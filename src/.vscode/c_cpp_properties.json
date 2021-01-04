@@ -1,0 +1,56 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/include",
+                "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/atlmfc/include",
+                "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.27.29110/include",
+                "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.27.29110/atlmfc/include",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/um",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/ucrt",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/shared",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/winrt",
+                "C:/Work/themachinery",
+                "C:/Work/themachinery/lib/physx-4.1.0-r5-win64/include",
+                "C:/Work/themachinery/lib/bearssl-0.6-r1-win64/inc",
+                "C:/Work/themachinery/lib/assimp-5.0-rc1-win64/include",
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "TM_LINKS_DCC_ASSET",
+                "TM_LINKS_DEFAULT_RENDER_PIPE",
+                "TM_LINKS_EDITOR_VIEWS",
+                "TM_LINKS_ENTITY",
+                "TM_LINKS_FOUNDATION",
+                "TM_LINKS_GRAPH_INTERPRETER",
+                "TM_LINKS_RENDER_GRAPH",
+                "TM_LINKS_THE_MACHINERY",
+                "TM_LINKS_UI",
+                "TM_LINKS_CREATION_GRAPH",
+                "TM_LINKS_RENDER_UTILITIES",
+                "TM_OS_WINDOWS"
+            ],
+            "intelliSenseMode": "msvc-x64",
+            "browse": {
+                "path": [
+                    "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/include",
+                    "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/atlmfc/include",
+                    "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.27.29110/include",
+                    "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.27.29110/atlmfc/include",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/um",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/ucrt",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/shared",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.18362.0/winrt",
+                    "C:/Work/themachinery"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}
