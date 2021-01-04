@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "d13b0d47-e286-7849-b3bc-62cc9930c77c"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "79966c70-afdc-fc88-3ac0-54cb582387a2"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "b686ec75-82e4-ab26-9558-bc0cf21ba38b"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "b13b04f0-f1e2-4e97-aa35-adaffe756dfe"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "ec6a375f-8e69-cbb7-cd3e-bd932a82b060"
+					filename: "c:\\work\\dinosaur-collector\\art\\ankylosaurus.png"
+					validity_hash: "63fe7eb384aca513"
+					description: {
+						__uuid: "7ff92cd1-30af-212b-1775-5388df553178"
+						widht: 924
+						height: 446
+					}
+					buffer: "96568d0ec5e6ddc1"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "fc37bfbd-8b90-387d-e514-802367d4308e"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

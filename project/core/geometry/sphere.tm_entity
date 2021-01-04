@@ -1,0 +1,201 @@
+__type: "tm_entity"
+__uuid: "d1108c05-1ed8-1a44-93cd-defa729ff68e"
+components: [
+	{
+		__type: "tm_transform_component"
+		__uuid: "7e2aeb1b-c039-f2f7-8282-87ec72d2e8a0"
+		local_position: {
+			__uuid: "c77526dc-6252-8566-7baa-2ba70015dccb"
+		}
+		local_rotation: {
+			__uuid: "53906ae7-b1fe-1861-7af9-8904c6c30519"
+		}
+		local_scale: {
+			__uuid: "e466cfe3-91e0-1d92-3280-905589bee431"
+		}
+	}
+	{
+		__type: "tm_render_component"
+		__uuid: "596509b6-238a-f318-b9c0-558e26ed8562"
+		creation_graph: {
+			__uuid: "c97b712d-f867-990b-c06d-c2d724fffae4"
+			graph: {
+				__uuid: "1705d1db-75b1-5b57-cc51-371e61a31765"
+				nodes: [
+					{
+						__uuid: "0303cb93-80c2-f557-7171-3fd82d61db46"
+						type: "geometry__uv_sphere"
+						position_x: 23.9649658203125
+						position_y: -194.5
+					}
+					{
+						__uuid: "6d3d0084-38a7-75a9-2e22-5fd90b60d484"
+						type: "tm_input_node"
+						position_x: -201.7675170898438
+						position_y: -233.75
+					}
+					{
+						__uuid: "a9c689e2-5b89-f029-af8e-ddd41f999dae"
+						type: "drawcall"
+						position_x: 263.2324829101563
+						position_y: -326.75
+					}
+					{
+						__uuid: "e752c1ff-2eb5-c7b6-e111-edd9120ea051"
+						type: "bounding_volume"
+						position_x: 261.2324829101563
+						position_y: -80.75
+					}
+					{
+						__uuid: "2184fc93-ffbf-bd3e-6b6a-b63996c30ca8"
+						type: "creation_graph_import"
+						position_x: 28.23248291015625
+						position_y: -284.75
+					}
+				]
+				connections: [
+					{
+						__uuid: "80642c47-11b7-042b-8408-17851d85554f"
+						from_node: "6d3d0084-38a7-75a9-2e22-5fd90b60d484"
+						to_node: "0303cb93-80c2-f557-7171-3fd82d61db46"
+						from_connector_hash: "e85dba4ad5c47776"
+						to_connector_hash: "807ba6945b385199"
+					}
+					{
+						__uuid: "bf1c5472-7d81-ab34-94bd-d1f56af70ed5"
+						from_node: "6d3d0084-38a7-75a9-2e22-5fd90b60d484"
+						to_node: "0303cb93-80c2-f557-7171-3fd82d61db46"
+						from_connector_hash: "1d0385a117d46b44"
+						to_connector_hash: "197aa554763f64b0"
+					}
+					{
+						__uuid: "bafaa47a-de02-7e09-ca03-f81fe9b5c377"
+						from_node: "2184fc93-ffbf-bd3e-6b6a-b63996c30ca8"
+						to_node: "a9c689e2-5b89-f029-af8e-ddd41f999dae"
+						from_connector_hash: "759d549788b7b7e0"
+						to_connector_hash: "2be49fca20727525"
+					}
+					{
+						__uuid: "442ef782-bb05-608d-2c37-5e395efa2bec"
+						from_node: "6d3d0084-38a7-75a9-2e22-5fd90b60d484"
+						to_node: "0303cb93-80c2-f557-7171-3fd82d61db46"
+						from_connector_hash: "222d2f0fee5e9d08"
+						to_connector_hash: "22596f2fda5a3963"
+					}
+					{
+						__uuid: "a76c201e-6c6e-6b7f-cb5e-73ca8a5e92b0"
+						from_node: "0303cb93-80c2-f557-7171-3fd82d61db46"
+						to_node: "e752c1ff-2eb5-c7b6-e111-edd9120ea051"
+						from_connector_hash: "197aa554763f64b0"
+						to_connector_hash: "197aa554763f64b0"
+					}
+					{
+						__uuid: "4eef9d65-d923-2572-8fa3-25cdec746d43"
+						from_node: "6d3d0084-38a7-75a9-2e22-5fd90b60d484"
+						to_node: "2184fc93-ffbf-bd3e-6b6a-b63996c30ca8"
+						from_connector_hash: "98a73cc3900146f0"
+						to_connector_hash: "0bfe464427987240"
+					}
+					{
+						__uuid: "6ad15a9e-f69b-7b5f-8331-2c80eaf251e0"
+						from_node: "6d3d0084-38a7-75a9-2e22-5fd90b60d484"
+						to_node: "0303cb93-80c2-f557-7171-3fd82d61db46"
+						from_connector_hash: "193eb08744b3a142"
+						to_connector_hash: "197aa554763f64b0"
+					}
+					{
+						__uuid: "c009e4cc-da0f-90e4-f246-7ee72123b322"
+						from_node: "6d3d0084-38a7-75a9-2e22-5fd90b60d484"
+						to_node: "0303cb93-80c2-f557-7171-3fd82d61db46"
+						from_connector_hash: "470384a52bef7e9e"
+						to_connector_hash: "807ba6945b385199"
+					}
+					{
+						__uuid: "0ddddf9c-090b-a276-292a-23ffb871e0bc"
+						from_node: "6d3d0084-38a7-75a9-2e22-5fd90b60d484"
+						to_node: "0303cb93-80c2-f557-7171-3fd82d61db46"
+						from_connector_hash: "99dc9838b324573b"
+						to_connector_hash: "22596f2fda5a3963"
+					}
+					{
+						__uuid: "156b9c81-327b-2a6f-ed2b-f08ae540cc80"
+						from_node: "6d3d0084-38a7-75a9-2e22-5fd90b60d484"
+						to_node: "2184fc93-ffbf-bd3e-6b6a-b63996c30ca8"
+						from_connector_hash: "23c3a34b45baf495"
+						to_connector_hash: "0bfe464427987240"
+					}
+					{
+						__uuid: "ce0de9b0-3eb6-eec4-4aca-6b3b73a78e02"
+						from_node: "0303cb93-80c2-f557-7171-3fd82d61db46"
+						to_node: "a9c689e2-5b89-f029-af8e-ddd41f999dae"
+						from_connector_hash: "31a9dec4d565e3b4"
+						to_connector_hash: "31a9dec4d565e3b4"
+					}
+				]
+				interface: {
+					__uuid: "0fa62a51-32ed-eb72-9e08-a9ad8c0cafdc"
+					inputs: [
+						{
+							__uuid: "dd8e71e7-7cb1-bab9-5f04-6da5936bdf0f"
+							display_name: "Radius"
+							id: "8"
+							type_hash: "6d0a4e744c45523b"
+							value_set_by_user: true
+							value: {
+								__type: "tm_float"
+								__uuid: "a44b2ffa-f1b6-4411-2463-c54d8fe2b064"
+								float: 1
+							}
+							public: true
+							order: 1
+						}
+						{
+							__uuid: "0457ffbc-1192-0089-506c-d8d4b4ff5964"
+							display_name: "Meridians"
+							id: "9"
+							type_hash: "eaf325d06c5cb568"
+							value_set_by_user: true
+							value: {
+								__type: "tm_uint32_t"
+								__uuid: "e1be57a1-7e02-7617-5447-5e55ee24ee0b"
+								uint32_t: 16
+							}
+							public: true
+							order: 2
+						}
+						{
+							__uuid: "f8f030c1-69b3-c626-64a5-7ee1dd0c3b3d"
+							display_name: "Parallels"
+							id: "10"
+							type_hash: "eaf325d06c5cb568"
+							value_set_by_user: true
+							value: {
+								__type: "tm_uint32_t"
+								__uuid: "21b7d8f2-1d53-d373-0337-24a5bab5ca4d"
+								uint32_t: 16
+							}
+							public: true
+							order: 3
+						}
+						{
+							__uuid: "b1023bfa-27be-60cd-33b9-a07bd684e8a4"
+							display_name: "Material"
+							id: "11"
+							type_hash: "2cf8ac15b913494b"
+							value: {
+								__type: "tm_creation_graph_resource_reference"
+								__uuid: "a9d2df97-74c9-5e71-cc0d-9bfaa663228a"
+								creation_graph: "e8151be1-8d26-755f-b1c0-541eaf4fca61"
+								node_type_hash: "f09329374a5bbd5e"
+							}
+							public: true
+							order: 4
+						}
+					]
+					last_id: 11
+				}
+			}
+		}
+	}
+]
+__asset_uuid: "1979880f-9d2d-ac95-8389-b848a0c717f9"

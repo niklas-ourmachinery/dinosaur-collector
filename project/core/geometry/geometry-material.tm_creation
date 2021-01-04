@@ -1,0 +1,106 @@
+__type: "tm_creation_graph"
+__uuid: "e8151be1-8d26-755f-b1c0-541eaf4fca61"
+graph: {
+	__uuid: "cbbb585a-8079-8252-7013-1e7b308fabe7"
+	nodes: [
+		{
+			__uuid: "e950ecd6-d25f-c719-391c-ab0811f274fe"
+			type: "lit_output"
+			position_x: 50.23248291015625
+			position_y: -160.75
+			settings: {
+				__type: "tm_shader_system_compiled_result"
+				__uuid: "a777237d-ce69-9e29-8b05-f4830c94e357"
+			}
+		}
+		{
+			__uuid: "8470109b-f774-dffb-2bf7-4715cb12e94c"
+			type: "tm_shader_instance_output"
+			position_x: 247.2324829101563
+			position_y: -156.75
+		}
+		{
+			__uuid: "bb21c4e5-bc1b-a2f4-44ad-1d4b1be12158"
+			type: "tm_input_node"
+			position_x: -380.0350341796875
+			position_y: 8.5
+		}
+		{
+			__uuid: "fe58b55b-988d-764b-ff1c-f10f7e3c2063"
+			type: "shader_variable_node"
+			position_x: -168.0350341796875
+			position_y: 7.5
+		}
+	]
+	connections: [
+		{
+			__uuid: "039600c5-b670-01f1-280c-87f1ad071c15"
+			from_node: "e950ecd6-d25f-c719-391c-ab0811f274fe"
+			to_node: "8470109b-f774-dffb-2bf7-4715cb12e94c"
+			from_connector_hash: "2be49fca20727525"
+			to_connector_hash: "2be49fca20727525"
+		}
+		{
+			__uuid: "7c93d7b6-33f0-20fa-a1f4-b2282f819260"
+			from_node: "bb21c4e5-bc1b-a2f4-44ad-1d4b1be12158"
+			to_node: "fe58b55b-988d-764b-ff1c-f10f7e3c2063"
+			from_connector_hash: "0a5d08d6299c4888"
+			to_connector_hash: "2bbcabe5074ade9e"
+		}
+		{
+			__uuid: "cdefbe25-e82c-479e-eea5-d862902a3a44"
+			from_node: "fe58b55b-988d-764b-ff1c-f10f7e3c2063"
+			to_node: "e950ecd6-d25f-c719-391c-ab0811f274fe"
+			from_connector_hash: "920b430f38928dc9"
+			to_connector_hash: "cb577b8f84e499e4"
+		}
+	]
+	comments: [
+		{
+			__uuid: "81f1e2fb-19e4-cf08-e791-c1b453ea5aea"
+			text: "Default material assigned to geometry entities shipped in core."
+			position_x: -389.7675170898438
+			position_y: -205.75
+			font_scale: 2
+			color: {
+				__uuid: "48ad7687-f24f-8e5a-ca14-711784ff424a"
+			}
+		}
+	]
+	interface: {
+		__uuid: "988af1c2-389c-166e-22d7-a07d35e29a4a"
+		inputs: [
+			{
+				__uuid: "53f6b1c3-a59d-1f6e-4dfb-297aa611b324"
+				display_name: "Base Color"
+				id: "1"
+				type_hash: "d0c8704d11c0c0f1"
+				value_set_by_user: true
+				value: {
+					__type: "tm_color_rgb"
+					__uuid: "b6cddee1-3024-22ec-ec2d-9c575904aeea"
+					r: 0.800000011920929
+					g: 0.800000011920929
+					b: 0.800000011920929
+				}
+				public: true
+				order: 1
+			}
+		]
+		last_id: 1
+		cached_node_result: [
+			{
+				__uuid: "7f724f7e-7f17-2c8a-2830-0d02cd15c3e2"
+				node: "e950ecd6-d25f-c719-391c-ab0811f274fe"
+				validity_hash: "c16e9a2a4018f243"
+				object: {
+					__type: "tm_shader_system_compiled_result"
+					__uuid: "85f56c03-fe23-7a24-362b-1f88a9166763"
+					name: "c16e9a2a4018f243"
+					buffer: "fd62c63f8c45dc50"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "655b3402-1243-9ea8-a54e-44c23ba67fc1"

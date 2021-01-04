@@ -1,0 +1,82 @@
+__type: "tm_entity"
+__uuid: "cb5231fa-3d88-9a99-6224-e47bc8118aa5"
+components: [
+	{
+		__type: "tm_transform_component"
+		__uuid: "89372785-3ff6-bf95-8737-676375fdc5f8"
+		local_position: {
+			__uuid: "a732b28d-daae-ab1c-bca2-735b89cfdbe5"
+		}
+		local_rotation: {
+			__uuid: "fd4f2d4e-d39e-a51d-f4e1-8ae681d98942"
+		}
+		local_scale: {
+			__uuid: "ec9b0467-391d-311e-1454-ac25cf8cafad"
+		}
+	}
+]
+children: [
+	{
+		__uuid: "c5a50466-dd96-c027-8acf-2444f7a415ab"
+		__prototype_type: "tm_entity"
+		__prototype_uuid: "a54f6f5c-b3ee-6ab8-4f2b-03f9bd53b0b8"
+		components__instantiated: [
+			{
+				__type: "tm_transform_component"
+				__uuid: "4a18cfcf-a69d-7dba-2b55-9556ddcba4a0"
+				__prototype_type: "tm_transform_component"
+				__prototype_uuid: "fba9c4d9-7104-4b02-1bc2-8e810fef21c5"
+				local_position: {
+					__uuid: "87416c65-de6a-8955-c61b-f47cd230aaf4"
+					__prototype_type: "tm_position"
+					__prototype_uuid: "60ef26a1-7062-969a-b984-7d39ef0a5ffe"
+					x: 10.66855239868164
+					y: 4.980159282684326
+					z: -8.197910308837891
+				}
+				local_rotation: {
+					__uuid: "c357cc6e-375c-36f9-72e5-8631115ec2cd"
+					__prototype_type: "tm_rotation"
+					__prototype_uuid: "4791d183-5f4d-b0d1-8b4f-e098291c9a1b"
+					x: -0.3159854114055634
+					y: -0.3596047461032867
+					z: -0.1308853924274445
+					w: 0.8681628108024597
+				}
+				local_scale: {
+					__uuid: "63046212-c650-0c68-8e0e-b8e938b1fd81"
+					__prototype_type: "tm_scale"
+					__prototype_uuid: "2dfd6f12-22be-3c8d-87fc-82b734dba9b7"
+				}
+				scene_tree_node: 0
+			}
+			{
+				__type: "tm_default_render_pipe_light_component"
+				__uuid: "733d36e7-4f5f-c7b0-7e53-85e8bd4a799b"
+				__prototype_type: "tm_default_render_pipe_light_component"
+				__prototype_uuid: "731b66a9-720c-809b-b9d9-1b0867f94bbe"
+				type: 2
+				color: {
+					__uuid: "cb5237d3-17c0-d319-bc03-f2e546ba6d2a"
+					__prototype_type: "tm_color_rgb"
+					__prototype_uuid: "dd891cfc-5175-6a7f-d536-e62802e8012c"
+				}
+				intensity: 2
+				cast_shadows: true
+				area_extent: {
+					__uuid: "a40723e0-7241-6c8e-6c7f-e692ee2e6fa7"
+					x: 1
+					y: 1
+				}
+			}
+		]
+		sort_order: 100
+	}
+	{
+		__uuid: "ae5f3989-5e44-4b02-07d5-5efdfb6ab51d"
+		__prototype_type: "tm_entity"
+		__prototype_uuid: "3ad88a64-2b81-508b-4e84-4160cc346b12"
+		sort_order: 101
+	}
+]
+__asset_uuid: "8ed592fc-9377-4a28-c433-59d89a94b75f"

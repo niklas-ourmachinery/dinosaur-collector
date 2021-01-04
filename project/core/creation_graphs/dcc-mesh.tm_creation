@@ -1,0 +1,172 @@
+__type: "tm_creation_graph"
+__uuid: "ae204997-eea9-53c1-17bd-2faca6857c73"
+graph: {
+	__uuid: "598f61d4-5463-c4ad-4a46-ece4e0ab67ce"
+	nodes: [
+		{
+			__uuid: "3cba9222-331c-d8dd-08f2-b3216eb26e89"
+			type: "dcc_mesh"
+			position_x: -46.1007080078125
+			position_y: 2.74993896484375
+		}
+		{
+			__uuid: "7fa4cb3a-234f-d0ac-e41f-ef7014f05547"
+			type: "drawcall"
+			position_x: 171.5659790039063
+			position_y: -100.2500610351563
+		}
+		{
+			__uuid: "f4d0ae36-14dd-ae19-3b27-9330e921d45a"
+			type: "bounding_volume"
+			position_x: 167.5657958984375
+			position_y: 130.4166259765625
+		}
+		{
+			__uuid: "3fbd878d-06eb-a80a-96cf-75e3798cd9e0"
+			type: "creation_graph_import"
+			position_x: -47.5009765625
+			position_y: -101.25
+		}
+		{
+			__uuid: "df51d39b-f84b-a9d2-6ac5-f5b9e01dfb4f"
+			type: "tm_input_node"
+			position_x: -263.1676635742188
+			position_y: -95.91668701171875
+		}
+		{
+			__uuid: "47139ad9-a213-c84a-9307-99b133599904"
+			type: "physics_shape"
+			position_x: -45.568359375
+			position_y: 150.8333129882813
+		}
+	]
+	connections: [
+		{
+			__uuid: "2a5000e8-1f83-3caf-265d-1f52affb68dd"
+			from_node: "3cba9222-331c-d8dd-08f2-b3216eb26e89"
+			to_node: "7fa4cb3a-234f-d0ac-e41f-ef7014f05547"
+			from_connector_hash: "31a9dec4d565e3b4"
+			to_connector_hash: "31a9dec4d565e3b4"
+		}
+		{
+			__uuid: "a0af4351-2768-7143-d736-051b7bb65288"
+			from_node: "3cba9222-331c-d8dd-08f2-b3216eb26e89"
+			to_node: "f4d0ae36-14dd-ae19-3b27-9330e921d45a"
+			from_connector_hash: "0424510e82d7c38b"
+			to_connector_hash: "7b036730a478919c"
+		}
+		{
+			__uuid: "2acdbe26-317a-7393-0009-662de47f7acb"
+			from_node: "3cba9222-331c-d8dd-08f2-b3216eb26e89"
+			to_node: "f4d0ae36-14dd-ae19-3b27-9330e921d45a"
+			from_connector_hash: "a5ce3ec0993dc215"
+			to_connector_hash: "5f6f4dddca7efd93"
+		}
+		{
+			__uuid: "d1ec08e4-8175-cc9a-d381-867f7934bba4"
+			to_node: "7fa4cb3a-234f-d0ac-e41f-ef7014f05547"
+			from_connector_hash: "920b430f38928dc9"
+			to_connector_hash: "2be49fca20727525"
+		}
+		{
+			__uuid: "c43fedbf-675a-04eb-9aa8-d9c7d8b6ab1f"
+			from_node: "df51d39b-f84b-a9d2-6ac5-f5b9e01dfb4f"
+			to_node: "3cba9222-331c-d8dd-08f2-b3216eb26e89"
+			from_connector_hash: "085e449ca4d7dec1"
+			to_connector_hash: "6bb47b51ae4a21ff"
+		}
+		{
+			__uuid: "06f1084e-0a30-4332-7570-c5a0501c7624"
+			from_node: "df51d39b-f84b-a9d2-6ac5-f5b9e01dfb4f"
+			to_node: "3fbd878d-06eb-a80a-96cf-75e3798cd9e0"
+			from_connector_hash: "0a5d08d6299c4888"
+			to_connector_hash: "0bfe464427987240"
+		}
+		{
+			__uuid: "7e4676da-727e-987d-8237-44939d342e78"
+			from_node: "3fbd878d-06eb-a80a-96cf-75e3798cd9e0"
+			to_node: "7fa4cb3a-234f-d0ac-e41f-ef7014f05547"
+			from_connector_hash: "759d549788b7b7e0"
+			to_connector_hash: "2be49fca20727525"
+		}
+		{
+			__uuid: "83ecf793-7990-ff00-f8ce-99c41000e24a"
+			from_node: "df51d39b-f84b-a9d2-6ac5-f5b9e01dfb4f"
+			to_node: "47139ad9-a213-c84a-9307-99b133599904"
+			from_connector_hash: "085e449ca4d7dec1"
+			to_connector_hash: "54f8703e1e8cd826"
+		}
+	]
+	data: [
+		{
+			__uuid: "1d137ce9-50b9-27ba-95f6-81d67ab6e0dd"
+			to_connector_hash: "6bb47b51ae4a21ff"
+			data: {
+				__type: "tm_creation_graph_variable_node_settings"
+				__uuid: "123dcae8-636a-db6d-70cb-0c5c86c56f01"
+				access_type: 1
+				value_type_hash: "2cf8ac15b913494b"
+				value: {
+					__type: "tm_creation_graph_resource_reference"
+					__uuid: "1dbb7fd0-a7c3-a49a-4102-45fd6b6648ac"
+					node_type_hash: "f09329374a5bbd5e"
+				}
+				name: "material"
+				public_display_name: "Material"
+			}
+		}
+		{
+			__uuid: "9555017e-6405-6bce-97c1-9e3b35aacca1"
+			to_node: "7fa4cb3a-234f-d0ac-e41f-ef7014f05547"
+			to_connector_hash: "643e5b63623d8285"
+			data: {
+				__type: "tm_uint32_t"
+				__uuid: "93ddb2d5-1ce9-73b8-d2eb-3dd72d394b53"
+				uint32_t: 1
+			}
+		}
+	]
+	comments: [
+		{
+			__uuid: "70a52aae-d806-46e4-be75-910c86df06a3"
+			text: "Default creation graph for rendering meshes in a dcc_asset."
+			position_x: -355.100830078125
+			position_y: -165.5833129882813
+			font_scale: 2
+			color: {
+				__uuid: "c67a26b8-58ef-3c45-c4fe-0a23ea1d4935"
+			}
+		}
+	]
+	interface: {
+		__uuid: "74313b81-241f-e816-b55d-f2cdf7db8ae7"
+		inputs: [
+			{
+				__uuid: "843c467f-112b-d657-fd18-d4d3c2717896"
+				display_name: "Material"
+				id: "1"
+				type_hash: "2cf8ac15b913494b"
+				value: {
+					__type: "tm_creation_graph_resource_reference"
+					__uuid: "03189be0-53c1-bbcb-baab-a51a89c21a80"
+				}
+				public: true
+				order: 1
+			}
+			{
+				__uuid: "46f74015-42bc-db9c-5409-e9ff0b71c683"
+				display_name: "DCC Asset Mesh"
+				id: "2"
+				type_hash: "fe918d0abd8aa1ad"
+				value: {
+					__type: "tm_dcc_asset_mesh_node_settings"
+					__uuid: "904e0d47-0869-cbff-2e8b-039ec9547572"
+				}
+				public: true
+				order: 2
+			}
+		]
+		last_id: 2
+	}
+}
+__asset_uuid: "3d35d8f3-08a2-1b56-8ae2-e67a1e607418"

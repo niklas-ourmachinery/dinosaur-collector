@@ -1,0 +1,31 @@
+__type: "tm_entity"
+__uuid: "3ad88a64-2b81-508b-4e84-4160cc346b12"
+components: [
+	{
+		__type: "tm_default_render_pipe_exposure_component"
+		__uuid: "ab12d1f4-69fd-8c67-bea6-72a09817a944"
+		metering_mode: 1
+		min_ev100: -1
+	}
+	{
+		__type: "tm_default_render_pipe_bloom_component"
+		__uuid: "95a48a49-1926-d91d-e5e7-dc1ed865723f"
+		tint: {
+			__uuid: "918010ae-f494-f30f-29ce-b33bc747c2b7"
+		}
+	}
+	{
+		__type: "tm_transform_component"
+		__uuid: "8066274b-23fc-6c81-0218-295a603e36d4"
+		local_position: {
+			__uuid: "88b95045-8310-69d0-043b-843362d826a9"
+		}
+		local_rotation: {
+			__uuid: "5cf8fe5e-1dad-5d12-29dd-5a52a4c1b871"
+		}
+		local_scale: {
+			__uuid: "d6ca4509-d3e0-25d8-c3f7-507748a71ee9"
+		}
+	}
+]
+__asset_uuid: "49cb5909-cf72-2790-3a49-18f500ca7495"
