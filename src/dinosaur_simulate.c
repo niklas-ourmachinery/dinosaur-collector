@@ -29,11 +29,41 @@ static struct tm_the_truth_api* tm_the_truth_api;
 // Reserve this many bytes for the state, so that we can grow it while hot-reloading.
 enum { RESERVE_STATE_BYTES = 32 * 1024 };
 
+enum IMAGES {
+    BACKGROUND,
+    ANKYLOSAURUS,
+    NUM_IMAGES,
+};
+
+const char* image_paths[NUM_IMAGES] = {
+    [BACKGROUND] = "art/backgrounds/background.creation",
+    [ANKYLOSAURUS] = "art/dinosaurs/ankylosaurus.creation",
+};
+
 struct tm_simulate_state_o {
     tm_allocator_i* allocator;
     uint32_t money;
-    uint32_t background_image;
+    uint32_t images[NUM_IMAGES];
 };
+
+static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_path)
+{
+    const tm_tt_id_t asset = tm_the_truth_assets_api->asset_from_path(args->tt, args->asset_root, asset_path);
+    if (!TM_ASSERT(asset.u64, tm_error_api->def, "Image not found `%s`", asset_path))
+        return 0;
+
+    const tm_tt_id_t object = tm_the_truth_api->get_subobject(args->tt, tm_tt_read(args->tt, asset), TM_TT_PROP__ASSET__OBJECT);
+    // TODO: Pipe a proper device_affinity_mask?
+    tm_creation_graph_context_t ctx = (tm_creation_graph_context_t){ .rb = args->render_backend, .device_affinity_mask = TM_RENDERER_DEVICE_AFFINITY_MASK_ALL, .tt = args->tt };
+    tm_creation_graph_instance_t inst = tm_creation_graph_api->create_instance(object, &ctx);
+    tm_creation_graph_output_t output = tm_creation_graph_api->output(&inst, TM_CREATION_GRAPH__IMAGE__OUTPUT_NODE_HASH, &ctx, 0);
+    const tm_creation_graph_image_data_t* cg_image = (tm_creation_graph_image_data_t*)output.output;
+    uint32_t image = tm_ui_renderer_api->allocate_image_slot(args->ui_renderer);
+    if (!image)
+        image = tm_ui_renderer_api->allocate_image_slot(args->ui_renderer);
+    tm_ui_renderer_api->set_image(args->ui_renderer, image, cg_image->handle);
+    return image;
+}
 
 static tm_simulate_state_o* start(tm_simulate_start_args_t* args)
 {
@@ -46,18 +76,8 @@ static tm_simulate_state_o* start(tm_simulate_start_args_t* args)
         .money = 112,
     };
 
-    const tm_tt_id_t background_asset = tm_the_truth_assets_api->asset_from_path(args->tt, args->asset_root, "art/backgrounds/background.creation");
-    if (TM_ASSERT(background_asset.u64, tm_error_api->def, "Image not found")) {
-        const tm_tt_id_t background = tm_the_truth_api->get_subobject(args->tt, tm_tt_read(args->tt, background_asset), TM_TT_PROP__ASSET__OBJECT);
-        // TODO: Pipe a proper device_affinity_mask?
-        tm_creation_graph_context_t ctx = (tm_creation_graph_context_t){ .rb = args->render_backend, .device_affinity_mask = TM_RENDERER_DEVICE_AFFINITY_MASK_ALL, .tt = args->tt };
-        tm_creation_graph_instance_t inst = tm_creation_graph_api->create_instance(background, &ctx);
-        tm_creation_graph_output_t output = tm_creation_graph_api->output(&inst, TM_CREATION_GRAPH__IMAGE__OUTPUT_NODE_HASH, &ctx, 0);
-        const tm_creation_graph_image_data_t* cg_image = (tm_creation_graph_image_data_t*)output.output;
-        tm_renderer_handle_t image = cg_image->handle;
-        state->background_image = tm_ui_renderer_api->allocate_image_slot(args->ui_renderer);
-        tm_ui_renderer_api->set_image(args->ui_renderer, state->background_image, image);
-    }
+    for (uint32_t i = 0; i < NUM_IMAGES; ++i)
+        state->images[i] = load_image(args, image_paths[i]);
 
     return state;
 }
@@ -75,15 +95,21 @@ static void background(tm_simulate_state_o* state, tm_simulate_frame_args_t* arg
     tm_ui_api->to_draw_style(args->ui, style, args->uistyle);
 
     // Placeholder sky and ground.
-    const tm_rect_t sky_r = tm_rect_divide_y(args->rect, 0, 2, 0);
-    const tm_rect_t ground_r = tm_rect_divide_y(args->rect, 0, 2, 1);
-    style->color = (tm_color_srgb_t){ .r = 200, .g = 200, .b = 255, .a = 255 };
-    tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, style, sky_r);
-    style->color = (tm_color_srgb_t){ .r = 50, .g = 100, .b = 50, .a = 255 };
-    tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, style, ground_r);
+    if (!state->images[BACKGROUND]) {
+        const tm_rect_t sky_r = tm_rect_divide_y(args->rect, 0, 2, 0);
+        const tm_rect_t ground_r = tm_rect_divide_y(args->rect, 0, 2, 1);
+        style->color = (tm_color_srgb_t){ .r = 200, .g = 200, .b = 255, .a = 255 };
+        tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, style, sky_r);
+        style->color = (tm_color_srgb_t){ .r = 50, .g = 100, .b = 50, .a = 255 };
+        tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, style, ground_r);
+        return;
+    }
 
+    style->include_alpha = true;
     style->color = (tm_color_srgb_t){ 255, 255, 255, 255 };
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->background_image, (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->images[BACKGROUND], (tm_rect_t){ 0, 0, 1, 1 });
+    const tm_rect_t ankylo_r = { 100, 100, 100, 100 };
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, ankylo_r, state->images[ANKYLOSAURUS], (tm_rect_t){ 0, 0, 1, 1 });
 }
 
 static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
