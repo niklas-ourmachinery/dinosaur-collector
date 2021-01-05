@@ -1,38 +1,59 @@
 #include <foundation/allocator.h>
 #include <foundation/api_registry.h>
+#include <foundation/error.h>
 #include <foundation/rect.inl>
+#include <foundation/the_truth.h>
+#include <foundation/the_truth_assets.h>
 
+#include <plugins/creation_graph/creation_graph.h>
 #include <plugins/simulate/simulate_entry.h>
 #include <plugins/ui/draw2d.h>
 #include <plugins/ui/ui.h>
 
+#include <memory.h>
+#include <stdio.h>
+
 static struct tm_ui_api* tm_ui_api;
 static struct tm_draw2d_api* tm_draw2d_api;
 
-struct tm_simulate_state_o {
-    // Store state here.
+// Reserve this many bytes for the state, so that we can grow it while hot-reloading.
+enum { RESERVE_STATE_BYTES = 32 * 1024 };
 
+struct tm_simulate_state_o {
     tm_allocator_i* allocator;
-} tm_gameplay_state_o;
+    int money;
+};
 
 static tm_simulate_state_o* start(tm_simulate_start_args_t* args)
 {
-    tm_simulate_state_o* state = tm_alloc(args->allocator, sizeof(*state));
+    TM_STATIC_ASSERT(sizeof(tm_simulate_state_o) < RESERVE_STATE_BYTES);
+
+    tm_simulate_state_o* state = tm_alloc(args->allocator, RESERVE_STATE_BYTES);
+    memset(state, 0, RESERVE_STATE_BYTES);
     *state = (tm_simulate_state_o){
         .allocator = args->allocator,
+        .money = 112,
     };
 
-    // Setup stuff at beginning of simulation.
+    /*
+
+    const tm_tt_id_t background = t
+
+        tm_creation_graph_context_t ctx = (tm_creation_graph_context_t){ .rb = args->render_backend, .device_affinity_mask = args->device_affinity_mask, .tt = args->tt };
+    tm_creation_graph_instance_t inst = tm_creation_graph_api->create_instance(<creation - graph - asset>, &ctx);
+    tm_creation_graph_output_t output = tm_creation_graph_api->output(&inst, TM_CREATION_GRAPH__IMAGE__OUTPUT_NODE_HASH, &ctx, 0);
+    // A graph can produce multiple images, but I'll assume we are only interested in the first found
+    const tm_creation_graph_image_data_t* cg_image = (tm_creation_graph_image_data_t*)output.output;
+    tm_renderer_handle_t image = cg_image->handle;
+    */
 
     return state;
 }
 
 static void stop(tm_simulate_state_o* state)
 {
-    // Clean up when simulation ends.
-
     tm_allocator_i a = *state->allocator;
-    tm_free(&a, state, sizeof(*state));
+    tm_free(&a, state, RESERVE_STATE_BYTES);
 }
 
 static void background(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
@@ -63,7 +84,9 @@ static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 
     const tm_rect_t money_amount_r = { .x = tm_rect_right(money_symbol_r) + 10, .y = money_symbol_r.y - 2, .w = args->rect.w, .h = 30 };
     args->uistyle->font_scale = 2.9f;
-    tm_ui_api->text(args->ui, args->uistyle, &(tm_ui_text_t){ .rect = money_amount_r, .text = "299", .color = &(tm_color_srgb_t){ .r = 255, .a = 255 } });
+    char money_str[64];
+    sprintf(money_str, "Score: %d", state->money);
+    tm_ui_api->text(args->ui, args->uistyle, &(tm_ui_text_t){ .rect = money_amount_r, .text = money_str, .color = &(tm_color_srgb_t){ .r = 255, .a = 255 } });
 }
 
 static void main_screen(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
