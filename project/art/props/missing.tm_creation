@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "a18c1df3-46d0-3efa-7fb6-ee025b0f525c"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "7c0cf371-4d4f-d641-8e9d-b386ba681cc5"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "8158062a-b13f-fac5-cc87-74ac89afe03b"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "6768c7d3-885f-1a25-05b3-08dfabe4cb7c"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "ffc56120-4741-5f5a-dd51-62d98b122b0e"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\missing.png"
+					validity_hash: "d6d30bf62a707cf9"
+					description: {
+						__uuid: "3acfa401-b02c-762c-fa8b-09f7b87cd87f"
+					}
+					buffer: "ed14f3c8cd353af7"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "ef02c560-d05f-a8f7-6af2-78d4a3595853"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

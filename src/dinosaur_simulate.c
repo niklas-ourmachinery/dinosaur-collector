@@ -31,14 +31,27 @@ static struct tm_the_truth_api* tm_the_truth_api;
 enum { RESERVE_STATE_BYTES = 32 * 1024 };
 
 enum IMAGES {
+    MISSING,
+
     BACKGROUND,
+
     ANKYLOSAURUS,
+
+    BONE,
+    MENU,
+
     NUM_IMAGES,
 };
 
 const char* image_paths[NUM_IMAGES] = {
+    [MISSING] = "art/props/missing.creation",
+
     [BACKGROUND] = "art/backgrounds/background.creation",
+
     [ANKYLOSAURUS] = "art/dinosaurs/ankylosaurus.creation",
+
+    [BONE] = "art/props/bone.creation",
+    [MENU] = "art/props/menu.creation",
 };
 
 struct tm_simulate_state_o {
@@ -59,9 +72,7 @@ static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_pat
     tm_creation_graph_instance_t inst = tm_creation_graph_api->create_instance(object, &ctx);
     tm_creation_graph_output_t output = tm_creation_graph_api->output(&inst, TM_CREATION_GRAPH__IMAGE__OUTPUT_NODE_HASH, &ctx, 0);
     const tm_creation_graph_image_data_t* cg_image = (tm_creation_graph_image_data_t*)output.output;
-    uint32_t image = tm_ui_renderer_api->allocate_image_slot(args->ui_renderer);
-    if (!image)
-        image = tm_ui_renderer_api->allocate_image_slot(args->ui_renderer);
+    const uint32_t image = tm_ui_renderer_api->allocate_image_slot(args->ui_renderer);
     tm_ui_renderer_api->set_image(args->ui_renderer, image, cg_image->handle);
     return image;
 }
@@ -118,17 +129,42 @@ static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     tm_ui_buffers_t uib = tm_ui_api->buffers(args->ui);
     tm_draw2d_style_t style[1] = { 0 };
     tm_ui_api->to_draw_style(args->ui, style, args->uistyle);
+    style->color = (tm_color_srgb_t){ .r = 255, .g = 255, .b = 255, .a = 255 };
+    style->include_alpha = true;
+
+    const float icon_size = 64;
+    const float font_scale = 4.0f;
 
     const tm_rect_t inset_r = tm_rect_inset(args->rect, 5, 5);
-    const tm_rect_t money_symbol_r = tm_rect_split_bottom(tm_rect_split_left(inset_r, 30, 0, 0), 30, 0, 1);
-    style->color = (tm_color_srgb_t){ .r = 255, .a = 255 };
-    tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, style, money_symbol_r);
-
-    const tm_rect_t money_amount_r = { .x = tm_rect_right(money_symbol_r) + 10, .y = money_symbol_r.y - 2, .w = args->rect.w, .h = 30 };
-    args->uistyle->font_scale = 2.9f;
+    const tm_rect_t money_symbol_r = tm_rect_split_bottom(tm_rect_split_left(inset_r, icon_size, 0, 0), icon_size, 0, 1);
+    const tm_rect_t money_amount_r = { .x = tm_rect_right(money_symbol_r) + 10, .y = money_symbol_r.y - 2, .w = args->rect.w, .h = icon_size };
+    args->uistyle->font_scale = font_scale;
     char money_str[64];
     sprintf(money_str, "%d", state->money);
-    tm_ui_api->text(args->ui, args->uistyle, &(tm_ui_text_t){ .rect = money_amount_r, .text = money_str, .color = &(tm_color_srgb_t){ .r = 255, .a = 255 } });
+    const tm_rect_t metrics_r = tm_ui_api->text_metrics(args->ui, args->uistyle, money_str);
+    const tm_rect_t draw_r = { .y = money_symbol_r.y, .w = money_amount_r.x + metrics_r.w, .h = args->rect.h - money_symbol_r.y };
+    const tm_rect_t background_r = tm_rect_inset(draw_r, -5, -5);
+
+    tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, style, background_r);
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, money_symbol_r, state->images[BONE], (tm_rect_t){ 0, 0, 1, 1 });
+    style->color = (tm_color_srgb_t){ .a = 255 };
+    tm_ui_api->text(args->ui, args->uistyle, &(tm_ui_text_t){ .rect = money_amount_r, .text = money_str, .color = &style->color });
+}
+
+static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
+{
+    tm_ui_buffers_t uib = tm_ui_api->buffers(args->ui);
+    tm_draw2d_style_t style[1] = { 0 };
+    tm_ui_api->to_draw_style(args->ui, style, args->uistyle);
+    style->color = (tm_color_srgb_t){ .r = 255, .g = 255, .b = 255, .a = 255 };
+    style->include_alpha = true;
+
+    const float icon_size = 128;
+
+    const tm_rect_t inset_r = tm_rect_inset(args->rect, 5, 5);
+    const tm_rect_t menu_r = tm_rect_split_top(tm_rect_split_left(inset_r, icon_size, 0, 0), icon_size, 0, 0);
+
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, menu_r, state->images[MENU], (tm_rect_t){ 0, 0, 1, 1 });
 }
 
 static void main_screen(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
@@ -136,6 +172,7 @@ static void main_screen(tm_simulate_state_o* state, tm_simulate_frame_args_t* ar
     background(state, args);
     dinosaurs(state, args);
     money(state, args);
+    menu(state, args);
 }
 
 // Called once a frame.
