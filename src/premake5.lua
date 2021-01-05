@@ -1,8 +1,6 @@
 -- premake5.lua
 -- version: premake-5.0.0-alpha14
 
--- %TM_SDK_DIR% should be set to the directory of The Machinery SDK
-
 newoption {
     trigger     = "clang",
     description = "Force use of CLANG for Windows builds"
@@ -40,13 +38,9 @@ filter { "system:windows", "options:clang" }
 
 filter "platforms:Win64"
     defines { "TM_OS_WINDOWS", "_CRT_SECURE_NO_WARNINGS" }
-    includedirs { "%TM_SDK_DIR%/headers" }
+    includedirs { "C:/Work/themachinery" }
     staticruntime "On"
     architecture "x64"
-    prebuildcommands {
-        "if not defined TM_SDK_DIR (echo ERROR: Environment variable TM_SDK_DIR must be set)"
-    }
-    libdirs { "%TM_SDK_DIR%/lib/" .. _ACTION .. "/%{cfg.buildcfg}"}
     disablewarnings {
         "4057", -- Slightly different base types. Converting from type with volatile to without.
         "4100", -- Unused formal parameter. I think unusued parameters are good for documentation.

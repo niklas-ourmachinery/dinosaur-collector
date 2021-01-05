@@ -6,22 +6,33 @@
 #include <foundation/the_truth_assets.h>
 
 #include <plugins/creation_graph/creation_graph.h>
+#include <plugins/creation_graph/creation_graph_output.inl>
+#include <plugins/creation_graph/image_nodes.h>
+#include <plugins/renderer/render_backend.h>
+#include <plugins/renderer/renderer_api_types.h>
 #include <plugins/simulate/simulate_entry.h>
 #include <plugins/ui/draw2d.h>
 #include <plugins/ui/ui.h>
+#include <plugins/ui/ui_renderer.h>
 
 #include <memory.h>
 #include <stdio.h>
 
 static struct tm_ui_api* tm_ui_api;
 static struct tm_draw2d_api* tm_draw2d_api;
+static struct tm_the_truth_assets_api* tm_the_truth_assets_api;
+static struct tm_creation_graph_api* tm_creation_graph_api;
+static struct tm_ui_renderer_api* tm_ui_renderer_api;
+static struct tm_error_api* tm_error_api;
+static struct tm_the_truth_api* tm_the_truth_api;
 
 // Reserve this many bytes for the state, so that we can grow it while hot-reloading.
 enum { RESERVE_STATE_BYTES = 32 * 1024 };
 
 struct tm_simulate_state_o {
     tm_allocator_i* allocator;
-    int money;
+    uint32_t money;
+    uint32_t background_image;
 };
 
 static tm_simulate_state_o* start(tm_simulate_start_args_t* args)
@@ -35,17 +46,18 @@ static tm_simulate_state_o* start(tm_simulate_start_args_t* args)
         .money = 112,
     };
 
-    /*
-
-    const tm_tt_id_t background = t
-
-        tm_creation_graph_context_t ctx = (tm_creation_graph_context_t){ .rb = args->render_backend, .device_affinity_mask = args->device_affinity_mask, .tt = args->tt };
-    tm_creation_graph_instance_t inst = tm_creation_graph_api->create_instance(<creation - graph - asset>, &ctx);
-    tm_creation_graph_output_t output = tm_creation_graph_api->output(&inst, TM_CREATION_GRAPH__IMAGE__OUTPUT_NODE_HASH, &ctx, 0);
-    // A graph can produce multiple images, but I'll assume we are only interested in the first found
-    const tm_creation_graph_image_data_t* cg_image = (tm_creation_graph_image_data_t*)output.output;
-    tm_renderer_handle_t image = cg_image->handle;
-    */
+    const tm_tt_id_t background_asset = tm_the_truth_assets_api->asset_from_path(args->tt, args->asset_root, "art/backgrounds/background.creation");
+    if (TM_ASSERT(background_asset.u64, tm_error_api->def, "Image not found")) {
+        const tm_tt_id_t background = tm_the_truth_api->get_subobject(args->tt, tm_tt_read(args->tt, background_asset), TM_TT_PROP__ASSET__OBJECT);
+        // TODO: Pipe a proper device_affinity_mask?
+        tm_creation_graph_context_t ctx = (tm_creation_graph_context_t){ .rb = args->render_backend, .device_affinity_mask = TM_RENDERER_DEVICE_AFFINITY_MASK_ALL, .tt = args->tt };
+        tm_creation_graph_instance_t inst = tm_creation_graph_api->create_instance(background, &ctx);
+        tm_creation_graph_output_t output = tm_creation_graph_api->output(&inst, TM_CREATION_GRAPH__IMAGE__OUTPUT_NODE_HASH, &ctx, 0);
+        const tm_creation_graph_image_data_t* cg_image = (tm_creation_graph_image_data_t*)output.output;
+        tm_renderer_handle_t image = cg_image->handle;
+        state->background_image = tm_ui_renderer_api->allocate_image_slot(args->ui_renderer);
+        tm_ui_renderer_api->set_image(args->ui_renderer, state->background_image, image);
+    }
 
     return state;
 }
@@ -69,6 +81,9 @@ static void background(tm_simulate_state_o* state, tm_simulate_frame_args_t* arg
     tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, style, sky_r);
     style->color = (tm_color_srgb_t){ .r = 50, .g = 100, .b = 50, .a = 255 };
     tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, style, ground_r);
+
+    style->color = (tm_color_srgb_t){ 255, 255, 255, 255 };
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->background_image, (tm_rect_t){ 0, 0, 1, 1 });
 }
 
 static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
@@ -117,4 +132,9 @@ TM_DLL_EXPORT void tm_load_plugin(struct tm_api_registry_api* reg, bool load)
 
     tm_ui_api = reg->get(TM_UI_API_NAME);
     tm_draw2d_api = reg->get(TM_DRAW2D_API_NAME);
+    tm_the_truth_assets_api = reg->get(TM_THE_TRUTH_ASSETS_API_NAME);
+    tm_creation_graph_api = reg->get(TM_CREATION_GRAPH_API_NAME);
+    tm_ui_renderer_api = reg->get(TM_UI_RENDERER_API_NAME);
+    tm_error_api = reg->get(TM_ERROR_API_NAME);
+    tm_the_truth_api = reg->get(TM_THE_TRUTH_API_NAME);
 }
