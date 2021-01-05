@@ -15,6 +15,7 @@
 #include <plugins/ui/ui.h>
 #include <plugins/ui/ui_renderer.h>
 
+#include <math.h>
 #include <memory.h>
 #include <stdio.h>
 
@@ -93,22 +94,22 @@ static void background(tm_simulate_state_o* state, tm_simulate_frame_args_t* arg
     tm_ui_buffers_t uib = tm_ui_api->buffers(args->ui);
     tm_draw2d_style_t style[1] = { 0 };
     tm_ui_api->to_draw_style(args->ui, style, args->uistyle);
-
-    // Placeholder sky and ground.
-    if (!state->images[BACKGROUND]) {
-        const tm_rect_t sky_r = tm_rect_divide_y(args->rect, 0, 2, 0);
-        const tm_rect_t ground_r = tm_rect_divide_y(args->rect, 0, 2, 1);
-        style->color = (tm_color_srgb_t){ .r = 200, .g = 200, .b = 255, .a = 255 };
-        tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, style, sky_r);
-        style->color = (tm_color_srgb_t){ .r = 50, .g = 100, .b = 50, .a = 255 };
-        tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, style, ground_r);
-        return;
-    }
-
     style->include_alpha = true;
     style->color = (tm_color_srgb_t){ 255, 255, 255, 255 };
+
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->images[BACKGROUND], (tm_rect_t){ 0, 0, 1, 1 });
-    const tm_rect_t ankylo_r = { 100, 100, 100, 100 };
+}
+
+static void dinosaurs(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
+{
+    tm_ui_buffers_t uib = tm_ui_api->buffers(args->ui);
+    tm_draw2d_style_t style[1] = { 0 };
+    tm_ui_api->to_draw_style(args->ui, style, args->uistyle);
+    style->include_alpha = true;
+    style->color = (tm_color_srgb_t){ 255, 255, 255, 255 };
+
+    const float x = (float)fmod(args->time * 200, args->rect.w + 300) - 300;
+    const tm_rect_t ankylo_r = { x, tm_rect_bottom(args->rect) - 200, 200, 100 };
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, ankylo_r, state->images[ANKYLOSAURUS], (tm_rect_t){ 0, 0, 1, 1 });
 }
 
@@ -126,13 +127,14 @@ static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     const tm_rect_t money_amount_r = { .x = tm_rect_right(money_symbol_r) + 10, .y = money_symbol_r.y - 2, .w = args->rect.w, .h = 30 };
     args->uistyle->font_scale = 2.9f;
     char money_str[64];
-    sprintf(money_str, "Score: %d", state->money);
+    sprintf(money_str, "%d", state->money);
     tm_ui_api->text(args->ui, args->uistyle, &(tm_ui_text_t){ .rect = money_amount_r, .text = money_str, .color = &(tm_color_srgb_t){ .r = 255, .a = 255 } });
 }
 
 static void main_screen(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
     background(state, args);
+    dinosaurs(state, args);
     money(state, args);
 }
 
