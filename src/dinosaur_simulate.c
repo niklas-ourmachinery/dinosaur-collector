@@ -39,6 +39,7 @@ enum IMAGES {
     ANKYLOSAURUS,
 
     ALBUM,
+    BACK,
     BONE,
     CLOSE,
     INVENTORY,
@@ -58,6 +59,7 @@ const char* image_paths[NUM_IMAGES] = {
     [ANKYLOSAURUS] = "art/dinosaurs/ankylosaurus.creation",
 
     [ALBUM] = "art/icons/album.creation",
+    [BACK] = "art/icons/back.creation",
     [BONE] = "art/icons/bone.creation",
     [CLOSE] = "art/icons/close.creation",
     [INVENTORY] = "art/icons/inventory.creation",
@@ -67,11 +69,19 @@ const char* image_paths[NUM_IMAGES] = {
     [SQUARE] = "art/icons/square.creation",
 };
 
+enum STATE {
+    STATE__MAIN,
+    STATE__MENU,
+    STATE__INVENTORY,
+    STATE__SHOP,
+    STATE__ALBUM,
+};
+
 struct tm_simulate_state_o {
     tm_allocator_i* allocator;
     uint32_t money;
     uint32_t images[NUM_IMAGES];
-    bool in_menu;
+    uint32_t state;
 };
 
 static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_path)
@@ -145,9 +155,10 @@ static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     tm_ui_api->to_draw_style(args->ui, style, args->uistyle);
     style->color = (tm_color_srgb_t){ .r = 255, .g = 255, .b = 255, .a = 255 };
     style->include_alpha = true;
+    const float unit = tm_min(args->rect.w, args->rect.h);
 
-    const float icon_size = 64;
-    const float font_scale = 4.0f;
+    const float icon_size = 0.08f * unit;
+    const float font_scale = icon_size / 18.0f;
 
     const tm_rect_t inset_r = tm_rect_inset(args->rect, 5, 5);
     const tm_rect_t money_symbol_r = tm_rect_split_bottom(tm_rect_split_left(inset_r, icon_size, 0, 0), icon_size, 0, 1);
@@ -193,42 +204,48 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     style->include_alpha = true;
     const float unit = tm_min(args->rect.w, args->rect.h);
 
-    const float icon_size = 0.1f * unit;
+    const float icon_size = 0.15f * unit;
     const tm_rect_t inset_r = tm_rect_inset(args->rect, 5, 5);
     const tm_rect_t menu_icon_r = tm_rect_split_top(tm_rect_split_left(inset_r, icon_size, 0, 0), icon_size, 0, 0);
 
-    if (!state->in_menu) {
-        state->in_menu = button(state, args, menu_icon_r, MENU);
-    } else {
-        const bool close = button(state, args, menu_icon_r, CLOSE);
-        if (close)
-            state->in_menu = false;
+    tm_rect_t rect = args->rect;
+    if (state->state == STATE__MAIN) {
+        if (button(state, args, menu_icon_r, MENU))
+            state->state = STATE__MENU;
+        return;
+    }
 
-        const tm_rect_t menu_r = tm_rect_center_in(0.8f * unit, 0.8f * unit, args->rect);
-        const tm_rect_t close_r = tm_rect_center_in(0.1f * unit, 0.1f * unit, (tm_rect_t){ menu_r.x + 0.02f * unit, menu_r.y + 0.02f * unit });
+    if (button(state, args, menu_icon_r, CLOSE))
+        state->state = STATE__MAIN;
 
-        tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, menu_r, state->images[MENU_BACKGROUND], (tm_rect_t){ 0, 0, 1, 1 });
+    const tm_rect_t menu_r = tm_rect_center_in(0.8f * unit, 0.8f * unit, args->rect);
+    const tm_rect_t close_r = tm_rect_center_in(0.1f * unit, 0.1f * unit, (tm_rect_t){ menu_r.x + 0.02f * unit, menu_r.y + 0.02f * unit });
 
-        const bool corner_close = button(state, args, close_r, CLOSE);
-        if (corner_close)
-            state->in_menu = false;
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, menu_r, state->images[MENU_BACKGROUND], (tm_rect_t){ 0, 0, 1, 1 });
 
-        const tm_rect_t menu_inset_r = tm_rect_inset(menu_r, 0.1f * unit, 0.1f * unit);
+    if (button(state, args, close_r, state->state == STATE__MENU ? CLOSE : BACK))
+        state->state = state->state == STATE__MENU ? STATE__MAIN : STATE__MENU;
+    const tm_rect_t menu_inset_r = tm_rect_inset(menu_r, 0.05f * unit, 0.05f * unit);
+    rect = menu_inset_r;
 
+    if (state->state == STATE__MENU) {
         for (uint32_t i = 0; i < 3; ++i) {
-            const tm_rect_t row_r = tm_rect_divide_y(menu_inset_r, 0.04f * unit, 3, i);
+            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.04f * unit, 3, i);
             for (uint32_t j = 0; j < 3; ++j) {
                 const tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.04f * unit, 3, j);
                 const uint32_t idx = i * 3 + j;
                 switch (idx) {
                 case 0:
-                    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, icon_r, state->images[INVENTORY], (tm_rect_t){ 0, 0, 1, 1 });
+                    if (button(state, args, icon_r, INVENTORY))
+                        state->state = STATE__INVENTORY;
                     break;
                 case 1:
-                    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, icon_r, state->images[SHOP], (tm_rect_t){ 0, 0, 1, 1 });
+                    if (button(state, args, icon_r, SHOP))
+                        state->state = STATE__SHOP;
                     break;
                 case 2:
-                    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, icon_r, state->images[ALBUM], (tm_rect_t){ 0, 0, 1, 1 });
+                    if (button(state, args, icon_r, ALBUM))
+                        state->state = STATE__ALBUM;
                     break;
                 }
             }
