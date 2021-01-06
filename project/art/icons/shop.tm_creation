@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "830ecd23-62fa-e115-e649-7bb766e50b0b"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "9a14c465-7b23-3dd7-1888-6006f134b3e9"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "fb5a3e5c-c926-0e99-fa8a-fedb198a206b"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "5a264c7b-3377-7314-54ce-4e9843d43a60"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "2636b7bb-96e5-a7f8-e9fb-e60c99dde576"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\icons\\shop.png"
+					validity_hash: "335327bf8b2db5f7"
+					description: {
+						__uuid: "f793a845-1a27-e0fc-7f74-36279ce4c41f"
+					}
+					buffer: "7a547f6b9c6b1fda"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "ef2282aa-beb0-4188-3501-c13afbcca31a"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]
