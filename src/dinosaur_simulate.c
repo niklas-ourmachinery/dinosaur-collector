@@ -290,6 +290,35 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
                 break;
             }
         }
+    } else if (state->state == STATE__INVENTORY) {
+        tm_ui_style_t uistyle[1] = { *args->uistyle };
+
+        uint32_t idx = 0;
+        for (uint32_t i = 0; i < 9; ++i,++idx) {
+            const uint32_t x = i % 3;
+            const uint32_t y = i / 3;
+            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.04f * unit, 3, y);
+            const tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.04f * unit, 3, x);
+
+            while (idx < NUM_PROPS && state->inventory[idx] == 0)
+                ++idx;
+            if (idx >= NUM_PROPS)
+                break;
+
+            const tm_color_srgb_t text_color = { .a = 255 };
+            const tm_rect_t desc_r = tm_rect_set_h(tm_rect_add(icon_r, (tm_rect_t){ .y = icon_r.h }), 0.04f * unit);
+            uistyle->font_scale = desc_r.h / 18.0f;
+            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = props[idx].name, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
+
+            tm_rect_t inventory_r = tm_rect_add(desc_r, (tm_rect_t){ .y = desc_r.h * 1.2f });
+            char inventory_str[32] = { 0 };
+            sprintf(inventory_str, "%d", state->inventory[idx]);
+            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = inventory_r, .text = inventory_str, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
+
+            if (button(state, args, icon_r, props[idx].image)) {
+                // TODO: Implement place inventory.
+            }
+        }
     } else if (state->state == STATE__SHOP) {
         tm_ui_style_t uistyle[1] = { *args->uistyle };
 
@@ -303,7 +332,7 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 
             const bool enabled = state->money >= props[idx].price;
 
-            const tm_color_srgb_t text_color = {.a = enabled ? 255 : 64 };
+            const tm_color_srgb_t text_color = { .a = enabled ? 255 : 64 };
             const tm_rect_t desc_r = tm_rect_set_h(tm_rect_add(icon_r, (tm_rect_t){ .y = icon_r.h }), 0.04f * unit);
             uistyle->font_scale = desc_r.h / 18.0f;
             tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = props[idx].name, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
