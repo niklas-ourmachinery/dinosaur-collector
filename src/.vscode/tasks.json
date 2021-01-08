@@ -15,6 +15,17 @@
             "problemMatcher": [
                 "$msCompile"
             ]
-        }
+        },
+        {
+            "label": "docgen",
+            "group": "build",
+            "windows": {
+                "command": "%TM_SDK_DIR%//bin//docgen.exe"
+            },
+            "args": [
+                "-e",
+                "dinosaur_simulate.c"
+            ],
+        },
     ]
 }
