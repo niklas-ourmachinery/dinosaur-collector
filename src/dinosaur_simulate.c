@@ -2,6 +2,7 @@
 #include <foundation/api_registry.h>
 #include <foundation/error.h>
 #include <foundation/macros.h>
+#include <foundation/math.inl>
 #include <foundation/rect.inl>
 #include <foundation/the_truth.h>
 #include <foundation/the_truth_assets.h>
@@ -92,21 +93,33 @@ enum STATE {
     STATE__INVENTORY,
     STATE__SHOP,
     STATE__ALBUM,
+    STATE__PLACING,
 };
 
 struct prop_t {
     const char* name;
     uint32_t image;
+    float margin;
+    float scale;
     uint32_t price;
 };
 
+// clang-format off
 struct prop_t props[] = {
-    { .name = "Leaves", .image = LEAVES, .price = 5 },
-    { .name = "Meat", .image = MEAT, .price = 10 },
-    { .name = "Fish", .image = FISH, .price = 20 },
+    { .name = "Leaves", .image = LEAVES, .margin = 0.17f, .scale = 0.9f, .price = 5 },
+    { .name = "Meat",   .image = MEAT,   .margin = 0.2f,  .scale = 1.0f, .price = 10 },
+    { .name = "Fish",   .image = FISH,   .margin = 0.35f, .scale = 0.7f, .price = 20 },
 };
+// clang-format on
 
 #define NUM_PROPS (TM_ARRAY_COUNT(props))
+
+struct scene_prop_t {
+    uint32_t prop;
+    float x, y;
+};
+
+enum { MAX_SCENE_PROPS = 32 };
 
 struct tm_simulate_state_o {
     tm_allocator_i* allocator;
@@ -115,6 +128,9 @@ struct tm_simulate_state_o {
     uint32_t state;
     uint32_t inventory[NUM_PROPS];
     float scroll;
+    uint32_t place_prop;
+    uint32_t num_scene_props;
+    struct scene_prop_t scene_props[MAX_SCENE_PROPS + 1];
 };
 
 static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_path)
@@ -156,6 +172,32 @@ static void stop(tm_simulate_state_o* state)
     tm_free(&a, state, RESERVE_STATE_BYTES);
 }
 
+static void scene_props(tm_simulate_state_o* state, tm_simulate_frame_args_t* args,
+    tm_rect_t background_r, tm_draw2d_style_t* style, struct scene_prop_t* draw_props, uint32_t num_props,
+    uint32_t layer)
+{
+    tm_ui_buffers_t uib = tm_ui_api->buffers(args->ui);
+    for (struct scene_prop_t* p = draw_props; p < draw_props + num_props; ++p) {
+        const uint32_t p_layer = p->y >= 0.82 ? 3 : p->y >= 0.52 ? 2 : p->y >= 0.45 ? 1 : 0;
+        if (layer != p_layer)
+            continue;
+
+        struct prop_t* prop = props + p->prop;
+
+        const float x = background_r.x + background_r.w * p->x;
+        const float y = background_r.y + background_r.h * p->y;
+
+        const float unit = background_r.h;
+        const float far_size = 0.06f * unit * prop->scale;
+        const float close_size = 0.24f * unit * prop->scale;
+        const float rel_size = (p->y - 0.35f) / (1.0f - 0.35f);
+        const float size = tm_lerp(far_size, close_size, rel_size);
+
+        const tm_rect_t r = { x - size / 2, y - size + size * prop->margin, size, size };
+        tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, r, state->images[prop->image], (tm_rect_t){ 0, 0, 1, 1 });
+    }
+}
+
 static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
     tm_ui_buffers_t uib = tm_ui_api->buffers(args->ui);
@@ -177,16 +219,38 @@ static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
         background_r.x = -state->scroll;
     }
 
-    const float x = (float)fmod(args->time * 200, args->rect.w + 300) - 300;
-    const tm_rect_t ankylo_r = { x, tm_rect_bottom(args->rect) - 200, 200, 200 };
+    uint32_t num_scene_props = state->num_scene_props;
+    if (state->state == STATE__PLACING) {
+        const float scene_rel_mouse_x = (uib.input->mouse_pos.x - background_r.x) / background_r.w;
+        const float scene_rel_mouse_y = (uib.input->mouse_pos.y - background_r.y) / background_r.h;
+        if (tm_is_between(scene_rel_mouse_x, 0, 1) && tm_is_between(scene_rel_mouse_y, 0.35, 1)) {
+            state->scene_props[num_scene_props] = (struct scene_prop_t){
+                .x = scene_rel_mouse_x,
+                .y = scene_rel_mouse_y,
+                .prop = state->place_prop,
+            };
+            if (uib.input->left_mouse_pressed) {
+                ++state->num_scene_props;
+                while (state->num_scene_props > MAX_SCENE_PROPS) {
+                    memmove(state->scene_props, state->scene_props + 1, MAX_SCENE_PROPS * sizeof(struct scene_prop_t));
+                    state->num_scene_props--;
+                }
+                --state->inventory[state->place_prop];
+                if (state->inventory[state->place_prop] == 0)
+                    state->state = STATE__MAIN;
+            }
+            ++num_scene_props;
+        }
+    }
 
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[BACKGROUND], (tm_rect_t){ 0, 0, 1, 1 });
+    scene_props(state, args, background_r, style, state->scene_props, num_scene_props, 0);
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[LAYER_1], (tm_rect_t){ 0, 0, 1, 1 });
+    scene_props(state, args, background_r, style, state->scene_props, num_scene_props, 1);
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[LAYER_2], (tm_rect_t){ 0, 0, 1, 1 });
+    scene_props(state, args, background_r, style, state->scene_props, num_scene_props, 2);
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[LAYER_3], (tm_rect_t){ 0, 0, 1, 1 });
-
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, ankylo_r, state->images[ANKYLOSAURUS], (tm_rect_t){ 0, 0, 1, 1 });
-
+    scene_props(state, args, background_r, style, state->scene_props, num_scene_props, 3);
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[LAYER_4], (tm_rect_t){ 0, 0, 1, 1 });
 
     const float rel_mouse_x = tm_clamp((uib.input->mouse_pos.x - args->rect.x) / args->rect.w, 0, 1);
@@ -273,7 +337,7 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     const tm_rect_t menu_icon_r = tm_rect_split_top(tm_rect_split_left(inset_r, icon_size, 0, 0), icon_size, 0, 0);
 
     tm_rect_t rect = args->rect;
-    if (state->state == STATE__MAIN) {
+    if (state->state == STATE__MAIN || state->state == STATE__PLACING) {
         if (button(state, args, menu_icon_r, MENU))
             state->state = STATE__MENU;
         return;
@@ -339,7 +403,8 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
             tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = inventory_r, .text = inventory_str, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
 
             if (button(state, args, icon_r, props[idx].image)) {
-                // TODO: Implement place inventory.
+                state->state = STATE__PLACING;
+                state->place_prop = idx;
             }
         }
     } else if (state->state == STATE__SHOP) {
