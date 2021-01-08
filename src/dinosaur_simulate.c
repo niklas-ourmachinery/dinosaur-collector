@@ -30,20 +30,31 @@ static struct tm_ui_renderer_api* tm_ui_renderer_api;
 static struct tm_error_api* tm_error_api;
 static struct tm_the_truth_api* tm_the_truth_api;
 
+// A dinosaur collecting game.
+
 // Reserve this many bytes for the state, so that we can grow it while hot-reloading.
 enum { RESERVE_STATE_BYTES = 32 * 1024 };
 
+// Returns a `tm_color_srgb_t` corresponding to the hexadecimal color `c`. 
+#define HEXCOLOR(c) ((tm_color_srgb_t){ .a = 255, .r = 0xff & (c >> 16), .g = 0xff & (c >> 8), .b = 0xff & (c >> 0) })
+
+// Index of all images in the game.
 enum IMAGES {
-    MISSING,
+    // Used as placeholder for missing graphics.
+    PLACEHOLDER,
 
-    BACKGROUND,
-    LAYER_1,
-    LAYER_2,
-    LAYER_3,
-    LAYER_4,
+    // Background images. The background has multiple layers used to implement "hidden surface
+    // removal".
+    BACKGROUND_LAYER_0,
+    BACKGROUND_LAYER_1,
+    BACKGROUND_LAYER_2,
+    BACKGROUND_LAYER_3,
+    BACKGROUND_LAYER_4,
 
+    // Dinosaur images.
     ANKYLOSAURUS,
 
+    // Icons
     ALBUM,
     BACK,
     BONE,
@@ -54,21 +65,24 @@ enum IMAGES {
     SHOP,
     SQUARE,
 
+    // Props
     FISH,
     LEAVES,
     MEAT,
 
+    // Total number of images.
     NUM_IMAGES,
 };
 
+// Specifies project paths for the various images. Used to load the image data.
 const char* image_paths[NUM_IMAGES] = {
-    [MISSING] = "art/icons/missing.creation",
+    [PLACEHOLDER] = "art/icons/missing.creation",
 
-    [BACKGROUND] = "art/backgrounds/background.creation",
-    [LAYER_1] = "art/backgrounds/layer 1.creation",
-    [LAYER_2] = "art/backgrounds/layer 2.creation",
-    [LAYER_3] = "art/backgrounds/layer 3.creation",
-    [LAYER_4] = "art/backgrounds/layer 4.creation",
+    [BACKGROUND_LAYER_0] = "art/backgrounds/background.creation",
+    [BACKGROUND_LAYER_1] = "art/backgrounds/layer 1.creation",
+    [BACKGROUND_LAYER_2] = "art/backgrounds/layer 2.creation",
+    [BACKGROUND_LAYER_3] = "art/backgrounds/layer 3.creation",
+    [BACKGROUND_LAYER_4] = "art/backgrounds/layer 4.creation",
 
     [ANKYLOSAURUS] = "art/dinosaurs/ankylosaurus.creation",
 
@@ -87,52 +101,108 @@ const char* image_paths[NUM_IMAGES] = {
     [MEAT] = "art/props/meat.creation",
 };
 
+// Current game state.
 enum STATE {
+    // The main scene view.
     STATE__MAIN,
+
+    // Menu screen.
     STATE__MENU,
+
+    // Inventory screen.
     STATE__INVENTORY,
+
+    // Shop screen.
     STATE__SHOP,
+
+    // Dinosaur album screen.
     STATE__ALBUM,
+
+    // Placing a prop in the scene.
     STATE__PLACING,
 };
 
+// Properties for props.
 struct prop_t {
+    // Name of the prop.
     const char* name;
+
+    // Image index for the prop.
     uint32_t image;
+
+    // Distance from the bottom of the prop graphics to the bottom of the image box as a fraction
+    // of the graphics height (0--1).
+    //
+    // The prop images are always square and 256 x 256 pixel, with the graphics centered in the square.
+    // When we place a prop, we want to align the bottom of the actual graphics of the prop with the
+    // cursor position, so we need to offset it by this margin.
     float margin;
+
+    // Scale at which the prop will be drawn. Props can be drawn bigger or smaller in the world.
     float scale;
+
+    // Price to by the prop in the shop.
     uint32_t price;
 };
 
 // clang-format off
+
+// List of all the props in the game.
 struct prop_t props[] = {
     { .name = "Leaves", .image = LEAVES, .margin = 0.17f, .scale = 0.9f, .price = 5 },
     { .name = "Meat",   .image = MEAT,   .margin = 0.2f,  .scale = 1.0f, .price = 10 },
     { .name = "Fish",   .image = FISH,   .margin = 0.35f, .scale = 0.7f, .price = 20 },
 };
+
 // clang-format on
 
+// Total  number of props in the game.
 #define NUM_PROPS (TM_ARRAY_COUNT(props))
 
+// Data for a prop placed in the scene.
 struct scene_prop_t {
+    // Index of the prop in the global `props` array.
     uint32_t prop;
+
+    // X and Y position of the prop (in relative coordinates, relative to the background image).
+    // I.e. `(0,0)` represents the top left corner of the background image and `(1,1)` the bottom
+    // right corner.
     float x, y;
 };
 
+// Maximum number of props that can be placed in the scene.
 enum { MAX_SCENE_PROPS = 32 };
 
+// Game state.
 struct tm_simulate_state_o {
     tm_allocator_i* allocator;
+
+    // Money that the player has.
     uint32_t money;
+
+    // Loaded image data.
     uint32_t images[NUM_IMAGES];
-    uint32_t state;
+
+    // Current game state.
+    enum STATE state;
+
+    // Number of items of each prop type that the player has in her inventory.
     uint32_t inventory[NUM_PROPS];
+
+    // Current scroll amount for main screen. On small displays, the main screen scrolls
+    // horizontally to fit the full background image.
     float scroll;
+
+    // In STATE__PLACING -- the index of the prop that is currently being placed.
     uint32_t place_prop;
+
+    // Props currently paced in the scene.
     uint32_t num_scene_props;
     struct scene_prop_t scene_props[MAX_SCENE_PROPS + 1];
 };
 
+// Loads the image at the specified `asset_path` and returns an image handle to it. If the image
+// fails to load, the image handle `0` is returned. (This handle is used for the placeholder image.)
 static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_path)
 {
     const tm_tt_id_t asset = tm_the_truth_assets_api->asset_from_path(args->tt, args->asset_root, asset_path);
@@ -149,29 +219,8 @@ static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_pat
     return image;
 }
 
-static tm_simulate_state_o* start(tm_simulate_start_args_t* args)
-{
-    TM_STATIC_ASSERT(sizeof(tm_simulate_state_o) < RESERVE_STATE_BYTES);
-
-    tm_simulate_state_o* state = tm_alloc(args->allocator, RESERVE_STATE_BYTES);
-    memset(state, 0, RESERVE_STATE_BYTES);
-    *state = (tm_simulate_state_o){
-        .allocator = args->allocator,
-        .money = 112,
-    };
-
-    for (uint32_t i = 0; i < NUM_IMAGES; ++i)
-        state->images[i] = load_image(args, image_paths[i]);
-
-    return state;
-}
-
-static void stop(tm_simulate_state_o* state)
-{
-    tm_allocator_i a = *state->allocator;
-    tm_free(&a, state, RESERVE_STATE_BYTES);
-}
-
+// Draws scene props in the array `(draw_props, num_props)`. Only the props found in the specified
+// `layer` are drawn.
 static void scene_props(tm_simulate_state_o* state, tm_simulate_frame_args_t* args,
     tm_rect_t background_r, tm_draw2d_style_t* style, struct scene_prop_t* draw_props, uint32_t num_props,
     uint32_t layer)
@@ -198,6 +247,7 @@ static void scene_props(tm_simulate_state_o* state, tm_simulate_frame_args_t* ar
     }
 }
 
+// Draws the scene -- the background layers and the placed props.
 static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
     tm_ui_buffers_t uib = tm_ui_api->buffers(args->ui);
@@ -243,15 +293,15 @@ static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
         }
     }
 
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[BACKGROUND], (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[BACKGROUND_LAYER_0], (tm_rect_t){ 0, 0, 1, 1 });
     scene_props(state, args, background_r, style, state->scene_props, num_scene_props, 0);
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[LAYER_1], (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[BACKGROUND_LAYER_1], (tm_rect_t){ 0, 0, 1, 1 });
     scene_props(state, args, background_r, style, state->scene_props, num_scene_props, 1);
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[LAYER_2], (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[BACKGROUND_LAYER_2], (tm_rect_t){ 0, 0, 1, 1 });
     scene_props(state, args, background_r, style, state->scene_props, num_scene_props, 2);
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[LAYER_3], (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[BACKGROUND_LAYER_3], (tm_rect_t){ 0, 0, 1, 1 });
     scene_props(state, args, background_r, style, state->scene_props, num_scene_props, 3);
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[LAYER_4], (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[BACKGROUND_LAYER_4], (tm_rect_t){ 0, 0, 1, 1 });
 
     const float rel_mouse_x = tm_clamp((uib.input->mouse_pos.x - args->rect.x) / args->rect.w, 0, 1);
     if (rel_mouse_x < 0.25f) {
@@ -263,6 +313,7 @@ static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     }
 }
 
+// Draws the money counter.
 static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
     tm_ui_buffers_t uib = tm_ui_api->buffers(args->ui);
@@ -292,8 +343,8 @@ static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = money_amount_r, .text = money_str, .color = &style->color });
 }
 
-#define HEXCOLOR(c) ((tm_color_srgb_t){ .a = 255, .r = 0xff & (c >> 16), .g = 0xff & (c >> 8), .b = 0xff & (c >> 0) })
-
+// Draws a button using the image specified by `image_idx`. Returns `true` if the button was
+// clicked.
 static bool button(tm_simulate_state_o* state, tm_simulate_frame_args_t* args, tm_rect_t r, const uint32_t image_idx)
 {
     const uint64_t id = tm_ui_api->make_id(args->ui);
@@ -311,6 +362,7 @@ static bool button(tm_simulate_state_o* state, tm_simulate_frame_args_t* args, t
     return (uib.activation->hover == id && uib.input->left_mouse_pressed);
 }
 
+// Draws a disabled (not clickable) button.
 static void disabled_button(tm_simulate_state_o* state, tm_simulate_frame_args_t* args, tm_rect_t r, const uint32_t image_idx)
 {
     tm_ui_api->make_id(args->ui);
@@ -323,6 +375,7 @@ static void disabled_button(tm_simulate_state_o* state, tm_simulate_frame_args_t
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, r, state->images[image_idx], (tm_rect_t){ 0, 0, 1, 1 });
 }
 
+// Draws the menu screens.
 static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
     tm_ui_buffers_t uib = tm_ui_api->buffers(args->ui);
@@ -447,29 +500,49 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     }
 }
 
-static void main_screen(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
+// Implements `tm_simulate_entry_i->start()`.
+static tm_simulate_state_o* simulate__start(tm_simulate_start_args_t* args)
+{
+    TM_STATIC_ASSERT(sizeof(tm_simulate_state_o) < RESERVE_STATE_BYTES);
+
+    tm_simulate_state_o* state = tm_alloc(args->allocator, RESERVE_STATE_BYTES);
+    memset(state, 0, RESERVE_STATE_BYTES);
+    *state = (tm_simulate_state_o){
+        .allocator = args->allocator,
+        .money = 112,
+    };
+
+    for (uint32_t i = 0; i < NUM_IMAGES; ++i)
+        state->images[i] = load_image(args, image_paths[i]);
+
+    return state;
+}
+
+// Implements `tm_simulate_entry_i->stop()`.
+static void simulate__stop(tm_simulate_state_o* state)
+{
+    tm_allocator_i a = *state->allocator;
+    tm_free(&a, state, RESERVE_STATE_BYTES);
+}
+
+// Implements `tm_simulate_entry_i->tick()`.
+static void simulate__tick(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
     scene(state, args);
     money(state, args);
     menu(state, args);
 }
 
-// Called once a frame.
-static void tick(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
-{
-    main_screen(state, args);
-    money(state, args);
-}
-
+// `tm_simulate_entry_i` interface.
 static tm_simulate_entry_i simulate_entry_i = {
-    // Change this and re-run hash.exe if you wish to change the unique identifier
     .id = TM_STATIC_HASH("tm_dinosaur_simulate", 0xcc5e7b0d0f04fed9ULL),
     .display_name = "Dinosaur Simulate",
-    .start = start,
-    .stop = stop,
-    .tick = tick,
+    .start = simulate__start,
+    .stop = simulate__stop,
+    .tick = simulate__tick,
 };
 
+// Called to load the plugin.
 TM_DLL_EXPORT void tm_load_plugin(struct tm_api_registry_api* reg, bool load)
 {
     tm_add_or_remove_implementation(reg, load, TM_SIMULATE_ENTRY_INTERFACE_NAME, &simulate_entry_i);
