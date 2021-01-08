@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "0d8277e5-af87-90f7-26fc-99fbf042ec4b"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "4d230a8b-bbae-e659-73e1-904e4ef2f599"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "ca831295-d611-dcee-bc09-0bc9420d478d"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "5c027c50-ba4c-4531-2902-150f3f203afb"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "d109aec7-defe-f4ca-f1c3-77b6bf5156a4"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\props\\fish.png"
+					validity_hash: "df00d7b2ec29d973"
+					description: {
+						__uuid: "64632694-62ed-0cd8-91b7-5d302d614476"
+					}
+					buffer: "f762e484f0cce432"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "eb81703f-3c97-5b60-ca8a-81f620a2c8d1"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

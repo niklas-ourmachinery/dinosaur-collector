@@ -1,6 +1,7 @@
 #include <foundation/allocator.h>
 #include <foundation/api_registry.h>
 #include <foundation/error.h>
+#include <foundation/macros.h>
 #include <foundation/rect.inl>
 #include <foundation/the_truth.h>
 #include <foundation/the_truth_assets.h>
@@ -52,6 +53,10 @@ enum IMAGES {
     SHOP,
     SQUARE,
 
+    FISH,
+    LEAVES,
+    MEAT,
+
     NUM_IMAGES,
 };
 
@@ -75,6 +80,10 @@ const char* image_paths[NUM_IMAGES] = {
     [MENU_BACKGROUND] = "art/icons/menu_background.creation",
     [SHOP] = "art/icons/shop.creation",
     [SQUARE] = "art/icons/square.creation",
+
+    [FISH] = "art/props/fish.creation",
+    [LEAVES] = "art/props/leaves.creation",
+    [MEAT] = "art/props/meat.creation",
 };
 
 enum STATE {
@@ -85,11 +94,26 @@ enum STATE {
     STATE__ALBUM,
 };
 
+struct prop_t {
+    const char* name;
+    uint32_t image;
+    uint32_t price;
+};
+
+struct prop_t props[] = {
+    { .name = "Leaves", .image = LEAVES, .price = 5 },
+    { .name = "Meat", .image = MEAT, .price = 10 },
+    { .name = "Fish", .image = FISH, .price = 20 },
+};
+
+#define NUM_PROPS (TM_ARRAY_COUNT(props))
+
 struct tm_simulate_state_o {
     tm_allocator_i* allocator;
     uint32_t money;
     uint32_t images[NUM_IMAGES];
     uint32_t state;
+    uint32_t inventory[NUM_PROPS];
 };
 
 static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_path)
@@ -167,17 +191,18 @@ static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     const tm_rect_t inset_r = tm_rect_inset(args->rect, 5, 5);
     const tm_rect_t money_symbol_r = tm_rect_split_bottom(tm_rect_split_left(inset_r, icon_size, 0, 0), icon_size, 0, 1);
     const tm_rect_t money_amount_r = { .x = tm_rect_right(money_symbol_r) + 10, .y = money_symbol_r.y - 2, .w = args->rect.w, .h = icon_size };
-    args->uistyle->font_scale = font_scale;
+    tm_ui_style_t uistyle[1] = { *args->uistyle };
+    uistyle->font_scale = font_scale;
     char money_str[64];
     sprintf(money_str, "%d", state->money);
-    const tm_rect_t metrics_r = tm_ui_api->text_metrics(args->ui, args->uistyle, money_str);
+    const tm_rect_t metrics_r = tm_ui_api->text_metrics(args->ui, uistyle, money_str);
     const tm_rect_t draw_r = { .y = money_symbol_r.y, .w = money_amount_r.x + metrics_r.w, .h = args->rect.h - money_symbol_r.y };
     const tm_rect_t background_r = tm_rect_inset(draw_r, -5, -5);
 
     tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, style, background_r);
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, money_symbol_r, state->images[BONE], (tm_rect_t){ 0, 0, 1, 1 });
     style->color = (tm_color_srgb_t){ .a = 255 };
-    tm_ui_api->text(args->ui, args->uistyle, &(tm_ui_text_t){ .rect = money_amount_r, .text = money_str, .color = &style->color });
+    tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = money_amount_r, .text = money_str, .color = &style->color });
 }
 
 #define HEXCOLOR(c) ((tm_color_srgb_t){ .a = 255, .r = 0xff & (c >> 16), .g = 0xff & (c >> 8), .b = 0xff & (c >> 0) })
@@ -197,6 +222,18 @@ static bool button(tm_simulate_state_o* state, tm_simulate_frame_args_t* args, t
         uib.activation->next_hover = id;
 
     return (uib.activation->hover == id && uib.input->left_mouse_pressed);
+}
+
+static void disabled_button(tm_simulate_state_o* state, tm_simulate_frame_args_t* args, tm_rect_t r, const uint32_t image_idx)
+{
+    tm_ui_api->make_id(args->ui);
+    tm_ui_buffers_t uib = tm_ui_api->buffers(args->ui);
+    tm_draw2d_style_t style[1] = { 0 };
+    tm_ui_api->to_draw_style(args->ui, style, args->uistyle);
+    style->color = (tm_color_srgb_t){ .r = 255, .g = 255, .b = 255, .a = 64 };
+    style->include_alpha = true;
+
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, r, state->images[image_idx], (tm_rect_t){ 0, 0, 1, 1 });
 }
 
 static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
@@ -233,25 +270,61 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     rect = menu_inset_r;
 
     if (state->state == STATE__MENU) {
-        for (uint32_t i = 0; i < 3; ++i) {
-            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.04f * unit, 3, i);
-            for (uint32_t j = 0; j < 3; ++j) {
-                const tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.04f * unit, 3, j);
-                const uint32_t idx = i * 3 + j;
-                switch (idx) {
-                case 0:
-                    if (button(state, args, icon_r, INVENTORY))
-                        state->state = STATE__INVENTORY;
-                    break;
-                case 1:
-                    if (button(state, args, icon_r, SHOP))
-                        state->state = STATE__SHOP;
-                    break;
-                case 2:
-                    if (button(state, args, icon_r, ALBUM))
-                        state->state = STATE__ALBUM;
-                    break;
-                }
+        for (uint32_t idx = 0; idx < 9; ++idx) {
+            const uint32_t x = idx % 3;
+            const uint32_t y = idx / 3;
+            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.04f * unit, 3, y);
+            const tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.04f * unit, 3, x);
+            switch (idx) {
+            case 0:
+                if (button(state, args, icon_r, INVENTORY))
+                    state->state = STATE__INVENTORY;
+                break;
+            case 1:
+                if (button(state, args, icon_r, SHOP))
+                    state->state = STATE__SHOP;
+                break;
+            case 2:
+                if (button(state, args, icon_r, ALBUM))
+                    state->state = STATE__ALBUM;
+                break;
+            }
+        }
+    } else if (state->state == STATE__SHOP) {
+        tm_ui_style_t uistyle[1] = { *args->uistyle };
+
+        for (uint32_t idx = 0; idx < 9; ++idx) {
+            const uint32_t x = idx % 3;
+            const uint32_t y = idx / 3;
+            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.04f * unit, 3, y);
+            const tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.04f * unit, 3, x);
+            if (idx >= NUM_PROPS)
+                continue;
+
+            const bool enabled = state->money >= props[idx].price;
+
+            const tm_color_srgb_t text_color = {.a = enabled ? 255 : 64 };
+            const tm_rect_t desc_r = tm_rect_set_h(tm_rect_add(icon_r, (tm_rect_t){ .y = icon_r.h }), 0.04f * unit);
+            uistyle->font_scale = desc_r.h / 18.0f;
+            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = props[idx].name, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
+
+            tm_rect_t price_r = tm_rect_add(desc_r, (tm_rect_t){ .y = desc_r.h * 1.2f });
+            const tm_rect_t bone_r = tm_rect_split_off_left(&price_r, price_r.h, 0.01f * unit);
+            style->color = (tm_color_srgb_t){ .a = enabled ? 255 : 64, .r = 255, .g = 255, .b = 255 };
+            tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, bone_r, state->images[BONE], (tm_rect_t){ 0, 0, 1, 1 });
+
+            char price_str[32] = { 0 };
+            char inventory_str[32] = { 0 };
+            sprintf(price_str, "%d", props[idx].price);
+            sprintf(inventory_str, "%d", state->inventory[idx]);
+            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = price_r, .text = price_str, .color = &text_color, .align = TM_UI_ALIGN_LEFT });
+            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = price_r, .text = inventory_str, .color = &text_color, .align = TM_UI_ALIGN_RIGHT });
+
+            if (!enabled) {
+                disabled_button(state, args, icon_r, props[idx].image);
+            } else if (button(state, args, icon_r, props[idx].image)) {
+                state->money -= props[idx].price;
+                state->inventory[idx]++;
             }
         }
     }

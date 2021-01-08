@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "814a7467-676d-71e9-469e-c83c71483161"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "aef1f9c5-eac0-5a84-fe69-4905ff0935da"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "5599b4cd-db97-9c1a-64cf-ab9dd6fbe997"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "712c44cb-be0b-f3ce-bc1e-ba1204dd59c4"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "ea6db0fd-2b41-5a2a-8bf4-ac029773046d"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\props\\leaves.png"
+					validity_hash: "cf8b58a2f7cb6643"
+					description: {
+						__uuid: "110b103d-e17b-1a49-ffc7-6a81465bf63a"
+					}
+					buffer: "b6329464f025323e"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "102a8ba4-16ab-35cc-2834-4e03d673bce0"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]
