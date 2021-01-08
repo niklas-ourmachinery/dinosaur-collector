@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "312a0a79-8c8b-6713-50ee-a0ece6853d40"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "50e89d64-d911-9454-1076-b5114ef8ae60"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "d41f0ad5-13cd-9c3f-9d46-fffebea8b742"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "dd837451-2692-c060-360f-e0896aeb3a8b"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "ce1eb587-3511-8c7f-15be-6c07c54fa2b7"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\brachiosaurus 2.png"
+					validity_hash: "6e4be14562beaaf4"
+					description: {
+						__uuid: "8d308f1a-ad81-323b-e8c0-4493057a8888"
+						widht: 512
+						height: 512
+					}
+					buffer: "673912cd22711f7c"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "e8a74180-4383-7bf8-88c8-f50c89647d91"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

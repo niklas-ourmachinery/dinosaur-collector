@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "b1e06916-2b1c-746b-a298-4379bf686f74"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "c8b754f6-08a0-33dd-4858-36a0cf0c8533"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "4771dd4a-7473-e5f0-2fc4-120b9acb47db"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "3195215b-95e8-ae0c-66dc-0fbabdde2a6f"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "2911971f-b107-2a9f-9699-37a747048a3e"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\spinosaurus.png"
+					validity_hash: "4812ca737bf23075"
+					description: {
+						__uuid: "be5a2509-24ce-9095-b65d-1803c573c34e"
+						widht: 512
+						height: 512
+					}
+					buffer: "a082d95d1de3278e"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "857325ed-541b-4e94-6be6-e89fa15350d4"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

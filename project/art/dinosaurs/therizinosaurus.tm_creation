@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "f91e37fb-2400-2e39-a635-4512e41ebb27"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "b2f8d176-5333-1ef3-60e7-a3344e78d852"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "0fc406b5-99f7-98a8-920e-9492fa549025"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "59502fdc-3f9b-b2c5-7882-5311539b8bb5"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "9ddba76d-fd3f-d523-3328-f4fcce558a6e"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\therizinosaurus.png"
+					validity_hash: "ff8b8e29cd745e82"
+					description: {
+						__uuid: "4405e9d0-05f4-2520-3dd5-04d336228824"
+						widht: 512
+						height: 512
+					}
+					buffer: "b3cfdb1f3dee374e"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "be864463-640e-cd21-a9c0-4c5cb51c9a2d"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "027b4d38-a31f-df67-12cc-e6edb94760a2"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "117b7189-7b3f-059d-d8e4-a286d54ce6ad"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "73733e18-9f3d-d7ce-aa39-bd55afc1cb6c"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "e9afe7b5-1e65-d2fa-51cb-63e7d2b6825c"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "cad6b8bc-a17b-c3b6-7a3f-0f8ebb1865d4"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\tyrannosaurus .png"
+					validity_hash: "ffae0e8566e3b47b"
+					description: {
+						__uuid: "9b56f558-b98a-1ebf-a992-90a8a999de20"
+						widht: 512
+						height: 512
+					}
+					buffer: "2c087f18ff14b28f"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "df0711a5-a3a4-26bc-84d0-19d1a111629c"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "ac0e1749-10e2-db84-1025-5a2453de9276"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "86683f8e-e479-53cd-de84-a65e9f2cba55"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "d5048182-ef3d-0248-0480-67dc6e855a66"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "4356a1ee-e227-53c4-3983-83c91792eced"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "350129b3-ac20-6dfe-af1c-d66c4c38e585"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\pliosaurus.png"
+					validity_hash: "a4326ce7eca3ee53"
+					description: {
+						__uuid: "5de62518-30b3-db4d-6776-d8a59408729e"
+						widht: 512
+						height: 512
+					}
+					buffer: "a0c5dfb2535895e0"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "47a567eb-dc92-7eb6-2ebc-5b7d492f6ab4"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

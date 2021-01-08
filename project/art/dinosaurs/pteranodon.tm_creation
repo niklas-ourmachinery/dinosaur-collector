@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "be5d07b5-9bb2-0d05-e0a8-47de3e6f710c"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "1827fca9-d963-58ea-ec21-b71b44a9177b"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "60e7650e-0204-1cb5-1119-3b0adeecac5f"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "502c3088-c023-0762-0733-1b54a4f13782"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "ea76b13d-8878-1386-ada4-469684d0b5eb"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\pteranodon.png"
+					validity_hash: "c5ea75c1e007d7ac"
+					description: {
+						__uuid: "b42cf6e1-5859-7c3a-f587-c7b6c508ec08"
+						widht: 512
+						height: 512
+					}
+					buffer: "d55e57ea31f09d21"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "cc38a2eb-7ec9-f597-1f47-c484319830f3"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

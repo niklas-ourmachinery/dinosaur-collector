@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "92b4eece-24a3-f4f2-95d7-911f2d631264"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "36d1ae81-2e4c-cf75-2933-0e182aa1cd99"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "4c83e7cc-d798-a9ae-f61c-30707c060dcd"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "474dc79a-8f5a-d92c-4194-c38bca4fd7c7"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "0b96dcc4-60cb-6a9f-ab75-01edc94d1f9b"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\stegosaurus 3.png"
+					validity_hash: "76de0b20182dda43"
+					description: {
+						__uuid: "37516056-05b5-bfac-8a74-e7e925ebf593"
+						widht: 512
+						height: 512
+					}
+					buffer: "88b570926a0c629d"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "41a46e29-bdbf-e7d9-a975-f5a59fc7991f"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

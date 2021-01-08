@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "996b70b0-332b-a4ed-a939-92e8cb7b8531"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "953b9dba-4688-cdf4-d9e8-4648ea90d94c"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "36d45fc2-0f4e-62e2-0ae0-d131908a39a2"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "d637060b-1ce3-2d36-fc5d-338499cd850a"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "d57d11cc-0fe4-98bb-aeba-51eae54f0642"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\parasaurolophus 2.png"
+					validity_hash: "5df3e5cd1e44a3b5"
+					description: {
+						__uuid: "b904fc7f-ffdc-a420-24c6-9e46783e1bda"
+						widht: 512
+						height: 512
+					}
+					buffer: "5ad3ae440282ce18"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "ca1c8ba8-340e-002c-441d-95fab6c2e58f"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

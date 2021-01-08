@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "6c1c7927-9806-abc3-93d2-06d8d6dcfd68"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "569991bf-0a26-611e-e823-0238afe11a37"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "3bfd3cbb-e384-ff46-c6bf-4a94331eff46"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "8d8f34e6-50d7-82c2-d712-c37f22da792c"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "e8be56d4-fee1-ceae-5666-fb5727442c2b"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\utahceratops.png"
+					validity_hash: "d4e52ce32d344a14"
+					description: {
+						__uuid: "7cb14855-4984-60a3-66e3-34240be28262"
+						widht: 512
+						height: 512
+					}
+					buffer: "23e9550c69a7f48d"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "cf10c3b8-6d5b-d1b1-9085-e6b8208a2bfc"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

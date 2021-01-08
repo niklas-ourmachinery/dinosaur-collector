@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "43e0fc86-c197-3f0b-c7d2-316cea912b18"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "379fdd20-ea0e-6c61-dc32-a5b05f58cefe"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "a11c0b48-f60f-05a9-dfac-5393466c3d5c"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "ba8470b4-20d2-d607-aebd-1697d03293f1"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "ac542282-e577-3b2c-636b-db756296a43e"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\apatosaurus.png"
+					validity_hash: "4925359d80bb5a12"
+					description: {
+						__uuid: "2bd3cb29-81d2-9c3b-6d9f-a46d9418e886"
+						widht: 512
+						height: 512
+					}
+					buffer: "db40608e3356f7d5"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "5fe443e6-8a06-9853-1b0d-83f26aae79ed"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

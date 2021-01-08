@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "814b7d97-3bcd-1805-20c4-00092d51a442"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "4a6cf066-3966-82b5-327c-c62cbc806e48"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "efbea587-189b-7b7b-f804-e13713c33817"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "94b23e2b-922b-5b89-87da-8c76f78f20f6"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "b587ecb9-aa9c-1946-9c4b-7866469ebe17"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\carnotaurus.png"
+					validity_hash: "3aa7604ba0c0892a"
+					description: {
+						__uuid: "f6143dda-0e10-e349-5187-2585e86806e2"
+						widht: 512
+						height: 512
+					}
+					buffer: "fa22324d1e7ce83a"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "9ef271f1-9125-19c7-f6ac-5eae3ac6d0ed"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

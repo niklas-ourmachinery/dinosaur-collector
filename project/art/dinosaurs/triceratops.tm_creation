@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "c0a62fd8-bf39-87ad-168a-8a05df761bcf"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "dae89a7f-b65f-a104-02df-2aa06ccb69b4"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "c08dbbc1-3714-9106-a891-c8a9a7167f9b"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "af90f8cd-87e7-c82b-ff1e-a34428e5a91a"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "cd6fefc5-168a-48df-df61-c07223cb6e15"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\triceratops .png"
+					validity_hash: "82b59a896687ea3b"
+					description: {
+						__uuid: "23d2246c-f22a-2280-b37d-dfc1c9e00571"
+						widht: 512
+						height: 512
+					}
+					buffer: "099628b0f0b0a750"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "18d92f10-89c5-79f4-90c8-821a17dd0b40"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

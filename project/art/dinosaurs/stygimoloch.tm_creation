@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "bf7ed782-f648-f10f-2ac9-956b9b352891"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "49bc04ef-7b9a-8c2a-57be-b60f6302c84b"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "47a2a083-5e21-f9a6-a758-5aaf77c17bdc"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "d447075b-d201-fabf-a76a-78858adb0f46"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "b1d9ac05-a300-501c-5ba0-b4fa33ef2163"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\stygimoloch.png"
+					validity_hash: "699776e017bf10b6"
+					description: {
+						__uuid: "de78b32c-3afb-15ff-b687-c22ab3438d31"
+						widht: 512
+						height: 512
+					}
+					buffer: "bc79ff1a59279d26"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "e39c4257-6a40-4d40-e22c-30b7e05077ff"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

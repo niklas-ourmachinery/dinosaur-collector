@@ -1,37 +1,37 @@
 __type: "tm_creation_graph"
-__uuid: "48005027-50dc-2b51-ea5a-2d799336c8a5"
+__uuid: "f9e4642d-ef00-d171-44f8-82fb92d21a4a"
 __prototype_type: "tm_creation_graph"
 __prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
 graph: {
-	__uuid: "994b6dd6-1d86-560b-0ce7-205943e13035"
+	__uuid: "4f68de02-146a-49d5-fea3-c74c8e7b444f"
 	__prototype_type: "tm_graph"
 	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
 	interface: {
-		__uuid: "70396f6a-2b9b-9cc7-7c8c-73b95ae8e912"
+		__uuid: "1dfad45c-a431-29f2-0ccc-248e4a3fa6f2"
 		__prototype_type: "tm_graph_interface"
 		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
 		inputs__instantiated: [
 			{
-				__uuid: "c3389cb3-6704-6bfd-5c91-cc16bccaf8a4"
+				__uuid: "7187ce24-911a-8588-8fc2-dc42d72b6659"
 				__prototype_type: "tm_graph_input"
 				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
 				value: {
 					__type: "tm_image_archive"
-					__uuid: "22b3da47-1d73-2e83-f092-48a72e052e9f"
+					__uuid: "eaaf3cc0-11be-7ec8-2c1b-c1943d900298"
 					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\backgrounds\\background .png"
-					validity_hash: "6c744b5e1a6e5935"
+					validity_hash: "d6ddf6417890cd97"
 					description: {
-						__uuid: "9bb9f1b2-3e9f-0768-a55f-f77540cda0f2"
+						__uuid: "b23eea82-cc83-1eb4-9652-3515b649525a"
 						widht: 2048
 						height: 1024
 					}
-					buffer: "6f1d4b5df01b2caf"
+					buffer: "3236fd02c639ccd3"
 				}
 			}
 		]
 	}
 }
-__asset_uuid: "5ebf316f-c910-4a33-32a3-f3e55b103652"
+__asset_uuid: "5950f584-a297-c3aa-3786-f4ac1c8a2f12"
 __asset_labels: [
 	"e4bec38d8f73f423"
 ]

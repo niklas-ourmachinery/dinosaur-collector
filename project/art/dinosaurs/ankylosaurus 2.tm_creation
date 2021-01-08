@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "c40367e7-7457-6c0f-e1a7-3d9d175dba73"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "794a86d5-8f33-1b29-3655-d4f5e2249df6"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "dce3f180-8b83-3898-69be-94aac7f796c1"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "1494c9a4-cd9e-76f8-6902-48d17a286f72"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "81c3d228-05ad-e551-4e72-ef6e7ad44ffb"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\ankylosaurus 2.png"
+					validity_hash: "d7a5425d4ad7a809"
+					description: {
+						__uuid: "c1ebbc7d-4069-1694-20f5-00b82c6981f4"
+						widht: 512
+						height: 512
+					}
+					buffer: "4a45f648d4628b3d"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "1ae62fca-7713-3846-774c-c42d24914058"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

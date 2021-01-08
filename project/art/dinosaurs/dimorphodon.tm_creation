@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "7a59924e-01a4-6471-bd9a-f40d6c0c0035"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "93259f91-a043-e684-d63d-738b99a18187"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "00c52abf-fe95-133f-c61c-3a11d0bbe7e2"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "c1b64fd9-243d-1021-916a-d22cc2e90e5f"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "c90fd63f-260c-18b9-39a0-6c40bcd5b3c3"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\dimorphodon.png"
+					validity_hash: "c1cc0589afefd60b"
+					description: {
+						__uuid: "08e840dd-d0db-b796-7993-674924d91a9d"
+						widht: 512
+						height: 512
+					}
+					buffer: "d36479ad5ffe1a5e"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "ff2c63c7-7cbc-e4a8-52d2-480e9f823140"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "8afeca57-6421-b5da-6404-f4ee15a54126"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "c26b8939-6aab-5cac-3ca6-e5944ce32f4e"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "b15c0ef0-0861-6296-b4ad-2a1964d0a05b"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "b6ccdb02-1fd2-a15b-666d-9b277056ab74"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "45da5caf-25c9-3846-9352-a623f179bafe"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\backgrounds\\layer 3.png"
+					validity_hash: "ea261e2f978b3fcc"
+					description: {
+						__uuid: "ec9f3fa1-8413-a5b4-7ca0-4186dd8dacdb"
+						widht: 2048
+						height: 1024
+					}
+					buffer: "93d023015b42d69a"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "c716bea0-37ef-6b46-c64b-7dcbfbc11a68"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

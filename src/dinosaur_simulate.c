@@ -35,6 +35,10 @@ enum IMAGES {
     MISSING,
 
     BACKGROUND,
+    LAYER_1,
+    LAYER_2,
+    LAYER_3,
+    LAYER_4,
 
     ANKYLOSAURUS,
 
@@ -55,6 +59,10 @@ const char* image_paths[NUM_IMAGES] = {
     [MISSING] = "art/icons/missing.creation",
 
     [BACKGROUND] = "art/backgrounds/background.creation",
+    [LAYER_1] = "art/backgrounds/layer 1.creation",
+    [LAYER_2] = "art/backgrounds/layer 2.creation",
+    [LAYER_3] = "art/backgrounds/layer 3.creation",
+    [LAYER_4] = "art/backgrounds/layer 4.creation",
 
     [ANKYLOSAURUS] = "art/dinosaurs/ankylosaurus.creation",
 
@@ -91,7 +99,6 @@ static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_pat
         return 0;
 
     const tm_tt_id_t object = tm_the_truth_api->get_subobject(args->tt, tm_tt_read(args->tt, asset), TM_TT_PROP__ASSET__OBJECT);
-    // TODO: Pipe a proper device_affinity_mask?
     tm_creation_graph_context_t ctx = (tm_creation_graph_context_t){ .rb = args->render_backend, .device_affinity_mask = TM_RENDERER_DEVICE_AFFINITY_MASK_ALL, .tt = args->tt };
     tm_creation_graph_instance_t inst = tm_creation_graph_api->create_instance(object, &ctx);
     tm_creation_graph_output_t output = tm_creation_graph_api->output(&inst, TM_CREATION_GRAPH__IMAGE__OUTPUT_NODE_HASH, &ctx, 0);
@@ -124,18 +131,7 @@ static void stop(tm_simulate_state_o* state)
     tm_free(&a, state, RESERVE_STATE_BYTES);
 }
 
-static void background(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
-{
-    tm_ui_buffers_t uib = tm_ui_api->buffers(args->ui);
-    tm_draw2d_style_t style[1] = { 0 };
-    tm_ui_api->to_draw_style(args->ui, style, args->uistyle);
-    style->include_alpha = true;
-    style->color = (tm_color_srgb_t){ 255, 255, 255, 255 };
-
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->images[BACKGROUND], (tm_rect_t){ 0, 0, 1, 1 });
-}
-
-static void dinosaurs(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
+static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
     tm_ui_buffers_t uib = tm_ui_api->buffers(args->ui);
     tm_draw2d_style_t style[1] = { 0 };
@@ -144,8 +140,16 @@ static void dinosaurs(tm_simulate_state_o* state, tm_simulate_frame_args_t* args
     style->color = (tm_color_srgb_t){ 255, 255, 255, 255 };
 
     const float x = (float)fmod(args->time * 200, args->rect.w + 300) - 300;
-    const tm_rect_t ankylo_r = { x, tm_rect_bottom(args->rect) - 200, 200, 100 };
+    const tm_rect_t ankylo_r = { x, tm_rect_bottom(args->rect) - 200, 200, 200 };
+
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->images[BACKGROUND], (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->images[LAYER_1], (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->images[LAYER_2], (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->images[LAYER_3], (tm_rect_t){ 0, 0, 1, 1 });
+
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, ankylo_r, state->images[ANKYLOSAURUS], (tm_rect_t){ 0, 0, 1, 1 });
+
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->images[LAYER_4], (tm_rect_t){ 0, 0, 1, 1 });
 }
 
 static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
@@ -255,8 +259,7 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 
 static void main_screen(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
-    background(state, args);
-    dinosaurs(state, args);
+    scene(state, args);
     money(state, args);
     menu(state, args);
 }

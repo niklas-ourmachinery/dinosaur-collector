@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "34bacdec-07a1-581c-37e6-ba3fafe7eefc"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "0315656f-160f-1723-2c5e-ee5da9b11502"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "7f831c9e-1d3f-b745-22c5-7e50db434977"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "beaadb9a-a40a-f672-b7fc-4e9b701c7567"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "19e11ca3-df76-4a71-ab94-8ad4f1fd998d"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\dinosaurs\\dino dinosaurs  2.png"
+					validity_hash: "826a14dfc7f8160a"
+					description: {
+						__uuid: "7ac87a83-1677-8428-0956-8ae844970bb3"
+						widht: 512
+						height: 512
+					}
+					buffer: "f970e092e2ea8183"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "4bef62f0-1d49-1973-0ede-a5648e7814cd"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]
