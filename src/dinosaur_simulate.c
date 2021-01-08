@@ -35,7 +35,7 @@ static struct tm_the_truth_api* tm_the_truth_api;
 // Reserve this many bytes for the state, so that we can grow it while hot-reloading.
 enum { RESERVE_STATE_BYTES = 32 * 1024 };
 
-// Returns a `tm_color_srgb_t` corresponding to the hexadecimal color `c`. 
+// Returns a `tm_color_srgb_t` corresponding to the hexadecimal color `c`.
 #define HEXCOLOR(c) ((tm_color_srgb_t){ .a = 255, .r = 0xff & (c >> 16), .g = 0xff & (c >> 8), .b = 0xff & (c >> 0) })
 
 // Index of all images in the game.
@@ -219,6 +219,29 @@ static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_pat
     return image;
 }
 
+// Returns `true` if the background-realtive coordinates `(x,y)` are "in the lake". Only
+static const bool in_lake(float x, float y)
+{
+    if (x > 0.39f)
+        return false;
+
+    if (y < 0.68f) {
+        if (x < 0.09f)
+            return y > tm_lerp(0.48f, 0.45f, (x - 0.00f) / 0.09f);
+        else if (x < 0.13f)
+            return y > tm_lerp(0.45f, 0.52f, (x - 0.09f) / 0.04f);
+        else if (x < 0.33f)
+            return y > tm_lerp(0.52f, 0.55f, (x - 0.13f) / 0.20f);
+        else
+            return y > tm_lerp(0.55f, 0.68f, (x - 0.33f) / 0.06f);
+    } else {
+        if (x < 0.22f)
+            return y < 0.88f;
+        else
+            return y < tm_lerp(0.90f, 0.74f, (x - 0.22f) / 0.17f);
+    }
+}
+
 // Draws scene props in the array `(draw_props, num_props)`. Only the props found in the specified
 // `layer` are drawn.
 static void scene_props(tm_simulate_state_o* state, tm_simulate_frame_args_t* args,
@@ -242,8 +265,13 @@ static void scene_props(tm_simulate_state_o* state, tm_simulate_frame_args_t* ar
         const float rel_size = (p->y - 0.35f) / (1.0f - 0.35f);
         const float size = tm_lerp(far_size, close_size, rel_size);
 
-        const tm_rect_t r = { x - size / 2, y - size + size * prop->margin, size, size };
-        tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, r, state->images[prop->image], (tm_rect_t){ 0, 0, 1, 1 });
+        if (in_lake(p->x, p->y)) {
+            const tm_rect_t r = { x - size / 2, y - size + size * prop->margin, size, size / 2 };
+            tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, r, state->images[prop->image], (tm_rect_t){ 0, 0, 1, 0.5f });
+        } else {
+            const tm_rect_t r = { x - size / 2, y - size + size * prop->margin, size, size };
+            tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, r, state->images[prop->image], (tm_rect_t){ 0, 0, 1, 1 });
+        }
     }
 }
 
@@ -273,7 +301,12 @@ static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     if (state->state == STATE__PLACING) {
         const float scene_rel_mouse_x = (uib.input->mouse_pos.x - background_r.x) / background_r.w;
         const float scene_rel_mouse_y = (uib.input->mouse_pos.y - background_r.y) / background_r.h;
-        if (tm_is_between(scene_rel_mouse_x, 0, 1) && tm_is_between(scene_rel_mouse_y, 0.35, 1)) {
+
+        const bool is_in_scene = tm_is_between(scene_rel_mouse_x, 0, 1) && tm_is_between(scene_rel_mouse_y, 0.35, 1);
+        const bool is_in_lake = in_lake(scene_rel_mouse_x, scene_rel_mouse_y);
+        const bool can_place = is_in_scene && (!is_in_lake || props[state->place_prop].image == FISH);
+
+        if (can_place) {
             state->scene_props[num_scene_props] = (struct scene_prop_t){
                 .x = scene_rel_mouse_x,
                 .y = scene_rel_mouse_y,
@@ -310,6 +343,17 @@ static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     } else if (rel_mouse_x > 0.75f) {
         const float edge_proximity = (rel_mouse_x - 0.75f) / 0.25f;
         state->scroll += args->dt * 2000 * edge_proximity;
+    }
+
+    // Enable this to print mouse relative coordinates for testing.
+    bool show_mouse_coordinates = true;
+    if (show_mouse_coordinates) {
+        const float scene_rel_mouse_x = (uib.input->mouse_pos.x - background_r.x) / background_r.w;
+        const float scene_rel_mouse_y = (uib.input->mouse_pos.y - background_r.y) / background_r.h;
+        char coords_str[128];
+        sprintf(coords_str, "(%.2f, %.2f)", scene_rel_mouse_x, scene_rel_mouse_y);
+        const tm_rect_t coords_r = { uib.input->mouse_pos.x, uib.input->mouse_pos.y, 32, 32 };
+        tm_ui_api->text(args->ui, args->uistyle, &(tm_ui_text_t){ .rect = coords_r, .text = coords_str, .color = &HEXCOLOR(0xff0000) });
     }
 }
 
