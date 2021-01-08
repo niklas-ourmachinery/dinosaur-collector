@@ -114,6 +114,7 @@ struct tm_simulate_state_o {
     uint32_t images[NUM_IMAGES];
     uint32_t state;
     uint32_t inventory[NUM_PROPS];
+    float scroll;
 };
 
 static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_path)
@@ -163,17 +164,39 @@ static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     style->include_alpha = true;
     style->color = (tm_color_srgb_t){ 255, 255, 255, 255 };
 
+    const float aspect = 2.0f;
+    tm_rect_t background_r = tm_rect_set_w(args->rect, args->rect.h * aspect);
+    if (background_r.w < args->rect.w) {
+        background_r.x = (args->rect.w - background_r.w) / 2.0f;
+        tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, style, args->rect);
+        style->clip = tm_draw2d_api->add_clip_rect(uib.vbuffer, background_r);
+    } else {
+        state->scroll = tm_clamp(state->scroll, 0, background_r.w - args->rect.w);
+        if (state->scroll < 0)
+            state->scroll = 0;
+        background_r.x = -state->scroll;
+    }
+
     const float x = (float)fmod(args->time * 200, args->rect.w + 300) - 300;
     const tm_rect_t ankylo_r = { x, tm_rect_bottom(args->rect) - 200, 200, 200 };
 
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->images[BACKGROUND], (tm_rect_t){ 0, 0, 1, 1 });
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->images[LAYER_1], (tm_rect_t){ 0, 0, 1, 1 });
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->images[LAYER_2], (tm_rect_t){ 0, 0, 1, 1 });
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->images[LAYER_3], (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[BACKGROUND], (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[LAYER_1], (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[LAYER_2], (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[LAYER_3], (tm_rect_t){ 0, 0, 1, 1 });
 
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, ankylo_r, state->images[ANKYLOSAURUS], (tm_rect_t){ 0, 0, 1, 1 });
 
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, args->rect, state->images[LAYER_4], (tm_rect_t){ 0, 0, 1, 1 });
+    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[LAYER_4], (tm_rect_t){ 0, 0, 1, 1 });
+
+    const float rel_mouse_x = tm_clamp((uib.input->mouse_pos.x - args->rect.x) / args->rect.w, 0, 1);
+    if (rel_mouse_x < 0.25f) {
+        const float edge_proximity = (0.25f - rel_mouse_x) / 0.25f;
+        state->scroll -= args->dt * 2000 * edge_proximity;
+    } else if (rel_mouse_x > 0.75f) {
+        const float edge_proximity = (rel_mouse_x - 0.75f) / 0.25f;
+        state->scroll += args->dt * 2000 * edge_proximity;
+    }
 }
 
 static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
@@ -294,7 +317,7 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
         tm_ui_style_t uistyle[1] = { *args->uistyle };
 
         uint32_t idx = 0;
-        for (uint32_t i = 0; i < 9; ++i,++idx) {
+        for (uint32_t i = 0; i < 9; ++i, ++idx) {
             const uint32_t x = i % 3;
             const uint32_t y = i / 3;
             const tm_rect_t row_r = tm_rect_divide_y(rect, 0.04f * unit, 3, y);
