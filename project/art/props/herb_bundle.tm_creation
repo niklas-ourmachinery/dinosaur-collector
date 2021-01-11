@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "18a2ee72-d5d6-6a25-b1e7-36e7295fe50b"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "175fb477-3fb0-3dad-4aee-7ed46f4b2541"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "2ae0f56c-a6e0-f4c9-da14-f6b131e78c28"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "5110899d-242b-a276-9e9d-c73df914466e"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "3c3de773-a7e9-dbfe-7d43-e155cdf184c5"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\props\\herbs.png"
+					validity_hash: "1496407a7684ed0c"
+					description: {
+						__uuid: "5e320d8c-c8a1-4675-cc54-46f4e626c642"
+					}
+					buffer: "2a9f245a40d33ed1"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "e4ffc126-990d-31ee-474c-f3644d511458"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

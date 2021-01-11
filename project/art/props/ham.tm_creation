@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "226e9aa4-ba35-f5bb-3f3d-a36caf498911"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "30df59c2-4911-b906-24e9-959815803c14"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "303a3d7e-a26e-242f-2946-b658add9c030"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "a39d106d-1e77-fc63-409d-d129c97abeb3"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "b3ce4c8d-5a86-e4d6-432a-9735acb6025a"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\props\\ham.png"
+					validity_hash: "52858ea1fb74ccb2"
+					description: {
+						__uuid: "a1faa6ea-3598-7395-4577-d1005adb6614"
+					}
+					buffer: "66d97b020b744d18"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "98cdf77d-2504-ae7d-131b-f4549882196a"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

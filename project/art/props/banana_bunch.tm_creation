@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "7dc07653-ec0c-6971-b023-aba542c43303"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "987ca005-6b23-deb7-3253-423db1611ac8"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "8ea592cf-7115-cb22-d6bb-8efad4e48f96"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "21ede669-e0b1-d228-1b9b-1b8925b588cd"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "2e43dda5-6094-e7d1-8d59-63afeaf55ed1"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\props\\bananas.png"
+					validity_hash: "f966168102f0c5fd"
+					description: {
+						__uuid: "7763c522-6ecc-5693-da79-eef35c6802e1"
+					}
+					buffer: "2265755933174cbe"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "d4c71d32-39f8-1fe7-1a31-f8cb824f32e6"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

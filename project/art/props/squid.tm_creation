@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "d4faa1f6-ae80-8b65-33d5-cf36c158ba0a"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "227bfdb2-dd4b-6557-d321-feb37ae39c8d"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "81c55010-d898-0b86-f2da-df3c5405f85c"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "3a20bced-148a-daf3-ff19-34e8b7f49bb0"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "da650640-c7ff-b9f1-7605-1247c6e83dc3"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\props\\squid.png"
+					validity_hash: "53691851d0f75014"
+					description: {
+						__uuid: "1d4b5937-b69e-cdec-221d-19fa7b481ffd"
+					}
+					buffer: "ee672448fefb05a3"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "028c937e-4468-2871-7d44-30a08d96afa4"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

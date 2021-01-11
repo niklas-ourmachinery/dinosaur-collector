@@ -53,6 +53,29 @@ enum IMAGES {
 
     // Dinosaur images.
     ANKYLOSAURUS,
+    ANKYLOSAURUS_2,
+    APATOSAURUS,
+    BRACHIOSAURUS,
+    BRACHIOSAURUS_2,
+    CARNOTAURUS,
+    DIMORPHODON,
+    PACHYCEPHALOSAURUS,
+    PARASAUROLOPHUS,
+    PARASAUROLOPHUS_2,
+    PLESIOSAURUS,
+    PLIOSAURUS,
+    PTERANODON,
+    SPINOSAURUS,
+    STEGOSAURUS,
+    STEGOSAURUS_2,
+    STEGOSAURUS_3,
+    STYGIMOLOCH,
+    THERIZINOSAURUS,
+    TRICERATOPS,
+    TRICERATOPS_2,
+    TYRANNOSAURUS,
+    UTAHCERATOPS,
+    VELOCIRAPTOR,
 
     // Icons
     ALBUM,
@@ -66,9 +89,18 @@ enum IMAGES {
     SQUARE,
 
     // Props
+    BANANA_BUNCH,
+    BERRY_BUNCH,
+    DEAD_MOUSE,
     FISH,
+    HAM,
+    HAUNCH,
+    HERB_BUNDLE,
     LEAVES,
     MEAT,
+    SQUID,
+    STARFISH,
+    URCHIN,
 
     // Total number of images.
     NUM_IMAGES,
@@ -85,6 +117,29 @@ const char* image_paths[NUM_IMAGES] = {
     [BACKGROUND_LAYER_4] = "art/backgrounds/layer 4.creation",
 
     [ANKYLOSAURUS] = "art/dinosaurs/ankylosaurus.creation",
+    [ANKYLOSAURUS_2] = "art/dinosaurs/ankylosaurus_2.creation",
+    [APATOSAURUS] = "art/dinosaurs/apatosaurus.creation",
+    [BRACHIOSAURUS] = "art/dinosaurs/brachiosaurus.creation",
+    [BRACHIOSAURUS_2] = "art/dinosaurs/brachiosaurus_2.creation",
+    [CARNOTAURUS] = "art/dinosaurs/carnotaurus.creation",
+    [DIMORPHODON] = "art/dinosaurs/dimorphodon.creation",
+    [PACHYCEPHALOSAURUS] = "art/dinosaurs/pachycephalosaurus.creation",
+    [PARASAUROLOPHUS] = "art/dinosaurs/parasaurolophus.creation",
+    [PARASAUROLOPHUS_2] = "art/dinosaurs/parasaurolophus_2.creation",
+    [PLESIOSAURUS] = "art/dinosaurs/plesiosaurus.creation",
+    [PLIOSAURUS] = "art/dinosaurs/pliosaurus.creation",
+    [PTERANODON] = "art/dinosaurs/pteranodon.creation",
+    [SPINOSAURUS] = "art/dinosaurs/spinosaurus.creation",
+    [STEGOSAURUS] = "art/dinosaurs/stegosaurus.creation",
+    [STEGOSAURUS_2] = "art/dinosaurs/stegosaurus_2.creation",
+    [STEGOSAURUS_3] = "art/dinosaurs/stegosaurus_3.creation",
+    [STYGIMOLOCH] = "art/dinosaurs/stygimoloch.creation",
+    [THERIZINOSAURUS] = "art/dinosaurs/therizinosaurus.creation",
+    [TRICERATOPS] = "art/dinosaurs/triceratops.creation",
+    [TRICERATOPS_2] = "art/dinosaurs/triceratops_2.creation",
+    [TYRANNOSAURUS] = "art/dinosaurs/tyrannosaurus.creation",
+    [UTAHCERATOPS] = "art/dinosaurs/utahceratops.creation",
+    [VELOCIRAPTOR] = "art/dinosaurs/velociraptor.creation",
 
     [ALBUM] = "art/icons/album.creation",
     [BACK] = "art/icons/back.creation",
@@ -96,9 +151,18 @@ const char* image_paths[NUM_IMAGES] = {
     [SHOP] = "art/icons/shop.creation",
     [SQUARE] = "art/icons/square.creation",
 
+    [BANANA_BUNCH] = "art/props/banana_bunch.creation",
+    [BERRY_BUNCH] = "art/props/berry_bunch.creation",
+    [DEAD_MOUSE] = "art/props/dead_mouse.creation",
     [FISH] = "art/props/fish.creation",
+    [HAM] = "art/props/ham.creation",
+    [HAUNCH] = "art/props/haunch.creation",
+    [HERB_BUNDLE] = "art/props/herb_bundle.creation",
     [LEAVES] = "art/props/leaves.creation",
     [MEAT] = "art/props/meat.creation",
+    [SQUID] = "art/props/squid.creation",
+    [STARFISH] = "art/props/starfish.creation",
+    [URCHIN] = "art/props/urchin.creation",
 };
 
 // Current game state.
@@ -151,7 +215,7 @@ struct prop_t {
 struct prop_t props[] = {
     { .name = "Leaves", .image = LEAVES, .margin = 0.17f, .scale = 0.9f, .price = 5 },
     { .name = "Meat",   .image = MEAT,   .margin = 0.2f,  .scale = 1.0f, .price = 10 },
-    { .name = "Fish",   .image = FISH,   .margin = 0.35f, .scale = 0.7f, .price = 20 },
+    { .name = "Fish",   .image = FISH,   .margin = 0.35f, .scale = 0.7f, .price = 20 },\
 };
 
 // clang-format on
@@ -346,7 +410,7 @@ static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     }
 
     // Enable this to print mouse relative coordinates for testing.
-    bool show_mouse_coordinates = true;
+    bool show_mouse_coordinates = false;
     if (show_mouse_coordinates) {
         const float scene_rel_mouse_x = (uib.input->mouse_pos.x - background_r.x) / background_r.w;
         const float scene_rel_mouse_y = (uib.input->mouse_pos.y - background_r.y) / background_r.h;

@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "a63e52c8-eede-b2c2-fe00-0a20afd25681"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "17e251da-ee91-e2de-6e15-a0f5529cfa91"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "fcd7d4cd-68ea-037c-7ff7-9bbbd041e11d"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "4a2d287f-b2ac-f0fc-897a-b5513538960f"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "14cb6fd8-b940-562e-4bed-da77aedd0af7"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\props\\dead_mouse.png"
+					validity_hash: "1940780cc09cfc98"
+					description: {
+						__uuid: "3bb3a36b-f551-3ac8-cbc4-16367ccebbe0"
+					}
+					buffer: "0b1a713cf3ccab2c"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "cb00c6c1-7518-c93b-02ab-4e51554642ec"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

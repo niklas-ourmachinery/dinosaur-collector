@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "dd6336f3-07ad-461a-b69c-f816f0f8eedf"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "fb410531-4b5c-33bd-0882-557d8259421a"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "2dae4f93-9fd5-00ce-ae9b-7133ae15d740"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "f5005078-b7f6-6d79-ef06-c6c92d7a57bf"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "dadaa0b5-8393-df2e-1ec3-d43a1d08e973"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\props\\haunch.png"
+					validity_hash: "b7b7422ec3afae84"
+					description: {
+						__uuid: "a8d45262-26a5-0f38-0d40-7954b86069c5"
+					}
+					buffer: "f385696e26ab171e"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "04947977-cc55-65b9-7de4-b28f5d9a9efa"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

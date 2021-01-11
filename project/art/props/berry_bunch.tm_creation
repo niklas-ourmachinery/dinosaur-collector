@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "aca635a3-45ac-a51a-b4e1-dc5975e471b3"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "ae8937fe-556e-9e59-38ec-f78e6f3da261"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "7bf29a15-7d79-4e18-112a-c2f7399068f7"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "264d47b5-896c-b8a4-1427-cf643ded3f6a"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "34587ffa-3dd1-149d-9872-e65186979e05"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\props\\berry_bunch.png"
+					validity_hash: "491933cab3cdd1e3"
+					description: {
+						__uuid: "417e672c-478b-59a7-c475-6b7a8cff7dd6"
+					}
+					buffer: "4d43b7b486bd0c9d"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "8b7a152f-2789-44a4-4320-1cb23add6802"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

@@ -30,6 +30,20 @@
 		]
 	}
 	{
+		name: "custom_struct_0x9d902a80f916de3a"
+		properties: [
+			{
+				name: "a"
+				type: "float"
+			}
+			{
+				name: "v"
+				type: "subobject"
+				type_hash: "5ea1bb7b6537de46"
+			}
+		]
+	}
+	{
 		name: "gameplay_sample_empty_component"
 		properties: [
 		]

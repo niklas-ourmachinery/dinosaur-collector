@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "423ac4ba-41c7-586d-4f10-a8b385c5084c"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "7a4524ba-ebfb-b646-6de5-20b0f025f094"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "cdf76c82-95a5-25b8-840d-3562b0874472"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "d83eae77-4e6f-13c9-0433-44e166a76299"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "e5f90ff9-dad6-1517-d468-f984097b7269"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\props\\urchin.png"
+					validity_hash: "fb12a308c6a74523"
+					description: {
+						__uuid: "89f34181-88c1-ca7f-596b-bcf57b4f5ab8"
+					}
+					buffer: "ba6489a264e95cab"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "17fe216c-c181-a065-575f-7f5eec070803"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

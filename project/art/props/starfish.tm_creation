@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "5f14fd9f-73e8-6d9e-8a2a-b3e959b929a9"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "f84b0d3b-63db-25ed-8afa-b619d125cdf8"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "48776265-94b9-ea0d-a946-27f661c4ff5b"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "da8feb39-3815-d4d1-54c1-c8e4f991e15e"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "fc00bbc8-7268-e8b8-d018-8869f87a153a"
+					filename: "c:\\users\\nikla\\iclouddrive\\desktop\\dinosaur-collector\\props\\starfish.png"
+					validity_hash: "7c96edb0dd81dc7d"
+					description: {
+						__uuid: "51b586a6-9963-cbf1-119c-f32fc616c1af"
+					}
+					buffer: "ac0497172a341cee"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "8a1e4cdd-c58e-9f99-5e4d-8a88575d5657"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]
