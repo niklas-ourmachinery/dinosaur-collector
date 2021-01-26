@@ -10,7 +10,11 @@
                 "isDefault": true
             },
             "windows": {
-                "command": "%TM_SDK_DIR%//bin//tmbuild.exe"
+                "command": "C://Work//themachinery//tmbuild.exe",
+                "args": [
+                    "--quiet",
+                    "--no-unit-test"
+                ]
             },
             "problemMatcher": [
                 "$msCompile"
@@ -20,7 +24,7 @@
             "label": "docgen",
             "group": "build",
             "windows": {
-                "command": "%TM_SDK_DIR%//bin//docgen.exe"
+                "command": "C://Work//themachinery//bin//Debug//docgen.exe"
             },
             "args": [
                 "-e",

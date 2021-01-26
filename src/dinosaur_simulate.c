@@ -215,7 +215,7 @@ struct prop_t {
 struct prop_t props[] = {
     { .name = "Leaves", .image = LEAVES, .margin = 0.17f, .scale = 0.9f, .price = 5 },
     { .name = "Meat",   .image = MEAT,   .margin = 0.2f,  .scale = 1.0f, .price = 10 },
-    { .name = "Fish",   .image = FISH,   .margin = 0.35f, .scale = 0.7f, .price = 20 },\
+    { .name = "Fish",   .image = FISH,   .margin = 0.35f, .scale = 0.7f, .price = 20 },
 };
 
 // clang-format on
@@ -440,8 +440,8 @@ static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     tm_ui_style_t uistyle[1] = { *args->uistyle };
     uistyle->font_scale = font_scale;
     char money_str[64];
-    sprintf(money_str, "%d", state->money);
-    const tm_rect_t metrics_r = tm_ui_api->text_metrics(args->ui, uistyle, money_str);
+    sprintf(money_str, "$ %d", state->money);
+    const tm_rect_t metrics_r = tm_ui_api->text_metrics(uistyle, money_str);
     const tm_rect_t draw_r = { .y = money_symbol_r.y, .w = money_amount_r.x + metrics_r.w, .h = args->rect.h - money_symbol_r.y };
     const tm_rect_t background_r = tm_rect_inset(draw_r, -5, -5);
 
