@@ -555,8 +555,15 @@ static void game_logic(tm_simulate_state_o* state, double dt)
         for (uint32_t pi = 0; pi < state->num_scene_props; ++pi) {
             struct scene_prop_t* p = state->scene_props + pi;
             enum IMAGE food = props[p->prop].image;
+            const bool food_in_lake = in_lake(p->x, p->y);
+
             for (struct dinosaur_t* d = dinosaurs; d != dinosaurs + NUM_DINOSAURS; ++d) {
                 if (d->attracted_by[0] != food)
+                    continue;
+
+                // Only ICTYOSAURS can spawn in the lake. ICTYOSAURS cannot spawn on land.
+                const bool is_ictyosaur = d->type == DINO_TYPE__ICTYOSAUR;
+                if (food_in_lake != is_ictyosaur)
                     continue;
 
                 const double spawn_chance = dt / 60 / d->minutes_to_spawn;
@@ -603,8 +610,7 @@ static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
         const float scene_rel_mouse_y = (uib.input->mouse_pos.y - background_r.y) / background_r.h;
 
         const bool is_in_scene = tm_is_between(scene_rel_mouse_x, 0, 1) && tm_is_between(scene_rel_mouse_y, 0.35, 1);
-        const bool is_in_lake = in_lake(scene_rel_mouse_x, scene_rel_mouse_y);
-        const bool can_place = is_in_scene && (!is_in_lake || props[state->place_prop].type == PROP_TYPE__FISH);
+        const bool can_place = is_in_scene;
 
         if (can_place) {
             state->scene_props[num_scene_props] = (struct scene_prop_t){
@@ -974,7 +980,7 @@ static void simulate__stop(tm_simulate_state_o* state)
 // Implements `tm_simulate_entry_i->tick()`.
 static void simulate__tick(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
-    const double speed_multiplier = 100;
+    const double speed_multiplier = 60;
     game_logic(state, args->dt_unscaled * speed_multiplier);
 
     scene(state, args);
