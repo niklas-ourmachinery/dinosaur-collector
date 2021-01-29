@@ -269,6 +269,9 @@ struct tm_simulate_state_o {
     // Current game state.
     enum STATE state;
 
+    // Current page when the STATE is a menu screen.
+    uint32_t page;
+
     // Number of items of each prop type that the player has in her inventory.
     uint32_t inventory[NUM_PROPS];
 
@@ -542,6 +545,9 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     // Use this to highlight parts of the UI to examine the layout.
     // tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, &highlight, price_r);
 
+    // Number of pages in this menu screen.
+    uint32_t num_pages = 0;
+
     if (state->state == STATE__MENU) {
         for (uint32_t idx = 0; idx < 9; ++idx) {
             const uint32_t x = idx % 3;
@@ -550,16 +556,22 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
             const tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.04f * unit, 3, x);
             switch (idx) {
             case 0:
-                if (button(state, args, icon_r, INVENTORY))
+                if (button(state, args, icon_r, INVENTORY)) {
                     state->state = STATE__INVENTORY;
+                    state->page = 0;
+                }
                 break;
             case 1:
-                if (button(state, args, icon_r, SHOP))
+                if (button(state, args, icon_r, SHOP)) {
                     state->state = STATE__SHOP;
+                    state->page = 0;
+                }
                 break;
             case 2:
-                if (button(state, args, icon_r, ALBUM))
+                if (button(state, args, icon_r, ALBUM)) {
                     state->state = STATE__ALBUM;
+                    state->page = 0;
+                }
                 break;
             }
         }
@@ -567,16 +579,23 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
         tm_ui_style_t uistyle[1] = { *args->uistyle };
 
         uint32_t idx = 0;
-        for (uint32_t i = 0; i < 9; ++i, ++idx) {
+        for (uint32_t i = 0;; ++i, ++idx) {
+            const uint32_t page = i / 9;
             const uint32_t x = i % 3;
-            const uint32_t y = i / 3;
-            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.01f * unit, 3, y);
-            tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.01f * unit, 3, x);
+            const uint32_t y = (i % 9) / 3;
 
             while (idx < NUM_PROPS && state->inventory[idx] == 0)
                 ++idx;
             if (idx >= NUM_PROPS)
                 break;
+
+            num_pages = page + 1;
+
+            if (state->page != page)
+                continue;
+
+            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.01f * unit, 3, y);
+            tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.01f * unit, 3, x);
 
             tm_rect_t inventory_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
             tm_rect_t desc_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
@@ -597,15 +616,15 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
             }
         }
     } else if (state->state == STATE__SHOP) {
-        static uint32_t view_page = 1;
         tm_ui_style_t uistyle[1] = { *args->uistyle };
 
         for (uint32_t idx = 0; idx < NUM_PROPS; ++idx) {
             const uint32_t page = idx / 9;
             const uint32_t x = idx % 3;
             const uint32_t y = (idx % 9) / 3;
+            num_pages = page + 1;
 
-            if (view_page != page)
+            if (state->page != page)
                 continue;
 
             const tm_rect_t row_r = tm_rect_divide_y(rect, 0.01f * unit, 3, y);
@@ -640,19 +659,22 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
                 state->inventory[idx]++;
             }
         }
+    }
 
-        const uint32_t num_pages = (NUM_PROPS + 8) / 9;
-        if (view_page > 0) {
-            const tm_rect_t left_edge_r = tm_rect_split_left(menu_r, 0.05f*unit, 0, 0);
+    // Left and right buttons.
+    if (num_pages > 0) {
+        state->page = tm_clamp(state->page, 0, num_pages - 1);
+        if (state->page > 0) {
+            const tm_rect_t left_edge_r = tm_rect_split_left(menu_r, 0.05f * unit, 0, 0);
             const tm_rect_t left_button_r = tm_rect_center_in(unit * 0.15f, unit * 0.15f, left_edge_r);
             if (button(state, args, left_button_r, LEFT_ARROW))
-                --view_page;
+                --state->page;
         }
-        if (view_page < num_pages - 1) {
-            const tm_rect_t right_edge_r = tm_rect_split_right(menu_r, 0.05f*unit, 0, 1);
+        if (state->page < num_pages - 1) {
+            const tm_rect_t right_edge_r = tm_rect_split_right(menu_r, 0.05f * unit, 0, 1);
             const tm_rect_t right_button_r = tm_rect_center_in(unit * 0.15f, unit * 0.15f, right_edge_r);
             if (button(state, args, right_button_r, RIGHT_ARROW))
-                ++view_page;
+                ++state->page;
         }
     }
 }
@@ -666,7 +688,7 @@ static tm_simulate_state_o* simulate__start(tm_simulate_start_args_t* args)
     memset(state, 0, RESERVE_STATE_BYTES);
     *state = (tm_simulate_state_o){
         .allocator = args->allocator,
-        .money = 112,
+        .money = 10000,
     };
 
     for (uint32_t i = 0; i < NUM_IMAGES; ++i)
