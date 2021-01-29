@@ -1,9 +1,22 @@
+
+static struct tm_ui_api* tm_ui_api;
+static struct tm_draw2d_api* tm_draw2d_api;
+static struct tm_the_truth_assets_api* tm_the_truth_assets_api;
+static struct tm_creation_graph_api* tm_creation_graph_api;
+static struct tm_ui_renderer_api* tm_ui_renderer_api;
+static struct tm_error_api* tm_error_api;
+static struct tm_the_truth_api* tm_the_truth_api;
+static struct tm_temp_allocator_api* tm_temp_allocator_api;
+
 #include <foundation/allocator.h>
 #include <foundation/api_registry.h>
+#include <foundation/carray.inl>
 #include <foundation/error.h>
 #include <foundation/macros.h>
 #include <foundation/math.inl>
 #include <foundation/rect.inl>
+#include <foundation/sort.inl>
+#include <foundation/temp_allocator.h>
 #include <foundation/the_truth.h>
 #include <foundation/the_truth_assets.h>
 
@@ -21,14 +34,6 @@
 #include <math.h>
 #include <memory.h>
 #include <stdio.h>
-
-static struct tm_ui_api* tm_ui_api;
-static struct tm_draw2d_api* tm_draw2d_api;
-static struct tm_the_truth_assets_api* tm_the_truth_assets_api;
-static struct tm_creation_graph_api* tm_creation_graph_api;
-static struct tm_ui_renderer_api* tm_ui_renderer_api;
-static struct tm_error_api* tm_error_api;
-static struct tm_the_truth_api* tm_the_truth_api;
 
 // A dinosaur collecting game.
 
@@ -312,6 +317,20 @@ struct scene_prop_t {
 // Maximum number of props that can be placed in the scene.
 enum { MAX_SCENE_PROPS = 32 };
 
+// Data for a dinosaur placed in the scene.
+struct scene_dinosaur_t {
+    // Index of the dinosaur in the global `dinosaurs` array.
+    uint32_t dinosaur;
+
+    // X and Y position of the dinosaur (in relative coordinates, relative to the background image).
+    // I.e. `(0,0)` represents the top left corner of the background image and `(1,1)` the bottom
+    // right corner.
+    float x, y;
+};
+
+// Maximum number of dionsaurs in the scene.
+enum { MAX_SCENE_DINOSAURS = 32 };
+
 // Game state.
 struct tm_simulate_state_o {
     tm_allocator_i* allocator;
@@ -341,6 +360,25 @@ struct tm_simulate_state_o {
     // Props currently paced in the scene.
     uint32_t num_scene_props;
     struct scene_prop_t scene_props[MAX_SCENE_PROPS + 1];
+
+    // Dinosaurs currently in the scene.
+    uint32_t num_scene_dinosaurs;
+    struct scene_dinosaur_t scene_dinosaurs[MAX_SCENE_DINOSAURS];
+};
+
+// Item to draw in the scene.
+struct draw_item_t {
+    // Y-coordinate for sorting.
+    float y;
+
+    // Image to draw for the item.
+    enum IMAGES image;
+
+    // Rect where image should be drawn.
+    tm_rect_t rect;
+
+    // UV rect for image texture. (If zero, the default (0,0,1,1) will be used.)
+    tm_rect_t uv_rect;
 };
 
 // Loads the image at the specified `asset_path` and returns an image handle to it. If the image
@@ -384,18 +422,12 @@ static const bool in_lake(float x, float y)
     }
 }
 
-// Draws scene props in the array `(draw_props, num_props)`. Only the props found in the specified
-// `layer` are drawn.
-static void scene_props(tm_simulate_state_o* state, tm_simulate_frame_args_t* args,
-    tm_rect_t background_r, tm_draw2d_style_t* style, struct scene_prop_t* draw_props, uint32_t num_props,
-    uint32_t layer)
+// Draws scene props in the array `(draw_props, num_props)`.
+static void draw_scene_props(tm_rect_t background_r, struct scene_prop_t* draw_props, uint32_t num_props,
+    struct draw_item_t** draw_ptr, tm_temp_allocator_i* ta)
 {
-    tm_ui_buffers_t uib = tm_ui_api->buffers(args->ui);
+    struct draw_item_t* draw = *draw_ptr;
     for (struct scene_prop_t* p = draw_props; p < draw_props + num_props; ++p) {
-        const uint32_t p_layer = p->y >= 0.82 ? 3 : p->y >= 0.52 ? 2 : p->y >= 0.45 ? 1 : 0;
-        if (layer != p_layer)
-            continue;
-
         struct prop_t* prop = props + p->prop;
 
         const float x = background_r.x + background_r.w * p->x;
@@ -409,12 +441,13 @@ static void scene_props(tm_simulate_state_o* state, tm_simulate_frame_args_t* ar
 
         if (in_lake(p->x, p->y)) {
             const tm_rect_t r = { x - size / 2, y - size + size * (float)prop->margin, size, size / 2 };
-            tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, r, state->images[prop->image], (tm_rect_t){ 0, 0, 1, 0.5f });
+            tm_carray_temp_push(draw, ((struct draw_item_t){ .image = prop->image, .y = p->y, .rect = r, .uv_rect = (tm_rect_t){ 0, 0, 1, 0.5f } }), ta);
         } else {
             const tm_rect_t r = { x - size / 2, y - size + size * (float)prop->margin, size, size };
-            tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, r, state->images[prop->image], (tm_rect_t){ 0, 0, 1, 1 });
+            tm_carray_temp_push(draw, ((struct draw_item_t){ .image = prop->image, .y = p->y, .rect = r }), ta);
         }
     }
+    *draw_ptr = draw;
 }
 
 // Draws the scene -- the background layers and the placed props.
@@ -468,15 +501,29 @@ static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
         }
     }
 
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[BACKGROUND_LAYER_0], (tm_rect_t){ 0, 0, 1, 1 });
-    scene_props(state, args, background_r, style, state->scene_props, num_scene_props, 0);
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[BACKGROUND_LAYER_1], (tm_rect_t){ 0, 0, 1, 1 });
-    scene_props(state, args, background_r, style, state->scene_props, num_scene_props, 1);
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[BACKGROUND_LAYER_2], (tm_rect_t){ 0, 0, 1, 1 });
-    scene_props(state, args, background_r, style, state->scene_props, num_scene_props, 2);
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[BACKGROUND_LAYER_3], (tm_rect_t){ 0, 0, 1, 1 });
-    scene_props(state, args, background_r, style, state->scene_props, num_scene_props, 3);
-    tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, background_r, state->images[BACKGROUND_LAYER_4], (tm_rect_t){ 0, 0, 1, 1 });
+    // Draw
+    {
+        TM_INIT_TEMP_ALLOCATOR(ta);
+
+        // Collect draw calls.
+        struct draw_item_t* draw = 0;
+        tm_carray_temp_push(draw, ((struct draw_item_t){ .image = BACKGROUND_LAYER_0, .y = 0, .rect = background_r }), ta);
+        tm_carray_temp_push(draw, ((struct draw_item_t){ .image = BACKGROUND_LAYER_1, .y = 0.45f, .rect = background_r }), ta);
+        tm_carray_temp_push(draw, ((struct draw_item_t){ .image = BACKGROUND_LAYER_2, .y = 0.52f, .rect = background_r }), ta);
+        tm_carray_temp_push(draw, ((struct draw_item_t){ .image = BACKGROUND_LAYER_3, .y = 0.82f, .rect = background_r }), ta);
+        tm_carray_temp_push(draw, ((struct draw_item_t){ .image = BACKGROUND_LAYER_4, .y = 1, .rect = background_r }), ta);
+        draw_scene_props(background_r, state->scene_props, num_scene_props, &draw, ta);
+
+        // Sort them.
+        qsort(draw, tm_carray_size(draw), sizeof(*draw), compare_float);
+
+        // Draw them
+        for (struct draw_item_t* d = draw; d != tm_carray_end(draw); ++d) {
+            const tm_rect_t uv = d->uv_rect.x == 0 && d->uv_rect.y == 0 && d->uv_rect.w == 0 && d->uv_rect.h == 0 ? (tm_rect_t){ 0, 0, 1, 1 } : d->uv_rect;
+            tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, d->rect, state->images[d->image], uv);
+        }
+        TM_SHUTDOWN_TEMP_ALLOCATOR(ta);
+    }
 
     const float rel_mouse_x = tm_clamp((uib.input->mouse_pos.x - args->rect.x) / args->rect.w, 0, 1);
     if (rel_mouse_x < 0.25f) {
@@ -789,4 +836,5 @@ TM_DLL_EXPORT void tm_load_plugin(struct tm_api_registry_api* reg, bool load)
     tm_ui_renderer_api = reg->get(TM_UI_RENDERER_API_NAME);
     tm_error_api = reg->get(TM_ERROR_API_NAME);
     tm_the_truth_api = reg->get(TM_THE_TRUTH_API_NAME);
+    tm_temp_allocator_api = reg->get(TM_TEMP_ALLOCATOR_API_NAME);
 }
