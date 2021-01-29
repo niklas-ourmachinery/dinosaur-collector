@@ -7,6 +7,7 @@ static struct tm_ui_renderer_api* tm_ui_renderer_api;
 static struct tm_error_api* tm_error_api;
 static struct tm_the_truth_api* tm_the_truth_api;
 static struct tm_temp_allocator_api* tm_temp_allocator_api;
+static struct tm_random_api* tm_random_api;
 
 #include <foundation/allocator.h>
 #include <foundation/api_registry.h>
@@ -270,9 +271,10 @@ struct dinosaur_t {
     // Average minutes before this dinosaur spawns if the right prop is placed.
     double minutes_to_spawn;
 
-    // Image of prop that attracts this dinosaur.
-    enum IMAGES attracted_by[16];
+    // Image of props that attract this dinosaur.
+    enum IMAGES attracted_by[1];
 
+    // Margin and scale for drawing the dinosaur.
     double margin, scale;
 };
 
@@ -303,6 +305,22 @@ struct dinosaur_t dinosaurs[] = {
     { .name = "Velociraptor", .image = VELOCIRAPTOR, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 20, .attracted_by = { HAUNCH }, .margin = 0.1, .scale = 1 },
 };
 
+struct range_t {
+    double min, max;
+};
+
+struct rules_t {
+    struct range_t minutes_to_coin;
+    struct range_t dinosaur_lifetime_minutes;
+    struct range_t food_lifetime_minutes;
+};
+
+struct rules_t rules = {
+    .minutes_to_coin = { 1, 1 },
+    .dinosaur_lifetime_minutes = { 1, 10 },
+    .food_lifetime_minutes = { 10, 20 },
+};
+
 // Total number of dinosaurs in the game.
 #define NUM_DINOSAURS (TM_ARRAY_COUNT(dinosaurs))
 
@@ -315,6 +333,9 @@ struct scene_prop_t {
     // I.e. `(0,0)` represents the top left corner of the background image and `(1,1)` the bottom
     // right corner.
     float x, y;
+
+    // Time that this prop will live until it disappears.
+    double lifetime;
 };
 
 // Maximum number of props that can be placed in the scene.
@@ -329,6 +350,9 @@ struct scene_dinosaur_t {
     // I.e. `(0,0)` represents the top left corner of the background image and `(1,1)` the bottom
     // right corner.
     float x, y;
+
+    // Time that this dinosaur will hang around until it disappears.
+    double lifetime;
 };
 
 // Maximum number of dionsaurs in the scene.
@@ -340,6 +364,9 @@ struct tm_simulate_state_o {
 
     // Money that the player has.
     uint32_t money;
+
+    // Time until next coin is received.
+    double next_coin;
 
     // Loaded image data.
     uint32_t images[NUM_IMAGES];
@@ -481,6 +508,68 @@ static void draw_scene_dinosaurs(tm_rect_t background_r, struct scene_dinosaur_t
     *draw_ptr = draw;
 }
 
+// Rolls a random value in the range and returns it.
+static double roll(struct range_t r)
+{
+    const double t = tm_random_to_double(tm_random_api->next());
+    return r.min + t * (r.max - r.min);
+}
+
+// Implement game logic.
+static void game_logic(tm_simulate_state_o* state, double dt)
+{
+    // Earn money
+    if (!state->next_coin)
+        state->next_coin = roll(rules.minutes_to_coin) * 60;
+    state->next_coin -= dt;
+    if (state->next_coin <= 0) {
+        state->money++;
+        state->next_coin = 0;
+    }
+
+    // Food spoils
+    for (uint32_t i = 0; i < state->num_scene_props; ++i) {
+        struct scene_prop_t* p = state->scene_props + i;
+        if (!p->lifetime)
+            p->lifetime = roll(rules.food_lifetime_minutes) * 60.0f;
+        p->lifetime -= dt;
+        if (p->lifetime <= 0)
+            state->scene_props[i--] = state->scene_props[--state->num_scene_props];
+    }
+
+    // Dinosaurs walk away
+    for (uint32_t i = 0; i < state->num_scene_dinosaurs; ++i) {
+        struct scene_dinosaur_t* d = state->scene_dinosaurs + i;
+        if (!d->lifetime)
+            d->lifetime = roll(rules.dinosaur_lifetime_minutes) * 60.0f;
+        d->lifetime -= dt;
+        if (d->lifetime <= 0)
+            state->scene_dinosaurs[i--] = state->scene_dinosaurs[--state->num_scene_dinosaurs];
+    }
+
+    // Food attracts dinosaurs
+    if (state->num_scene_dinosaurs < MAX_SCENE_DINOSAURS) {
+        for (uint32_t pi = 0; pi < state->num_scene_props; ++pi) {
+            struct scene_prop_t* p = state->scene_props + pi;
+            enum IMAGE food = props[p->prop].image;
+            for (struct dinosaur_t* d = dinosaurs; d != dinosaurs + NUM_DINOSAURS; ++d) {
+                if (d->attracted_by[0] != food)
+                    continue;
+
+                const double spawn_chance = dt / 60 / d->minutes_to_spawn;
+                const bool spawn = roll((struct range_t){ 0, 1 }) <= spawn_chance;
+                if (!spawn)
+                    continue;
+
+                const struct scene_dinosaur_t dino = { .dinosaur = (uint32_t)(d - dinosaurs), .x = p->x, .y = p->y };
+                state->scene_dinosaurs[state->num_scene_dinosaurs++] = dino;
+                state->scene_props[pi--] = state->scene_props[--state->num_scene_props];
+                break;
+            }
+        }
+    }
+}
+
 // Draws the scene -- the background layers and the placed props.
 static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
@@ -545,13 +634,6 @@ static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
         tm_carray_temp_push(draw, ((struct draw_item_t){ .image = BACKGROUND_LAYER_4, .y = 1, .rect = background_r }), ta);
         draw_scene_props(background_r, state->scene_props, num_scene_props, &draw, ta);
         draw_scene_dinosaurs(background_r, state->scene_dinosaurs, state->num_scene_dinosaurs, &draw, ta);
-
-        struct scene_dinosaur_t test = {
-            .dinosaur = ((uint32_t)args->time % NUM_DINOSAURS),
-            .x = 0.5f,
-            .y = 0.7f,
-        };
-        draw_scene_dinosaurs(background_r, &test, 1, &draw, ta);
 
         // Sort them.
         qsort(draw, tm_carray_size(draw), sizeof(*draw), compare_float);
@@ -857,6 +939,9 @@ static void simulate__stop(tm_simulate_state_o* state)
 // Implements `tm_simulate_entry_i->tick()`.
 static void simulate__tick(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
+    const double speed_multiplier = 100;
+    game_logic(state, args->dt_unscaled * speed_multiplier);
+
     scene(state, args);
     money(state, args);
     menu(state, args);
@@ -884,4 +969,5 @@ TM_DLL_EXPORT void tm_load_plugin(struct tm_api_registry_api* reg, bool load)
     tm_error_api = reg->get(TM_ERROR_API_NAME);
     tm_the_truth_api = reg->get(TM_THE_TRUTH_API_NAME);
     tm_temp_allocator_api = reg->get(TM_TEMP_ALLOCATOR_API_NAME);
+    tm_random_api = reg->get(TM_RANDOM_API_NAME);
 }
