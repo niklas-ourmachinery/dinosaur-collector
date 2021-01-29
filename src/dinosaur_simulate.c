@@ -203,7 +203,7 @@ struct prop_t {
     const char* name;
 
     // Image index for the prop.
-    uint32_t image;
+    enum IMAGES image;
 
     // Distance from the bottom of the prop graphics to the bottom of the image box as a fraction
     // of the graphics height (0--1).
@@ -233,14 +233,70 @@ struct prop_t props[] = {
     { .name = "Berry Bunch", .image = BERRY_BUNCH, .type = PROP_TYPE__VEG, .price = 30, .margin = 0.2, .scale = 0.6 },
     { .name = "Ham", .image = HAM, .type = PROP_TYPE__MEAT, .price = 10, .margin = 0.2, .scale = 0.9 },
     { .name = "Haunch", .image = HAUNCH, .type = PROP_TYPE__MEAT, .price = 20, .margin = 0.2, .scale = 1.1 },
-    { .name = "Dead Mouse", .image = DEAD_MOUSE, .type = PROP_TYPE__MEAT, .price = 30, .margin = 0.2, .scale = 0.6 },
+    { .name = "Dead Mouse", .image = DEAD_MOUSE, .type = PROP_TYPE__MEAT, .price = 30, .margin = 0.2, .scale = 0.7 },
     { .name = "Squid", .image = SQUID, .type = PROP_TYPE__FISH, .price = 10, .margin = 0.2, .scale = 1 },
     { .name = "Urchin", .image = URCHIN, .type = PROP_TYPE__FISH, .price = 20, .margin = 0.2, .scale = 0.7 },
     { .name = "Starfish ", .image = STARFISH, .type = PROP_TYPE__FISH, .price = 30, .margin = 0.2, .scale = 0.7 },
 };
 
-// Total  number of props in the game.
+// Total number of props in the game.
 #define NUM_PROPS (TM_ARRAY_COUNT(props))
+
+// Type of the dinosaur.
+enum DINO_TYPE {
+    DINO_TYPE__HERBIVORE,
+    DINO_TYPE__CARNIVORE,
+    DINO_TYPE__PTEROSAUR,
+    DINO_TYPE__ICTYOSAUR,
+};
+
+// Properties for dinosaurs
+struct dinosaur_t {
+    // Name of the dinosur
+    const char* name;
+
+    // Image for the dinosaur.
+    enum IMAGES image;
+
+    // Type of the dinosaur.
+    enum DINO_TYPE type;
+
+    // Average minutes before this dinosaur spawns if the right prop is placed.
+    double minutes_to_spawn;
+
+    // Image of prop that attracts this dinosaur.
+    enum IMAGES attracted_by[16];
+};
+
+struct dinosaur_t dinosaurs[] = {
+    { .name = "Ankylosaurus", .image = ANKYLOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 1, .attracted_by = { LEAVES } },
+    { .name = "Ankylosuarus 2", .image = ANKYLOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 3, .attracted_by = { HERB_BUNDLE } },
+    { .name = "Apatosaurus", .image = APATOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 5, .attracted_by = { LEAVES } },
+    { .name = "Brachiosaurus", .image = BRACHIOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 10, .attracted_by = { BERRY_BUNCH } },
+    { .name = "Brachiosaurus 2", .image = BRACHIOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 30, .attracted_by = { BANANA_BUNCH } },
+    { .name = "Carnotaurus", .image = CARNOTAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 30, .attracted_by = { HAUNCH } },
+    { .name = "Dimorphodon", .image = DIMORPHODON, .type = DINO_TYPE__PTEROSAUR, .minutes_to_spawn = 10, .attracted_by = { MEAT } },
+    { .name = "Pachycephalosaurus", .image = PACHYCEPHALOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 10, .attracted_by = { BERRY_BUNCH } },
+    { .name = "Parsaurolophus", .image = PARASAUROLOPHUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 12, .attracted_by = { BANANA_BUNCH } },
+    { .name = "Parsaurolophus 2", .image = PARASAUROLOPHUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 50, .attracted_by = { LEAVES } },
+    { .name = "Plesiosaurus", .image = PLESIOSAURUS, .type = DINO_TYPE__ICTYOSAUR, .minutes_to_spawn = 45, .attracted_by = { FISH } },
+    { .name = "Pliosaurus", .image = PLIOSAURUS, .type = DINO_TYPE__ICTYOSAUR, .minutes_to_spawn = 25, .attracted_by = { SQUID } },
+    { .name = "Pteranodon", .image = PTERANODON, .type = DINO_TYPE__PTEROSAUR, .minutes_to_spawn = 20, .attracted_by = { DEAD_MOUSE } },
+    { .name = "Spinosaurus", .image = SPINOSAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 30, .attracted_by = { HAM } },
+    { .name = "Stegosaurus", .image = STEGOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 5, .attracted_by = { LEAVES } },
+    { .name = "Stegosaurus 2", .image = STEGOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 100, .attracted_by = { HERB_BUNDLE } },
+    { .name = "Stegosaurus 3", .image = STEGOSAURUS_3, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 200, .attracted_by = { BERRY_BUNCH } },
+    { .name = "Stygimoloch", .image = STYGIMOLOCH, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 120, .attracted_by = { BANANA_BUNCH } },
+    { .name = "Therizinosaurus", .image = THERIZINOSAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 45, .attracted_by = { URCHIN } },
+    { .name = "Triceratops", .image = TRICERATOPS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 10, .attracted_by = { LEAVES } },
+    { .name = "Triceratops 2", .image = TRICERATOPS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 120, .attracted_by = { BERRY_BUNCH } },
+    { .name = "Tyrannosaurus", .image = TYRANNOSAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 10, .attracted_by = { HAUNCH } },
+    { .name = "Utahceratops", .image = UTAHCERATOPS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 60, .attracted_by = { BERRY_BUNCH } },
+    { .name = "Velociraptor", .image = VELOCIRAPTOR, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 20, .attracted_by = { HAUNCH } },
+};
+
+// Total number of dinosaurs in the game.
+#define NUM_DINOSAURS (TM_ARRAY_COUNT(dinosaurs))
 
 // Data for a prop placed in the scene.
 struct scene_prop_t {
