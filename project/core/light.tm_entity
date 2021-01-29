@@ -245,12 +245,12 @@ components: [
 						{
 							__uuid: "d9450011-a8be-383f-f192-3a395eed173e"
 							node: "f6fe50a0-5e17-10e3-8295-2a342f54c202"
-							validity_hash: "f8707d114e0e5491"
+							validity_hash: "8afac1a21275dc24"
 							object: {
 								__type: "tm_shader_system_compiled_result"
-								__uuid: "98fe6a44-70f9-ffb9-f1b1-3610ec61c2ba"
-								name: "f8707d114e0e5491"
-								buffer: "0e75a7ceaeeb7e0f"
+								__uuid: "18e85457-eea4-d37f-bbd6-317004624b4f"
+								name: "8afac1a21275dc24"
+								buffer: "e7a7ee644a92adda"
 							}
 						}
 					]

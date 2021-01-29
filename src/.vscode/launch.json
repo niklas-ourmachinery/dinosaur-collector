@@ -2,7 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Win64: the-machinery [Attach]",
+            "name": "Win64: Run",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "%TM_SDK_DIR%/bin/the-machinery.exe",
+            "args": [
+                "--load-project",
+                "../project"
+            ]
+        },
+        {
+            "name": "Win64: Attach",
             "type": "cppvsdbg",
             "request": "attach",
             "processName": "the-machinery.exe"

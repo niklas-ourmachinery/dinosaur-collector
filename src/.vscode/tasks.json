@@ -10,7 +10,7 @@
                 "isDefault": true
             },
             "windows": {
-                "command": "C://Work//themachinery//tmbuild.exe",
+                "command": "%TM_SDK_DIR%/bin/tmbuild.exe",
                 "args": [
                     "--quiet",
                     "--no-unit-test"
@@ -24,11 +24,25 @@
             "label": "docgen",
             "group": "build",
             "windows": {
-                "command": "C://Work//themachinery//bin//Debug//docgen.exe"
+                "command": "%TM_SDK_DIR%/bin/docgen.exe"
             },
             "args": [
                 "-e",
                 "dinosaur_simulate.c"
+            ],
+        },
+        {
+            "label": "launch",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "windows": {
+                "command": "%TM_SDK_DIR%/bin/the-machinery.exe"
+            },
+            "args": [
+                "--load-project",
+                "../project"
             ],
         },
     ]

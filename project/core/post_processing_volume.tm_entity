@@ -19,5 +19,70 @@ components: [
 			z: 0.5
 		}
 	}
+	{
+		__type: "tm_render_component"
+		__uuid: "f0f30085-9533-a3c7-5d8c-ca9c8793de88"
+		creation_graph: {
+			__uuid: "cfbc7010-3457-1533-b291-0212aa2d032d"
+			__prototype_type: "tm_creation_graph"
+			__prototype_uuid: "507a09d1-2817-15ef-11e1-76b4a3b7c229"
+			graph: {
+				__uuid: "2c291ccc-9d05-687c-cc94-d4f4bcabdfc4"
+				__prototype_type: "tm_graph"
+				__prototype_uuid: "932aadba-41f6-62fb-50a8-c3711669b6ba"
+				interface: {
+					__uuid: "f34b573a-1e2f-113d-7035-74c6213306e4"
+					__prototype_type: "tm_graph_interface"
+					__prototype_uuid: "ebadcfb5-680f-0fec-c34f-2923c1d9ac7d"
+					inputs__instantiated: [
+						{
+							__uuid: "897fb569-3def-0f85-ef7a-4c77f35fe4f1"
+							__prototype_type: "tm_graph_input"
+							__prototype_uuid: "64f9791b-b0ef-c9fa-b43b-b4bb8931540c"
+							value_set_by_user: true
+							value: {
+								__type: "tm_image_archive"
+								__uuid: "89d58ddd-8319-e791-3aef-bf62c2f77eac"
+								__prototype_type: "tm_image_archive"
+								__prototype_uuid: "226c414c-e509-fd3c-d4aa-3cb4fd55aafd"
+								filename: "C:\\Users\\Frank de Jong\\Downloads\\Icon_Cube.png"
+								validity_hash: "8b29b2d4d31e8a6d"
+								description: {
+									__uuid: "8c984e7d-7d1e-1807-6723-53c20630acb3"
+									__prototype_type: "tm_image_description"
+									__prototype_uuid: "a30c6054-c1f8-ff3a-df7e-8c91e695148a"
+									type: 1
+									pixel_format: 35684872
+									widht: 32
+									height: 32
+									depth: 1
+									mip_levels: 1
+									layer_count: 1
+									sample_count: 1
+								}
+								buffer: "c4cde05992720d12"
+							}
+						}
+						{
+							__uuid: "8c6bca16-3a3c-c201-147e-e7d8ea927585"
+							__prototype_type: "tm_graph_input"
+							__prototype_uuid: "7e6a1295-06c4-537c-6e59-7dd55477bf06"
+							value_set_by_user: true
+							value: {
+								__type: "tm_vec4_t"
+								__uuid: "44d39a50-15b6-876e-538e-7e6f59dc05f0"
+								__prototype_type: "tm_vec4_t"
+								__prototype_uuid: "e5316a0e-3e68-077d-6c92-0dcb8a01123f"
+								x: 16
+								y: 32
+								z: 16
+								w: 32
+							}
+						}
+					]
+				}
+			}
+		}
+	}
 ]
 __asset_uuid: "fbb423cc-16c1-473d-d3ee-95acb3ddb08a"

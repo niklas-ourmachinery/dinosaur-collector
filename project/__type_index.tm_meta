@@ -865,6 +865,46 @@
 				type: "reference"
 				type_hash: "8944e0b1cefd4756"
 			}
+			{
+				name: "sort_ascending"
+				type: "bool"
+			}
+			{
+				name: "sort_by"
+				type: "uint32_t"
+			}
+			{
+				name: "view_mode"
+				type: "uint32_t"
+			}
+			{
+				name: "filter_by_type"
+				type: "uint64_t"
+			}
+			{
+				name: "filter_by_label_bitflag_1"
+				type: "uint64_t"
+			}
+			{
+				name: "filter_by_label_bitflag_2"
+				type: "uint64_t"
+			}
+			{
+				name: "filter_by_label_bitflag_3"
+				type: "uint64_t"
+			}
+			{
+				name: "filter_by_label_bitflag_4"
+				type: "uint64_t"
+			}
+			{
+				name: "current_directory_uuid_a"
+				type: "uint64_t"
+			}
+			{
+				name: "current_directory_uuid_b"
+				type: "uint64_t"
+			}
 		]
 	}
 	{
@@ -887,10 +927,6 @@
 			{
 				name: "uuid"
 				type: "uint64_t"
-			}
-			{
-				name: "name"
-				type: "string"
 			}
 		]
 	}
@@ -935,6 +971,10 @@
 		name: "tm_camera_component"
 		properties: [
 			{
+				name: "projection_mode"
+				type: "uint32_t"
+			}
+			{
 				name: "near_plane"
 				type: "float"
 			}
@@ -947,15 +987,19 @@
 				type: "float"
 			}
 			{
-				name: "translation_speed"
+				name: "box_height"
 				type: "float"
 			}
 			{
-				name: "rotation_speed"
+				name: "shutter_speed"
 				type: "float"
 			}
 			{
-				name: "translation_damping"
+				name: "aperture"
+				type: "float"
+			}
+			{
+				name: "iso"
 				type: "float"
 			}
 		]
@@ -963,9 +1007,10 @@
 			near_plane: 0.1000000014901161
 			far_plane: 10000
 			vertical_fov: 1.047197580337524
-			translation_speed: 0.1000000014901161
-			rotation_speed: 1
-			translation_damping: 0.1500000059604645
+			box_height: 25
+			shutter_speed: 100
+			aperture: 4
+			iso: 100
 		}
 	}
 	{
@@ -2035,6 +2080,11 @@
 			tint: {
 			}
 		}
+	}
+	{
+		name: "tm_default_render_pipe_color_scopes"
+		properties: [
+		]
 	}
 	{
 		name: "tm_default_render_pipe_exposure_component"
@@ -3185,6 +3235,46 @@
 		}
 	}
 	{
+		name: "tm_physics_scene_settings"
+		properties: [
+			{
+				name: "gravity"
+				type: "subobject"
+				type_hash: "8d1487af36b1e3e1"
+			}
+			{
+				name: "ccd"
+				type: "bool"
+			}
+			{
+				name: "bounding_box_min"
+				type: "subobject"
+				type_hash: "8d1487af36b1e3e1"
+			}
+			{
+				name: "bounding_box_max"
+				type: "subobject"
+				type_hash: "8d1487af36b1e3e1"
+			}
+		]
+		default: {
+			gravity: {
+				y: -9.810000419616699
+			}
+			ccd: true
+			bounding_box_min: {
+				x: -inf
+				y: -100
+				z: -inf
+			}
+			bounding_box_max: {
+				x: inf
+				y: inf
+				z: inf
+			}
+		}
+	}
+	{
 		name: "tm_physics_shape_box"
 		properties: [
 			{
@@ -3371,6 +3461,14 @@
 			}
 			{
 				name: "windows_dll"
+				type: "buffer"
+			}
+			{
+				name: "linux_dll_import_path"
+				type: "string"
+			}
+			{
+				name: "linux_dll"
 				type: "buffer"
 			}
 		]
@@ -4845,6 +4943,24 @@
 			local_scale: {
 			}
 		}
+	}
+	{
+		name: "tm_ui_sample_tt_type"
+		properties: [
+			{
+				name: "int"
+				type: "uint64_t"
+			}
+			{
+				name: "string"
+				type: "string"
+			}
+			{
+				name: "asset_reference"
+				type: "reference_set"
+				type_hash: "ca71127abbb72960"
+			}
+		]
 	}
 	{
 		name: "tm_ui_theme"

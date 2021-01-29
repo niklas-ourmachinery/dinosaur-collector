@@ -1,23 +1,87 @@
 __type: "tm_entity"
-__uuid: "ea302167-0a30-2901-0993-a45b1d19b3e2"
-name: "camera"
+__uuid: "18b3ae96-1abf-bdcf-6e18-a5b500638249"
 components: [
 	{
-		__type: "tm_camera_component"
-		__uuid: "04b08c8a-fb9f-7944-9fce-7104c438a48e"
-	}
-	{
 		__type: "tm_transform_component"
-		__uuid: "2c034f79-7195-f9c1-eaa6-a37261d51f21"
+		__uuid: "6ec9b699-cc83-8d51-62c3-f72f2c6479d2"
 		local_position: {
-			__uuid: "4612561e-3e1d-939f-c04c-8a1c43b8a161"
+			__uuid: "da4a0e71-655e-b5b9-f00f-b025f62ee6ac"
 		}
 		local_rotation: {
-			__uuid: "72ca0f4a-808e-364a-61e8-51ba22791cb6"
+			__uuid: "449c7cdf-baa2-e475-311d-9e1568956d2a"
 		}
 		local_scale: {
-			__uuid: "e3f8e9e4-792a-ea5c-1834-7b1e505c8bbc"
+			__uuid: "892f25d7-8996-eacd-e827-c7d47db047fb"
 		}
 	}
+	{
+		__type: "tm_render_component"
+		__uuid: "090563a7-03f5-167e-b518-360af9c42687"
+		creation_graph: {
+			__uuid: "b78fc452-0568-bb68-f50e-a59095d6c49b"
+			__prototype_type: "tm_creation_graph"
+			__prototype_uuid: "507a09d1-2817-15ef-11e1-76b4a3b7c229"
+			graph: {
+				__uuid: "66a8865d-8417-f6b9-cf5c-3c447bc6594f"
+				__prototype_type: "tm_graph"
+				__prototype_uuid: "932aadba-41f6-62fb-50a8-c3711669b6ba"
+				interface: {
+					__uuid: "4e71bd94-1eae-6877-5b39-d6f00305f46f"
+					__prototype_type: "tm_graph_interface"
+					__prototype_uuid: "ebadcfb5-680f-0fec-c34f-2923c1d9ac7d"
+					inputs__instantiated: [
+						{
+							__uuid: "54737472-e121-4efd-062f-ba896fc1caa7"
+							__prototype_type: "tm_graph_input"
+							__prototype_uuid: "64f9791b-b0ef-c9fa-b43b-b4bb8931540c"
+							value_set_by_user: true
+							value: {
+								__type: "tm_image_archive"
+								__uuid: "a31e6cb3-74f1-57ba-00c7-2d1e14c4e967"
+								__prototype_type: "tm_image_archive"
+								__prototype_uuid: "226c414c-e509-fd3c-d4aa-3cb4fd55aafd"
+								filename: "C:\\Users\\Frank de Jong\\Downloads\\Icon_Camera.png"
+								validity_hash: "5584679c9d846b79"
+								description: {
+									__uuid: "89eaa853-a4e1-73ea-b211-06ee0610c9b9"
+									__prototype_type: "tm_image_description"
+									__prototype_uuid: "a30c6054-c1f8-ff3a-df7e-8c91e695148a"
+									type: 1
+									pixel_format: 35684872
+									widht: 32
+									height: 32
+									depth: 1
+									mip_levels: 1
+									layer_count: 1
+									sample_count: 1
+								}
+								buffer: "80fe49707017a9f2"
+							}
+						}
+						{
+							__uuid: "d35c56f8-b27d-6087-fc69-74ca9c422fb4"
+							__prototype_type: "tm_graph_input"
+							__prototype_uuid: "7e6a1295-06c4-537c-6e59-7dd55477bf06"
+							value_set_by_user: true
+							value: {
+								__type: "tm_vec4_t"
+								__uuid: "e497b246-242b-3bb8-8df2-1b420fe0d505"
+								__prototype_type: "tm_vec4_t"
+								__prototype_uuid: "e5316a0e-3e68-077d-6c92-0dcb8a01123f"
+								x: 16
+								y: 32
+								z: 16
+								w: 32
+							}
+						}
+					]
+				}
+			}
+		}
+	}
+	{
+		__type: "tm_camera_component"
+		__uuid: "829cceef-3ec8-bd01-708b-b546eacfada7"
+	}
 ]
-__asset_uuid: "9588c397-816d-1c0c-7f6e-35d6ffa3538c"
+__asset_uuid: "5cdaa7dc-2fae-8704-9674-2349be9241d6"

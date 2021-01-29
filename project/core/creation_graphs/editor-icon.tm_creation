@@ -1,0 +1,240 @@
+__type: "tm_creation_graph"
+__uuid: "507a09d1-2817-15ef-11e1-76b4a3b7c229"
+graph: {
+	__uuid: "932aadba-41f6-62fb-50a8-c3711669b6ba"
+	nodes: [
+		{
+			__uuid: "ea71a604-8d8d-73f0-1c40-e0884af63783"
+			type: "drawcall"
+			position_x: 218.2324829101563
+			position_y: -44.25
+		}
+		{
+			__uuid: "8b086966-dbe9-cdda-8ab8-ddb8524310bc"
+			type: "billboards-output"
+			position_x: 26.23248291015625
+			position_y: -43.25
+			settings: {
+				__type: "tm_shader_system_compiled_result"
+				__uuid: "f5bdfb8a-09aa-530f-2e30-7fee9ce8b943"
+			}
+		}
+		{
+			__uuid: "599369e3-5304-48fb-41ca-727ba9284a4e"
+			type: "tm_input_node"
+			position_x: -550.6242065429688
+			position_y: -118.3810577392578
+		}
+		{
+			__uuid: "9d405931-d7aa-7ab0-61ac-5078288c5376"
+			type: "image_to_gpu_image"
+			position_x: -556.7675170898438
+			position_y: 62.75
+		}
+		{
+			__uuid: "6c892c80-9105-b924-a2e5-2b647e14a135"
+			type: "shader_sample_2d"
+			position_x: -364.7675170898438
+			position_y: 66.75
+		}
+		{
+			__uuid: "e3047ac6-359a-083b-3358-3584bb929bba"
+			type: "shader_input_uv"
+			position_x: -549.7675170898438
+			position_y: 156.75
+		}
+		{
+			__uuid: "4382aee0-1cc9-190c-5108-543c3747fdeb"
+			type: "shader_deconstruct_float4"
+			position_x: -184.7675170898438
+			position_y: 74.75
+		}
+		{
+			__uuid: "b14e8b49-a3aa-113c-43a6-a72dd1441e07"
+			type: "image_input_archive"
+			position_x: -550.7982177734375
+			position_y: -16.38147163391113
+		}
+		{
+			__uuid: "1bf83a04-6c6e-5471-9483-01fc752a4d85"
+			type: "shader_variable_node"
+			position_x: -185.379638671875
+			position_y: -12.15068244934082
+		}
+	]
+	connections: [
+		{
+			__uuid: "3189a6b6-6399-17ed-911b-6d679f013db6"
+			from_node: "8b086966-dbe9-cdda-8ab8-ddb8524310bc"
+			to_node: "ea71a604-8d8d-73f0-1c40-e0884af63783"
+			from_connector_hash: "2be49fca20727525"
+			to_connector_hash: "2be49fca20727525"
+		}
+		{
+			__uuid: "a53f0c91-8469-f0ce-0254-650786c20a3e"
+			from_node: "b14e8b49-a3aa-113c-43a6-a72dd1441e07"
+			to_node: "9d405931-d7aa-7ab0-61ac-5078288c5376"
+			from_connector_hash: "284126856b22844e"
+			to_connector_hash: "284126856b22844e"
+		}
+		{
+			__uuid: "68a9ffa4-a4eb-a01e-b322-10bec59b362c"
+			from_node: "9d405931-d7aa-7ab0-61ac-5078288c5376"
+			to_node: "6c892c80-9105-b924-a2e5-2b647e14a135"
+			from_connector_hash: "c05fedba357b4754"
+			to_connector_hash: "1070f86ae935924b"
+		}
+		{
+			__uuid: "54c184b3-6bd7-cdc4-5f8f-0769dbe49fa4"
+			from_node: "e3047ac6-359a-083b-3358-3584bb929bba"
+			to_node: "6c892c80-9105-b924-a2e5-2b647e14a135"
+			from_connector_hash: "153bf17b6dcaf9d2"
+			to_connector_hash: "153bf17b6dcaf9d2"
+		}
+		{
+			__uuid: "8236eb0b-e919-febc-1863-68209e65ac38"
+			from_node: "6c892c80-9105-b924-a2e5-2b647e14a135"
+			to_node: "4382aee0-1cc9-190c-5108-543c3747fdeb"
+			from_connector_hash: "1609e8f8d8051ecb"
+			to_connector_hash: "e782557dca5659d0"
+		}
+		{
+			__uuid: "1217d6d6-ef96-2749-8466-0fe7d7153158"
+			from_node: "1bf83a04-6c6e-5471-9483-01fc752a4d85"
+			to_node: "8b086966-dbe9-cdda-8ab8-ddb8524310bc"
+			from_connector_hash: "920b430f38928dc9"
+			to_connector_hash: "640fe3e3431d39fc"
+		}
+		{
+			__uuid: "57402e32-eb72-002a-e321-c06e285a8aa6"
+			from_node: "599369e3-5304-48fb-41ca-727ba9284a4e"
+			to_node: "b14e8b49-a3aa-113c-43a6-a72dd1441e07"
+			from_connector_hash: "1e43996bd8e78849"
+			to_connector_hash: "b10d67d723e27f0a"
+		}
+		{
+			__uuid: "85eed7d3-6add-c71d-953a-c6ab59ec4a23"
+			from_node: "599369e3-5304-48fb-41ca-727ba9284a4e"
+			to_node: "1bf83a04-6c6e-5471-9483-01fc752a4d85"
+			from_connector_hash: "f50b54ba29c71d5d"
+			to_connector_hash: "2bbcabe5074ade9e"
+		}
+		{
+			__uuid: "2207acaf-c4f5-d9b6-1e25-0708c9a29fbe"
+			from_node: "4382aee0-1cc9-190c-5108-543c3747fdeb"
+			to_node: "8b086966-dbe9-cdda-8ab8-ddb8524310bc"
+			from_connector_hash: "f2afab6f85f8e4dc"
+			to_connector_hash: "2bbe599c6c8fe881"
+		}
+	]
+	data: [
+		{
+			__uuid: "9f18817c-2329-3242-0c2e-a6b182d76a98"
+			to_node: "ea71a604-8d8d-73f0-1c40-e0884af63783"
+			to_connector_hash: "5c448fe04f336bb8"
+			data: {
+				__type: "tm_uint32_t"
+				__uuid: "e50d6d65-7c1b-08c4-71f2-61a0832811d2"
+				uint32_t: 6
+			}
+		}
+		{
+			__uuid: "52711d1c-873e-e02f-2038-b3fd5d7b613a"
+			to_node: "8b086966-dbe9-cdda-8ab8-ddb8524310bc"
+			to_connector_hash: "6bb47b51ae4a21ff"
+			data: {
+				__type: "billboards-output_node_settings"
+				__uuid: "d1d2fdf5-55c9-e25c-aa71-a148ef3728fe"
+				mode: "f0995503bc312234"
+			}
+		}
+		{
+			__uuid: "ea2e4763-a181-4d86-0e8c-8a3c789a60c6"
+			to_node: "ea71a604-8d8d-73f0-1c40-e0884af63783"
+			to_connector_hash: "6bb47b51ae4a21ff"
+			data: {
+				__type: "tm_draw_call_settings"
+				__uuid: "f9ccd519-9d19-41a9-1adb-a739f59118b0"
+				visibility_flags: [
+					{
+						__uuid: "f4c62ba8-ba8d-8d5a-8d5d-a63c52f146d6"
+						uuid: 1286407477
+					}
+					{
+						__uuid: "6b4b1343-2eba-c75f-9b28-2109457cebfa"
+						uuid: 1863029695
+					}
+					{
+						__uuid: "c233b91f-13fc-0f4d-7454-a48d622d1ce8"
+						uuid: 281535834
+					}
+				]
+			}
+		}
+		{
+			__uuid: "7aa51749-22ff-7866-4105-ada3b5492ec3"
+			to_node: "b14e8b49-a3aa-113c-43a6-a72dd1441e07"
+			to_connector_hash: "b10d67d723e27f0a"
+			data: {
+				__type: "tm_image_archive"
+				__uuid: "59629b2a-d457-b807-2800-d7f0b8de4fb8"
+				filename: "C:\\Users\\Tobias Persson\\Downloads\\light-bulb-turned-off.png"
+				validity_hash: "881004763c233462"
+				description: {
+					__uuid: "59542963-1acf-a401-c137-4b1d78e9d127"
+					widht: 128
+					height: 128
+				}
+				buffer: "1c0766e5745d8d8f"
+			}
+		}
+	]
+	interface: {
+		__uuid: "ebadcfb5-680f-0fec-c34f-2923c1d9ac7d"
+		inputs: [
+			{
+				__uuid: "64f9791b-b0ef-c9fa-b43b-b4bb8931540c"
+				display_name: "Icon Path"
+				id: "input__graph_10604479288079442683__1"
+				type_hash: "c0e73f6b9d047b45"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "226c414c-e509-fd3c-d4aa-3cb4fd55aafd"
+					filename: ""
+					description: {
+						__uuid: "a30c6054-c1f8-ff3a-df7e-8c91e695148a"
+					}
+				}
+				public: true
+				order: 2
+			}
+			{
+				__uuid: "7e6a1295-06c4-537c-6e59-7dd55477bf06"
+				display_name: "Size Clamp"
+				id: "input__graph_10604479288079442683__2"
+				type_hash: "df81286b1233bab6"
+				value: {
+					__type: "tm_vec4_t"
+					__uuid: "e5316a0e-3e68-077d-6c92-0dcb8a01123f"
+				}
+				public: true
+				order: 1
+			}
+		]
+		last_id: 2
+		cached_node_result: [
+			{
+				__uuid: "753aec7f-2b2d-3280-2a29-9d4de265e216"
+				node: "8b086966-dbe9-cdda-8ab8-ddb8524310bc"
+				validity_hash: "8bdd67325e1e0913"
+				object: {
+					__type: "tm_shader_system_compiled_result"
+					__uuid: "c11876b1-492d-ab8a-5181-e290107bc444"
+					name: "8bdd67325e1e0913"
+					buffer: "a05d4f6b9cb139be"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "f2d1575d-121c-17ff-a5db-fb7ec2015faf"

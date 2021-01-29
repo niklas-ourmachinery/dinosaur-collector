@@ -275,7 +275,7 @@ static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_pat
 
     const tm_tt_id_t object = tm_the_truth_api->get_subobject(args->tt, tm_tt_read(args->tt, asset), TM_TT_PROP__ASSET__OBJECT);
     tm_creation_graph_context_t ctx = (tm_creation_graph_context_t){ .rb = args->render_backend, .device_affinity_mask = TM_RENDERER_DEVICE_AFFINITY_MASK_ALL, .tt = args->tt };
-    tm_creation_graph_instance_t inst = tm_creation_graph_api->create_instance(object, &ctx);
+    tm_creation_graph_instance_t inst = tm_creation_graph_api->create_instance(args->tt, object, &ctx);
     tm_creation_graph_output_t output = tm_creation_graph_api->output(&inst, TM_CREATION_GRAPH__IMAGE__OUTPUT_NODE_HASH, &ctx, 0);
     const tm_creation_graph_image_data_t* cg_image = (tm_creation_graph_image_data_t*)output.output;
     const uint32_t image = tm_ui_renderer_api->allocate_image_slot(args->ui_renderer);
