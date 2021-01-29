@@ -271,33 +271,35 @@ struct dinosaur_t {
 
     // Image of prop that attracts this dinosaur.
     enum IMAGES attracted_by[16];
+
+    float margin,scale;
 };
 
 struct dinosaur_t dinosaurs[] = {
-    { .name = "Ankylosaurus", .image = ANKYLOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 1, .attracted_by = { LEAVES } },
-    { .name = "Ankylosuarus 2", .image = ANKYLOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 3, .attracted_by = { HERB_BUNDLE } },
-    { .name = "Apatosaurus", .image = APATOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 5, .attracted_by = { LEAVES } },
-    { .name = "Brachiosaurus", .image = BRACHIOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 10, .attracted_by = { BERRY_BUNCH } },
-    { .name = "Brachiosaurus 2", .image = BRACHIOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 30, .attracted_by = { BANANA_BUNCH } },
-    { .name = "Carnotaurus", .image = CARNOTAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 30, .attracted_by = { HAUNCH } },
-    { .name = "Dimorphodon", .image = DIMORPHODON, .type = DINO_TYPE__PTEROSAUR, .minutes_to_spawn = 10, .attracted_by = { MEAT } },
-    { .name = "Pachycephalosaurus", .image = PACHYCEPHALOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 10, .attracted_by = { BERRY_BUNCH } },
-    { .name = "Parsaurolophus", .image = PARASAUROLOPHUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 12, .attracted_by = { BANANA_BUNCH } },
-    { .name = "Parsaurolophus 2", .image = PARASAUROLOPHUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 50, .attracted_by = { LEAVES } },
-    { .name = "Plesiosaurus", .image = PLESIOSAURUS, .type = DINO_TYPE__ICTYOSAUR, .minutes_to_spawn = 45, .attracted_by = { FISH } },
-    { .name = "Pliosaurus", .image = PLIOSAURUS, .type = DINO_TYPE__ICTYOSAUR, .minutes_to_spawn = 25, .attracted_by = { SQUID } },
-    { .name = "Pteranodon", .image = PTERANODON, .type = DINO_TYPE__PTEROSAUR, .minutes_to_spawn = 20, .attracted_by = { DEAD_MOUSE } },
-    { .name = "Spinosaurus", .image = SPINOSAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 30, .attracted_by = { HAM } },
-    { .name = "Stegosaurus", .image = STEGOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 5, .attracted_by = { LEAVES } },
-    { .name = "Stegosaurus 2", .image = STEGOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 100, .attracted_by = { HERB_BUNDLE } },
-    { .name = "Stegosaurus 3", .image = STEGOSAURUS_3, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 200, .attracted_by = { BERRY_BUNCH } },
-    { .name = "Stygimoloch", .image = STYGIMOLOCH, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 120, .attracted_by = { BANANA_BUNCH } },
-    { .name = "Therizinosaurus", .image = THERIZINOSAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 45, .attracted_by = { URCHIN } },
-    { .name = "Triceratops", .image = TRICERATOPS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 10, .attracted_by = { LEAVES } },
-    { .name = "Triceratops 2", .image = TRICERATOPS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 120, .attracted_by = { BERRY_BUNCH } },
-    { .name = "Tyrannosaurus", .image = TYRANNOSAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 10, .attracted_by = { HAUNCH } },
-    { .name = "Utahceratops", .image = UTAHCERATOPS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 60, .attracted_by = { BERRY_BUNCH } },
-    { .name = "Velociraptor", .image = VELOCIRAPTOR, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 20, .attracted_by = { HAUNCH } },
+    { .name = "Ankylosaurus", .image = ANKYLOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 1, .attracted_by = { LEAVES }, .margin = 0, .scale = 1 },
+    { .name = "Ankylosuarus 2", .image = ANKYLOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 3, .attracted_by = { HERB_BUNDLE }, .margin = 0, .scale = 1 },
+    { .name = "Apatosaurus", .image = APATOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 5, .attracted_by = { LEAVES }, .margin = 0, .scale = 1 },
+    { .name = "Brachiosaurus", .image = BRACHIOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 10, .attracted_by = { BERRY_BUNCH }, .margin = 0, .scale = 1 },
+    { .name = "Brachiosaurus 2", .image = BRACHIOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 30, .attracted_by = { BANANA_BUNCH }, .margin = 0, .scale = 1 },
+    { .name = "Carnotaurus", .image = CARNOTAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 30, .attracted_by = { HAUNCH }, .margin = 0, .scale = 1 },
+    { .name = "Dimorphodon", .image = DIMORPHODON, .type = DINO_TYPE__PTEROSAUR, .minutes_to_spawn = 10, .attracted_by = { MEAT }, .margin = 0, .scale = 1 },
+    { .name = "Pachycephalosaurus", .image = PACHYCEPHALOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 10, .attracted_by = { BERRY_BUNCH }, .margin = 0, .scale = 1 },
+    { .name = "Parsaurolophus", .image = PARASAUROLOPHUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 12, .attracted_by = { BANANA_BUNCH }, .margin = 0, .scale = 1 },
+    { .name = "Parsaurolophus 2", .image = PARASAUROLOPHUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 50, .attracted_by = { LEAVES }, .margin = 0, .scale = 1 },
+    { .name = "Plesiosaurus", .image = PLESIOSAURUS, .type = DINO_TYPE__ICTYOSAUR, .minutes_to_spawn = 45, .attracted_by = { FISH }, .margin = 0, .scale = 1 },
+    { .name = "Pliosaurus", .image = PLIOSAURUS, .type = DINO_TYPE__ICTYOSAUR, .minutes_to_spawn = 25, .attracted_by = { SQUID }, .margin = 0, .scale = 1 },
+    { .name = "Pteranodon", .image = PTERANODON, .type = DINO_TYPE__PTEROSAUR, .minutes_to_spawn = 20, .attracted_by = { DEAD_MOUSE }, .margin = 0, .scale = 1 },
+    { .name = "Spinosaurus", .image = SPINOSAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 30, .attracted_by = { HAM }, .margin = 0, .scale = 1 },
+    { .name = "Stegosaurus", .image = STEGOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 5, .attracted_by = { LEAVES }, .margin = 0, .scale = 1 },
+    { .name = "Stegosaurus 2", .image = STEGOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 100, .attracted_by = { HERB_BUNDLE }, .margin = 0, .scale = 1 },
+    { .name = "Stegosaurus 3", .image = STEGOSAURUS_3, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 200, .attracted_by = { BERRY_BUNCH }, .margin = 0, .scale = 1 },
+    { .name = "Stygimoloch", .image = STYGIMOLOCH, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 120, .attracted_by = { BANANA_BUNCH }, .margin = 0, .scale = 1 },
+    { .name = "Therizinosaurus", .image = THERIZINOSAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 45, .attracted_by = { URCHIN }, .margin = 0, .scale = 1 },
+    { .name = "Triceratops", .image = TRICERATOPS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 10, .attracted_by = { LEAVES }, .margin = 0, .scale = 1 },
+    { .name = "Triceratops 2", .image = TRICERATOPS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 120, .attracted_by = { BERRY_BUNCH }, .margin = 0, .scale = 1 },
+    { .name = "Tyrannosaurus", .image = TYRANNOSAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 10, .attracted_by = { HAUNCH }, .margin = 0, .scale = 1 },
+    { .name = "Utahceratops", .image = UTAHCERATOPS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 60, .attracted_by = { BERRY_BUNCH }, .margin = 0, .scale = 1 },
+    { .name = "Velociraptor", .image = VELOCIRAPTOR, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 20, .attracted_by = { HAUNCH }, .margin = 0, .scale = 1 },
 };
 
 // Total number of dinosaurs in the game.
@@ -450,6 +452,34 @@ static void draw_scene_props(tm_rect_t background_r, struct scene_prop_t* draw_p
     *draw_ptr = draw;
 }
 
+// Draws scene dinosaurs in the array `(draw_dinosaurs, num_dinosaurs)`.
+static void draw_scene_dinosaurs(tm_rect_t background_r, struct scene_dinosaur_t* draw_dinosaurs, uint32_t num_dinosaurs,
+    struct draw_item_t** draw_ptr, tm_temp_allocator_i* ta)
+{
+    struct draw_item_t* draw = *draw_ptr;
+    for (struct scene_dinosaur_t* d = draw_dinosaurs; d < draw_dinosaurs + num_dinosaurs; ++d) {
+        struct dinosaur_t* dinosaur = dinosaurs + d->dinosaur;
+
+        const float x = background_r.x + background_r.w * d->x;
+        const float y = background_r.y + background_r.h * d->y;
+
+        const float unit = background_r.h;
+        const float far_size = 0.06f * unit * (float)dinosaur->scale;
+        const float close_size = 0.24f * unit * (float)dinosaur->scale;
+        const float rel_size = (d->y - 0.35f) / (1.0f - 0.35f);
+        const float size = tm_lerp(far_size, close_size, rel_size);
+
+        if (in_lake(d->x, d->y)) {
+            const tm_rect_t r = { x - size / 2, y - size + size * (float)dinosaur->margin, size, size / 2 };
+            tm_carray_temp_push(draw, ((struct draw_item_t){ .image = dinosaur->image, .y = d->y, .rect = r, .uv_rect = (tm_rect_t){ 0, 0, 1, 0.5f } }), ta);
+        } else {
+            const tm_rect_t r = { x - size / 2, y - size + size * (float)dinosaur->margin, size, size };
+            tm_carray_temp_push(draw, ((struct draw_item_t){ .image = dinosaur->image, .y = d->y, .rect = r }), ta);
+        }
+    }
+    *draw_ptr = draw;
+}
+
 // Draws the scene -- the background layers and the placed props.
 static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
@@ -513,6 +543,7 @@ static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
         tm_carray_temp_push(draw, ((struct draw_item_t){ .image = BACKGROUND_LAYER_3, .y = 0.82f, .rect = background_r }), ta);
         tm_carray_temp_push(draw, ((struct draw_item_t){ .image = BACKGROUND_LAYER_4, .y = 1, .rect = background_r }), ta);
         draw_scene_props(background_r, state->scene_props, num_scene_props, &draw, ta);
+        draw_scene_dinosaurs(background_r, state->scene_dinosaurs, state->num_scene_dinosaurs, &draw, ta);
 
         // Sort them.
         qsort(draw, tm_carray_size(draw), sizeof(*draw), compare_float);
@@ -791,11 +822,17 @@ static tm_simulate_state_o* simulate__start(tm_simulate_start_args_t* args)
     memset(state, 0, RESERVE_STATE_BYTES);
     *state = (tm_simulate_state_o){
         .allocator = args->allocator,
-        .money = 10000,
     };
 
     for (uint32_t i = 0; i < NUM_IMAGES; ++i)
         state->images[i] = load_image(args, image_paths[i]);
+
+    // Test data
+    state->money = 10000;
+    state->scene_dinosaurs[0] = (struct scene_dinosaur_t){
+        .dinosaur = 0, .x = 0.5f, .y = 0.5f
+    };
+    state->num_scene_dinosaurs = 1;
 
     return state;
 }
