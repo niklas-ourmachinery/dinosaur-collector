@@ -186,6 +186,13 @@ enum STATE {
     STATE__PLACING,
 };
 
+// Types for props.
+enum PROP_TYPE {
+    PROP_TYPE__VEG,
+    PROP_TYPE__MEAT,
+    PROP_TYPE__FISH,
+};
+
 // Properties for props.
 struct prop_t {
     // Name of the prop.
@@ -200,25 +207,33 @@ struct prop_t {
     // The prop images are always square and 256 x 256 pixel, with the graphics centered in the square.
     // When we place a prop, we want to align the bottom of the actual graphics of the prop with the
     // cursor position, so we need to offset it by this margin.
-    float margin;
+    double margin;
 
     // Scale at which the prop will be drawn. Props can be drawn bigger or smaller in the world.
-    float scale;
+    double scale;
+
+    // Type of the prop.
+    enum PROP_TYPE type;
 
     // Price to by the prop in the shop.
     uint32_t price;
 };
 
-// clang-format off
-
 // List of all the props in the game.
 struct prop_t props[] = {
-    { .name = "Leaves", .image = LEAVES, .margin = 0.17f, .scale = 0.9f, .price = 5 },
-    { .name = "Meat",   .image = MEAT,   .margin = 0.2f,  .scale = 1.0f, .price = 10 },
-    { .name = "Fish",   .image = FISH,   .margin = 0.35f, .scale = 0.7f, .price = 20 },
+    { .name = "Leaves", .image = LEAVES, .type = PROP_TYPE__VEG, .price = 5, .margin = 0.17, .scale = 0.9 },
+    { .name = "Meat", .image = MEAT, .type = PROP_TYPE__MEAT, .price = 5, .margin = 0.2, .scale = 1 },
+    { .name = "Fish", .image = FISH, .type = PROP_TYPE__FISH, .price = 5, .margin = 0.35, .scale = 0.7 },
+    { .name = "Herb Bundle", .image = HERB_BUNDLE, .type = PROP_TYPE__VEG, .price = 10, .margin = 0.2, .scale = 1 },
+    { .name = "Banana Bunch", .image = BANANA_BUNCH, .type = PROP_TYPE__VEG, .price = 20, .margin = 0.2, .scale = 1 },
+    { .name = "Berry Bunch", .image = BERRY_BUNCH, .type = PROP_TYPE__VEG, .price = 30, .margin = 0.2, .scale = 1 },
+    { .name = "Ham", .image = HAM, .type = PROP_TYPE__MEAT, .price = 10, .margin = 0.2, .scale = 1 },
+    { .name = "Haunch", .image = HAUNCH, .type = PROP_TYPE__MEAT, .price = 20, .margin = 0.2, .scale = 1 },
+    { .name = "Dead Mouse", .image = DEAD_MOUSE, .type = PROP_TYPE__MEAT, .price = 30, .margin = 0.2, .scale = 1 },
+    { .name = "Squid", .image = SQUID, .type = PROP_TYPE__FISH, .price = 10, .margin = 0.2, .scale = 1 },
+    { .name = "Urchin", .image = URCHIN, .type = PROP_TYPE__FISH, .price = 20, .margin = 0.2, .scale = 1 },
+    { .name = "Starfish ", .image = STARFISH, .type = PROP_TYPE__FISH, .price = 30, .margin = 0.2, .scale = 1 },
 };
-
-// clang-format on
 
 // Total  number of props in the game.
 #define NUM_PROPS (TM_ARRAY_COUNT(props))
@@ -324,16 +339,16 @@ static void scene_props(tm_simulate_state_o* state, tm_simulate_frame_args_t* ar
         const float y = background_r.y + background_r.h * p->y;
 
         const float unit = background_r.h;
-        const float far_size = 0.06f * unit * prop->scale;
-        const float close_size = 0.24f * unit * prop->scale;
+        const float far_size = 0.06f * unit * (float)prop->scale;
+        const float close_size = 0.24f * unit * (float)prop->scale;
         const float rel_size = (p->y - 0.35f) / (1.0f - 0.35f);
         const float size = tm_lerp(far_size, close_size, rel_size);
 
         if (in_lake(p->x, p->y)) {
-            const tm_rect_t r = { x - size / 2, y - size + size * prop->margin, size, size / 2 };
+            const tm_rect_t r = { x - size / 2, y - size + size * (float)prop->margin, size, size / 2 };
             tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, r, state->images[prop->image], (tm_rect_t){ 0, 0, 1, 0.5f });
         } else {
-            const tm_rect_t r = { x - size / 2, y - size + size * prop->margin, size, size };
+            const tm_rect_t r = { x - size / 2, y - size + size * (float)prop->margin, size, size };
             tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, r, state->images[prop->image], (tm_rect_t){ 0, 0, 1, 1 });
         }
     }
@@ -368,7 +383,7 @@ static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 
         const bool is_in_scene = tm_is_between(scene_rel_mouse_x, 0, 1) && tm_is_between(scene_rel_mouse_y, 0.35, 1);
         const bool is_in_lake = in_lake(scene_rel_mouse_x, scene_rel_mouse_y);
-        const bool can_place = is_in_scene && (!is_in_lake || props[state->place_prop].image == FISH);
+        const bool can_place = is_in_scene && (!is_in_lake || props[state->place_prop].type == PROP_TYPE__FISH);
 
         if (can_place) {
             state->scene_props[num_scene_props] = (struct scene_prop_t){
@@ -440,7 +455,7 @@ static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     tm_ui_style_t uistyle[1] = { *args->uistyle };
     uistyle->font_scale = font_scale;
     char money_str[64];
-    sprintf(money_str, "$ %d", state->money);
+    sprintf(money_str, "%d", state->money);
     const tm_rect_t metrics_r = tm_ui_api->text_metrics(uistyle, money_str);
     const tm_rect_t draw_r = { .y = money_symbol_r.y, .w = money_amount_r.x + metrics_r.w, .h = args->rect.h - money_symbol_r.y };
     const tm_rect_t background_r = tm_rect_inset(draw_r, -5, -5);
@@ -517,6 +532,12 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     const tm_rect_t menu_inset_r = tm_rect_inset(menu_r, 0.05f * unit, 0.05f * unit);
     rect = menu_inset_r;
 
+    tm_draw2d_style_t highlight = *style;
+    highlight.color = HEXCOLOR(0xffff00);
+
+    // Use this to highlight parts of the UI to examine the layout.
+    // tm_draw2d_api->fill_rect(uib.vbuffer, *uib.ibuffers, &highlight, price_r);
+
     if (state->state == STATE__MENU) {
         for (uint32_t idx = 0; idx < 9; ++idx) {
             const uint32_t x = idx % 3;
@@ -545,20 +566,23 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
         for (uint32_t i = 0; i < 9; ++i, ++idx) {
             const uint32_t x = i % 3;
             const uint32_t y = i / 3;
-            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.04f * unit, 3, y);
-            const tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.04f * unit, 3, x);
+            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.01f * unit, 3, y);
+            tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.01f * unit, 3, x);
 
             while (idx < NUM_PROPS && state->inventory[idx] == 0)
                 ++idx;
             if (idx >= NUM_PROPS)
                 break;
 
+            tm_rect_t inventory_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
+            tm_rect_t desc_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
+            icon_r = tm_rect_center_in(icon_r.h, icon_r.h, icon_r);
+            inventory_r = tm_rect_center_in(icon_r.w, inventory_r.h, inventory_r);
+
             const tm_color_srgb_t text_color = { .a = 255 };
-            const tm_rect_t desc_r = tm_rect_set_h(tm_rect_add(icon_r, (tm_rect_t){ .y = icon_r.h }), 0.04f * unit);
             uistyle->font_scale = desc_r.h / 18.0f;
             tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = props[idx].name, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
 
-            tm_rect_t inventory_r = tm_rect_add(desc_r, (tm_rect_t){ .y = desc_r.h * 1.2f });
             char inventory_str[32] = { 0 };
             sprintf(inventory_str, "%d", state->inventory[idx]);
             tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = inventory_r, .text = inventory_str, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
@@ -574,19 +598,22 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
         for (uint32_t idx = 0; idx < 9; ++idx) {
             const uint32_t x = idx % 3;
             const uint32_t y = idx / 3;
-            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.04f * unit, 3, y);
-            const tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.04f * unit, 3, x);
+            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.01f * unit, 3, y);
+            tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.01f * unit, 3, x);
             if (idx >= NUM_PROPS)
                 continue;
 
             const bool enabled = state->money >= props[idx].price;
 
+            tm_rect_t price_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
+            tm_rect_t desc_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
+            icon_r = tm_rect_center_in(icon_r.h, icon_r.h, icon_r);
+            price_r = tm_rect_center_in(icon_r.w, price_r.h, price_r);
+
             const tm_color_srgb_t text_color = { .a = enabled ? 255 : 64 };
-            const tm_rect_t desc_r = tm_rect_set_h(tm_rect_add(icon_r, (tm_rect_t){ .y = icon_r.h }), 0.04f * unit);
             uistyle->font_scale = desc_r.h / 18.0f;
             tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = props[idx].name, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
 
-            tm_rect_t price_r = tm_rect_add(desc_r, (tm_rect_t){ .y = desc_r.h * 1.2f });
             const tm_rect_t bone_r = tm_rect_split_off_left(&price_r, price_r.h, 0.01f * unit);
             style->color = (tm_color_srgb_t){ .a = enabled ? 255 : 64, .r = 255, .g = 255, .b = 255 };
             tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, bone_r, state->images[BONE], (tm_rect_t){ 0, 0, 1, 1 });
