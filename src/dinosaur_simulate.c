@@ -87,6 +87,8 @@ enum IMAGES {
     MENU_BACKGROUND,
     SHOP,
     SQUARE,
+    LEFT_ARROW,
+    RIGHT_ARROW,
 
     // Props
     BANANA_BUNCH,
@@ -150,6 +152,8 @@ const char* image_paths[NUM_IMAGES] = {
     [MENU_BACKGROUND] = "art/icons/menu_background.creation",
     [SHOP] = "art/icons/shop.creation",
     [SQUARE] = "art/icons/square.creation",
+    [LEFT_ARROW] = "art/icons/left_arrow.creation",
+    [RIGHT_ARROW] = "art/icons/right_arrow.creation",
 
     [BANANA_BUNCH] = "art/props/banana_bunch.creation",
     [BERRY_BUNCH] = "art/props/berry_bunch.creation",
@@ -593,15 +597,19 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
             }
         }
     } else if (state->state == STATE__SHOP) {
+        static uint32_t view_page = 1;
         tm_ui_style_t uistyle[1] = { *args->uistyle };
 
-        for (uint32_t idx = 0; idx < 9; ++idx) {
+        for (uint32_t idx = 0; idx < NUM_PROPS; ++idx) {
+            const uint32_t page = idx / 9;
             const uint32_t x = idx % 3;
-            const uint32_t y = idx / 3;
+            const uint32_t y = (idx % 9) / 3;
+
+            if (view_page != page)
+                continue;
+
             const tm_rect_t row_r = tm_rect_divide_y(rect, 0.01f * unit, 3, y);
             tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.01f * unit, 3, x);
-            if (idx >= NUM_PROPS)
-                continue;
 
             const bool enabled = state->money >= props[idx].price;
 
@@ -631,6 +639,20 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
                 state->money -= props[idx].price;
                 state->inventory[idx]++;
             }
+        }
+
+        const uint32_t num_pages = (NUM_PROPS + 8) / 9;
+        if (view_page > 0) {
+            const tm_rect_t left_edge_r = tm_rect_split_left(menu_r, 0.05f*unit, 0, 0);
+            const tm_rect_t left_button_r = tm_rect_center_in(unit * 0.15f, unit * 0.15f, left_edge_r);
+            if (button(state, args, left_button_r, LEFT_ARROW))
+                --view_page;
+        }
+        if (view_page < num_pages - 1) {
+            const tm_rect_t right_edge_r = tm_rect_split_right(menu_r, 0.05f*unit, 0, 1);
+            const tm_rect_t right_button_r = tm_rect_center_in(unit * 0.15f, unit * 0.15f, right_edge_r);
+            if (button(state, args, right_button_r, RIGHT_ARROW))
+                ++view_page;
         }
     }
 }

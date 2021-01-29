@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "497c9a8b-655d-3dab-0ce9-2bdcb17893c8"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "5a79c178-2619-a645-52e4-332b69e00039"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "8789e4a1-2579-f7a1-a36e-149b79fea01e"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "772f70e7-d6b8-7332-6011-fbe434c5499a"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "f3af648f-272b-f340-2ee1-9c3b37d252e5"
+					filename: "C:\\work\\dinosaur-collector\\art\\icons\\right_arrow.png"
+					validity_hash: "610208b963063e75"
+					description: {
+						__uuid: "31ddfe8d-39a4-7c86-8f33-9bb982518aa9"
+					}
+					buffer: "1703d483b7a69a92"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "0a0976fa-191a-776a-ba27-6a34331b514b"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]
