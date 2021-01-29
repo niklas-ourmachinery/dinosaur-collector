@@ -394,6 +394,9 @@ struct tm_simulate_state_o {
     // Dinosaurs currently in the scene.
     uint32_t num_scene_dinosaurs;
     struct scene_dinosaur_t scene_dinosaurs[MAX_SCENE_DINOSAURS];
+
+    // Dinosaurs that the player has seen.
+    bool in_album[NUM_DINOSAURS];
 };
 
 // Item to draw in the scene.
@@ -561,7 +564,9 @@ static void game_logic(tm_simulate_state_o* state, double dt)
                 if (!spawn)
                     continue;
 
-                const struct scene_dinosaur_t dino = { .dinosaur = (uint32_t)(d - dinosaurs), .x = p->x, .y = p->y };
+                const uint32_t dino_i = (uint32_t)(d - dinosaurs);
+                state->in_album[dino_i] = true;
+                const struct scene_dinosaur_t dino = { .dinosaur = dino_i, .x = p->x, .y = p->y };
                 state->scene_dinosaurs[state->num_scene_dinosaurs++] = dino;
                 state->scene_props[pi--] = state->scene_props[--state->num_scene_props];
                 break;
@@ -888,6 +893,36 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
                 state->money -= props[idx].price;
                 state->inventory[idx]++;
             }
+        }
+    } else if (state->state == STATE__ALBUM) {
+        tm_ui_style_t uistyle[1] = { *args->uistyle };
+
+        uint32_t idx = 0;
+        for (uint32_t i = 0;; ++i, ++idx) {
+            const uint32_t page = i / 9;
+            const uint32_t x = i % 3;
+            const uint32_t y = (i % 9) / 3;
+
+            while (idx < NUM_DINOSAURS && !state->in_album[idx])
+                ++idx;
+            if (idx >= NUM_DINOSAURS)
+                break;
+
+            num_pages = page + 1;
+
+            if (state->page != page)
+                continue;
+
+            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.01f * unit, 3, y);
+            tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.01f * unit, 3, x);
+            tm_rect_t desc_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
+            icon_r = tm_rect_center_in(icon_r.h, icon_r.h, icon_r);
+
+            const tm_color_srgb_t text_color = { .a = 255 };
+            uistyle->font_scale = desc_r.h / 18.0f;
+            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = dinosaurs[idx].name, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
+
+            button(state, args, icon_r, dinosaurs[idx].image);
         }
     }
 
