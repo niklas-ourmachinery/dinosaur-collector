@@ -228,15 +228,15 @@ struct prop_t props[] = {
     { .name = "Leaves", .image = LEAVES, .type = PROP_TYPE__VEG, .price = 5, .margin = 0.17, .scale = 0.9 },
     { .name = "Meat", .image = MEAT, .type = PROP_TYPE__MEAT, .price = 5, .margin = 0.2, .scale = 1 },
     { .name = "Fish", .image = FISH, .type = PROP_TYPE__FISH, .price = 5, .margin = 0.35, .scale = 0.7 },
-    { .name = "Herb Bundle", .image = HERB_BUNDLE, .type = PROP_TYPE__VEG, .price = 10, .margin = 0.2, .scale = 1 },
-    { .name = "Banana Bunch", .image = BANANA_BUNCH, .type = PROP_TYPE__VEG, .price = 20, .margin = 0.2, .scale = 1 },
-    { .name = "Berry Bunch", .image = BERRY_BUNCH, .type = PROP_TYPE__VEG, .price = 30, .margin = 0.2, .scale = 1 },
-    { .name = "Ham", .image = HAM, .type = PROP_TYPE__MEAT, .price = 10, .margin = 0.2, .scale = 1 },
-    { .name = "Haunch", .image = HAUNCH, .type = PROP_TYPE__MEAT, .price = 20, .margin = 0.2, .scale = 1 },
-    { .name = "Dead Mouse", .image = DEAD_MOUSE, .type = PROP_TYPE__MEAT, .price = 30, .margin = 0.2, .scale = 1 },
+    { .name = "Herb Bundle", .image = HERB_BUNDLE, .type = PROP_TYPE__VEG, .price = 10, .margin = 0.2, .scale = 0.7 },
+    { .name = "Banana Bunch", .image = BANANA_BUNCH, .type = PROP_TYPE__VEG, .price = 20, .margin = 0.2, .scale = 0.8 },
+    { .name = "Berry Bunch", .image = BERRY_BUNCH, .type = PROP_TYPE__VEG, .price = 30, .margin = 0.2, .scale = 0.6 },
+    { .name = "Ham", .image = HAM, .type = PROP_TYPE__MEAT, .price = 10, .margin = 0.2, .scale = 0.9 },
+    { .name = "Haunch", .image = HAUNCH, .type = PROP_TYPE__MEAT, .price = 20, .margin = 0.2, .scale = 1.1 },
+    { .name = "Dead Mouse", .image = DEAD_MOUSE, .type = PROP_TYPE__MEAT, .price = 30, .margin = 0.2, .scale = 0.6 },
     { .name = "Squid", .image = SQUID, .type = PROP_TYPE__FISH, .price = 10, .margin = 0.2, .scale = 1 },
-    { .name = "Urchin", .image = URCHIN, .type = PROP_TYPE__FISH, .price = 20, .margin = 0.2, .scale = 1 },
-    { .name = "Starfish ", .image = STARFISH, .type = PROP_TYPE__FISH, .price = 30, .margin = 0.2, .scale = 1 },
+    { .name = "Urchin", .image = URCHIN, .type = PROP_TYPE__FISH, .price = 20, .margin = 0.2, .scale = 0.7 },
+    { .name = "Starfish ", .image = STARFISH, .type = PROP_TYPE__FISH, .price = 30, .margin = 0.2, .scale = 0.7 },
 };
 
 // Total  number of props in the game.
