@@ -319,6 +319,9 @@ struct rules_t {
     // Multiplier to the game speed (for faster testing).
     struct range_t speed_multiplier;
 
+    // Money player has at the start.
+    struct range_t start_money;
+
     // Minutes until the next coin is spawned.
     struct range_t minutes_to_coin;
 
@@ -332,6 +335,7 @@ struct rules_t {
 // Current game rules.
 struct rules_t rules = {
     .speed_multiplier = { 60, 60 },
+    .start_money = { 100, 100 },
     .minutes_to_coin = { 1, 1 },
     .dinosaur_lifetime_minutes = { 1, 10 },
     .food_lifetime_minutes = { 10, 20 },
@@ -977,13 +981,11 @@ static tm_simulate_state_o* simulate__start(tm_simulate_start_args_t* args)
     memset(state, 0, RESERVE_STATE_BYTES);
     *state = (tm_simulate_state_o){
         .allocator = args->allocator,
+        .money = (uint32_t)roll(rules.start_money),
     };
 
     for (uint32_t i = 0; i < NUM_IMAGES; ++i)
         state->images[i] = load_image(args, image_paths[i]);
-
-    // Test data
-    state->money = 100;
 
     return state;
 }
