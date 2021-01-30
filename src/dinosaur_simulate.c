@@ -316,6 +316,9 @@ struct range_t {
 
 // Game rules.
 struct rules_t {
+    // Multiplier to the game speed (for faster testing).
+    struct range_t speed_multiplier;
+
     // Minutes until the next coin is spawned.
     struct range_t minutes_to_coin;
 
@@ -328,6 +331,7 @@ struct rules_t {
 
 // Current game rules.
 struct rules_t rules = {
+    .speed_multiplier = { 60, 60 },
     .minutes_to_coin = { 1, 1 },
     .dinosaur_lifetime_minutes = { 1, 10 },
     .food_lifetime_minutes = { 10, 20 },
@@ -359,6 +363,9 @@ struct scene_dinosaur_t {
     // I.e. `(0,0)` represents the top left corner of the background image and `(1,1)` the bottom
     // right corner.
     float x, y;
+
+    // If true, the graphics of this dinosaur is horizontally flipped.
+    bool flipped;
 
     // Time that this dinosaur has left to live until it disappears.
     double lifetime;
@@ -511,10 +518,12 @@ static void draw_scene_dinosaurs(tm_rect_t background_r, struct scene_dinosaur_t
 
         if (in_lake(d->x, d->y)) {
             const tm_rect_t r = { x - size / 2, y - size + size * (float)dinosaur->margin, size, size / 2 };
-            tm_carray_temp_push(draw, ((struct draw_item_t){ .image = dinosaur->image, .y = d->y, .rect = r, .uv_rect = (tm_rect_t){ 0, 0, 1, 0.5f } }), ta);
+            const tm_rect_t uv = d->flipped ? (tm_rect_t){ 1, 0, -1, 0.5f } : (tm_rect_t){ 0, 0, 1, 0.5f };
+            tm_carray_temp_push(draw, ((struct draw_item_t){ .image = dinosaur->image, .y = d->y, .rect = r, .uv_rect = uv }), ta);
         } else {
             const tm_rect_t r = { x - size / 2, y - size + size * (float)dinosaur->margin, size, size };
-            tm_carray_temp_push(draw, ((struct draw_item_t){ .image = dinosaur->image, .y = d->y, .rect = r }), ta);
+            const tm_rect_t uv = d->flipped ? (tm_rect_t){ 1, 0, -1, 1 } : (tm_rect_t){ 0, 0, 1, 1 };
+            tm_carray_temp_push(draw, ((struct draw_item_t){ .image = dinosaur->image, .y = d->y, .rect = r, .uv_rect = uv }), ta);
         }
     }
     *draw_ptr = draw;
@@ -582,7 +591,7 @@ static void game_logic(tm_simulate_state_o* state, double dt)
 
                 const uint32_t dino_i = (uint32_t)(d - dinosaurs);
                 state->in_album[dino_i] = true;
-                const struct scene_dinosaur_t dino = { .dinosaur = dino_i, .x = p->x, .y = p->y };
+                const struct scene_dinosaur_t dino = { .dinosaur = dino_i, .x = p->x, .y = p->y, .flipped = tm_random_to_bool(tm_random_api->next()) };
                 state->scene_dinosaurs[state->num_scene_dinosaurs++] = dino;
                 state->scene_props[pi--] = state->scene_props[--state->num_scene_props];
                 break;
@@ -989,7 +998,7 @@ static void simulate__stop(tm_simulate_state_o* state)
 // Implements `tm_simulate_entry_i->tick()`.
 static void simulate__tick(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
-    const double speed_multiplier = 1;
+    const double speed_multiplier = roll(rules.speed_multiplier);
     game_logic(state, args->dt_unscaled * speed_multiplier);
 
     scene(state, args);
