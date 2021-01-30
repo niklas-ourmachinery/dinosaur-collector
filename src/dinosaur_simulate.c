@@ -259,7 +259,7 @@ enum DINO_TYPE {
 
 // Properties for dinosaurs
 struct dinosaur_t {
-    // Name of the dinosur
+    // Name of the dinosaur.
     const char* name;
 
     // Image for the dinosaur.
@@ -271,13 +271,14 @@ struct dinosaur_t {
     // Average minutes before this dinosaur spawns if the right prop is placed.
     double minutes_to_spawn;
 
-    // Image of props that attract this dinosaur.
+    // Images of props that attract this dinosaur. Currently, we only support 1 attracting prop.
     enum IMAGES attracted_by[1];
 
     // Margin and scale for drawing the dinosaur.
     double margin, scale;
 };
 
+// All the dinosaurs in the game.
 struct dinosaur_t dinosaurs[] = {
     { .name = "Ankylosaurus", .image = ANKYLOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 1, .attracted_by = { LEAVES }, .margin = 0.3, .scale = 0.9 },
     { .name = "Ankylosuarus 2", .image = ANKYLOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 3, .attracted_by = { HERB_BUNDLE }, .margin = 0.4, .scale = 0.9 },
@@ -305,24 +306,32 @@ struct dinosaur_t dinosaurs[] = {
     { .name = "Velociraptor", .image = VELOCIRAPTOR, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 20, .attracted_by = { HAUNCH }, .margin = 0.1, .scale = 1 },
 };
 
+// Total number of dinosaurs in the game.
+#define NUM_DINOSAURS (TM_ARRAY_COUNT(dinosaurs))
+
+// Specifies a numeric range.
 struct range_t {
     double min, max;
 };
 
+// Game rules.
 struct rules_t {
+    // Minutes until the next coin is spawned.
     struct range_t minutes_to_coin;
+
+    // Time a dinosaur stays around after it has come to eat food.
     struct range_t dinosaur_lifetime_minutes;
+
+    // Time food stays around if no dinosaur eats it.
     struct range_t food_lifetime_minutes;
 };
 
+// Current game rules.
 struct rules_t rules = {
     .minutes_to_coin = { 1, 1 },
     .dinosaur_lifetime_minutes = { 1, 10 },
     .food_lifetime_minutes = { 10, 20 },
 };
-
-// Total number of dinosaurs in the game.
-#define NUM_DINOSAURS (TM_ARRAY_COUNT(dinosaurs))
 
 // Data for a prop placed in the scene.
 struct scene_prop_t {
@@ -334,7 +343,7 @@ struct scene_prop_t {
     // right corner.
     float x, y;
 
-    // Time that this prop will live until it disappears.
+    // Time that this prop has left to live until it disappears.
     double lifetime;
 };
 
@@ -351,7 +360,7 @@ struct scene_dinosaur_t {
     // right corner.
     float x, y;
 
-    // Time that this dinosaur will hang around until it disappears.
+    // Time that this dinosaur has left to live until it disappears.
     double lifetime;
 };
 
