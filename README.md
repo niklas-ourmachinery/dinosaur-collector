@@ -4,7 +4,7 @@
 
 Dino Dino! is a tiny dinosaur collecting game built in The Machinery.
 
-To run it you need The Machinery 2021.1.
+To run it you need The Machinery 2021.1. Open a simulate tab to run the game.
 
 This game, the code and the art are licensed under the [CC BY-NC
 4.0](https://creativecommons.org/licenses/by-nc/4.0/) license.

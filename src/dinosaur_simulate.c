@@ -965,7 +965,7 @@ static tm_simulate_state_o* simulate__start(tm_simulate_start_args_t* args)
         state->images[i] = load_image(args, image_paths[i]);
 
     // Test data
-    state->money = 10000;
+    state->money = 100;
 
     return state;
 }
@@ -980,7 +980,7 @@ static void simulate__stop(tm_simulate_state_o* state)
 // Implements `tm_simulate_entry_i->tick()`.
 static void simulate__tick(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
-    const double speed_multiplier = 60;
+    const double speed_multiplier = 1;
     game_logic(state, args->dt_unscaled * speed_multiplier);
 
     scene(state, args);
