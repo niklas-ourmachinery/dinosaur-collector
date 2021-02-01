@@ -46,7 +46,7 @@ enum { RESERVE_STATE_BYTES = 32 * 1024 };
 #define HEXCOLOR(c) ((tm_color_srgb_t){ .a = 255, .r = 0xff & (c >> 16), .g = 0xff & (c >> 8), .b = 0xff & (c >> 0) })
 
 // Index of all images in the game.
-enum IMAGES {
+enum IMAGE {
     // Used as placeholder for missing graphics.
     PLACEHOLDER,
 
@@ -210,7 +210,7 @@ struct prop_t {
     const char* name;
 
     // Image index for the prop.
-    enum IMAGES image;
+    enum IMAGE image;
 
     // Distance from the bottom of the prop graphics to the bottom of the image box as a fraction
     // of the graphics height (0--1).
@@ -263,7 +263,7 @@ struct dinosaur_t {
     const char* name;
 
     // Image for the dinosaur.
-    enum IMAGES image;
+    enum IMAGE image;
 
     // Type of the dinosaur.
     enum DINO_TYPE type;
@@ -272,7 +272,7 @@ struct dinosaur_t {
     double minutes_to_spawn;
 
     // Images of props that attract this dinosaur. Currently, we only support 1 attracting prop.
-    enum IMAGES attracted_by[1];
+    enum IMAGE attracted_by[1];
 
     // Margin and scale for drawing the dinosaur.
     double margin, scale;
@@ -425,7 +425,7 @@ struct draw_item_t {
     float y;
 
     // Image to draw for the item.
-    enum IMAGES image;
+    enum IMAGE image;
 
     // Rect where image should be drawn.
     tm_rect_t rect;

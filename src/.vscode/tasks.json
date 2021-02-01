@@ -5,15 +5,57 @@
     "tasks": [
         {
             "label": "tmbuild",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "windows": {
                 "command": "%TM_SDK_DIR%/bin/tmbuild.exe",
                 "args": [
                     "--quiet",
                     "--no-unit-test"
+                ]
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "zig cc build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "windows": {
+                "command": "zig",
+                "args": [
+                    "cc",
+                    "-shared",
+                    "-o",
+                    "bin/Debug/tm_dinosaur_simulate.dll",
+                    "dinosaur_simulate.c",
+                    "-I",
+                    "%TM_SDK_DIR%/headers",
+                    "-Wno-microsoft-enum-forward-reference"
+                ]
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "zig cc build [Linux]",
+            "group": "build",
+            "windows": {
+                "command": "zig",
+                "args": [
+                    "cc",
+                    "-target",
+                    "x86_64-linux-gnu",
+                    "-shared",
+                    "-o",
+                    "bin/Debug/tm_dinosaur_simulate.so",
+                    "dinosaur_simulate.c",
+                    "-I",
+                    "%TM_SDK_DIR%/headers",
+                    "-Wno-microsoft-enum-forward-reference"
                 ]
             },
             "problemMatcher": [
