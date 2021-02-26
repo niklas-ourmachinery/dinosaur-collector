@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "8757b388-c4e4-7d97-8426-7c765f24aaed"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "7a102023-158b-2961-56bb-33bab0e4d778"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "081374e3-18d5-b8a9-829f-5de3ed9c35bf"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "1ae43115-a2b9-f2b0-a2fe-d4473c59fe23"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "9f992728-7189-2fe3-9e6f-080eee7e0ca9"
+					filename: "C:\\work\\dino-dino\\art\\mementos\\lavender.png"
+					validity_hash: "dc81935fb3819ca4"
+					description: {
+						__uuid: "64c3cf66-bfc6-70b7-2a7d-889402d0f6d1"
+					}
+					buffer: "8c0e0afad098cdd6"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "f32990e6-91d1-2bb0-d2f9-9323e12d2943"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

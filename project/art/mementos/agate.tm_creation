@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "a9d22579-9402-6ffe-323f-a44efd528c8f"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "634ac741-d90f-3fbf-a999-772c97d4e6ed"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "95c9523e-af86-ee78-d78f-361c5b4a69be"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "88dd3a59-6113-88b8-fc0d-5178b5a0e913"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "172dea77-4d0a-3a56-62f3-5f4ec6e63eeb"
+					filename: "C:\\work\\dino-dino\\art\\mementos\\agate.png"
+					validity_hash: "ebdb4db227c77f72"
+					description: {
+						__uuid: "dc18a733-12a8-b893-21cd-287f1abd68d0"
+					}
+					buffer: "664fac4d964c1b1a"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "bcd752ff-b086-80ca-5158-15d916b9120e"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "39f86042-063e-2e92-2071-ec396d9845db"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "d5b59868-e314-3e59-635c-e1ae54bb4cf5"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "498186c8-ca5f-a8ca-1aaa-4a7b81d47da1"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "015a69f0-0a69-83d9-8aa6-e7e51b12e29f"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "8d507890-9219-d59f-7f43-79672a233953"
+					filename: "C:\\work\\dino-dino\\art\\mementos\\fern.png"
+					validity_hash: "950cc06832ef7294"
+					description: {
+						__uuid: "93e43b14-ab4b-ff67-a394-0e3e6dfbda91"
+						widht: 650
+						height: 650
+					}
+					buffer: "d13199f7c73522db"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "1c17ac23-4d11-4172-297e-5aecc79b3553"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

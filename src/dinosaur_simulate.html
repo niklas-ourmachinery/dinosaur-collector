@@ -301,6 +301,18 @@ const char* image_paths[NUM_IMAGES] = {
     [SQUID] = "art/props/squid.creation",
     [STARFISH] = "art/props/starfish.creation",
     [URCHIN] = "art/props/urchin.creation",
+
+    [ORE] = "art/mementos/ore.creation",
+    [DIAMOND] = "art/mementos/diamond.creation",
+    [AGATE] = "art/mementos/agate.creation",
+    [BRANCH] = "art/mementos/branch.creation",
+    [COCONUT] = "art/mementos/coconut.creation",
+    [DEAD_BIRD] = "art/mementos/dead_bird.creation",
+    [FEATHER] = "art/mementos/feather.creation",
+    [FERN] = "art/mementos/fern.creation",
+    [LAVENDER] = "art/mementos/lavender.creation",
+    [PEARL] = "art/mementos/pearl.creation",
+    [SHELL] = "art/mementos/shell.creation",
 };
 ~~~
 
@@ -682,7 +694,7 @@ Generated from: https://docs.google.com/spreadsheets/d/11sT_7U7IMrL_BpgIoLGul436
 
 ~~~c
 struct rules_t rules = {
-    .speed_multiplier = { 60, 60 },
+    .speed_multiplier = { 1, 1 },
     .start_money = { 100, 100 },
     .minutes_to_coin = { 1, 1 },
     .dinosaur_lifetime_minutes = { 1, 10 },

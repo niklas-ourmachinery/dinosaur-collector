@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "33f281f0-16bb-a2ad-8914-826ce0184455"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "ca1fd957-d9f0-c6c5-9b24-54ce818bd779"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "236ec22f-435a-2f74-b42b-837706d2a580"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "a0903903-1ad5-86d7-1ecb-f5794ddfc4d3"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "7d5884d8-8ce2-41a4-5ead-9d69b8716b29"
+					filename: "C:\\work\\dino-dino\\art\\mementos\\dead_bird.png"
+					validity_hash: "d12d90e20493bf38"
+					description: {
+						__uuid: "c90a1254-0491-ca69-17cc-e7585be4d626"
+					}
+					buffer: "321fb426c141d01d"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "91d94c51-dffb-a7f2-ad83-c166b2bdf486"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "cf22ebaf-c8bb-7612-e38c-643e20bd4dfd"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "3f81a5c6-c976-ff1d-2093-85ff30e11216"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "f9cf2dde-046f-bea2-844a-5de6bbab2fea"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "f2fb7e84-feee-37c3-324d-3fa5a06f6397"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "1b74ae3a-486d-e87c-05e4-b3fd001cf27f"
+					filename: "C:\\work\\dino-dino\\art\\mementos\\coconut.png"
+					validity_hash: "d7e91342541e922d"
+					description: {
+						__uuid: "3b4b97ec-8e02-d819-2082-b56c868bcbef"
+					}
+					buffer: "cda841e82438ed58"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "5d0ea0f0-fd46-d358-8604-c81eaadb302e"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

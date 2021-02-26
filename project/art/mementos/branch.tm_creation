@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "fe494126-4c54-d75b-7475-41d7db72ca0a"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "5ba0bdec-4886-dc27-0744-4f879ec62a60"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "dd024c40-9bd3-b33d-bd7a-7d2d92fa550b"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "100f4fe7-095e-abc5-79a6-a867c8c12207"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "5abba43d-7571-591b-1262-f0857875a2d6"
+					filename: "C:\\work\\dino-dino\\art\\mementos\\branch.png"
+					validity_hash: "8964784486eb53fa"
+					description: {
+						__uuid: "f669fdb1-d0a9-9d8a-c464-b07991135308"
+					}
+					buffer: "aa4e5f6299fb2864"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "835277fa-9d22-af48-fa46-9540506f551e"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

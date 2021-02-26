@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "8d6f95fd-725d-9719-26da-05bffa7d93a2"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "4dc16d1a-e1af-de71-5fe4-c35eae131c33"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "414c7b81-853c-763a-6d63-3af978ddf7e1"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "a6b7dc65-53dd-9630-6755-5782999243a2"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "d8f21258-de65-e17c-1075-1689ff0dd449"
+					filename: "C:\\work\\dino-dino\\art\\mementos\\diamond.png"
+					validity_hash: "7b13513b53885372"
+					description: {
+						__uuid: "6c0c16f9-a02e-0b8e-c85d-c21b978cafa9"
+					}
+					buffer: "39ae24b91f88a629"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "e42e5aa9-194e-31ff-9b36-4bd388e4ac34"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

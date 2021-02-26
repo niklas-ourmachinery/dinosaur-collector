@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "1206bd1a-1585-7ead-6e2b-b06539bba9b4"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "da80fe69-164b-f851-63b9-bd462df8dd4d"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "86ce3681-8ab4-46e3-69d4-2edf320c8cff"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "3b6f6444-77fa-baa1-e09c-d00949d44105"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "bfef03c8-af59-c572-76a3-07a8bf2dc3e0"
+					filename: "C:\\work\\dino-dino\\art\\mementos\\feather.png"
+					validity_hash: "438c16bf13a0e779"
+					description: {
+						__uuid: "a94d0122-3f4b-9a4b-05cd-5cf1a8c6204d"
+					}
+					buffer: "8a74bf4625082129"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "2e11a8a8-9655-085b-05ac-edd9a5c32859"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

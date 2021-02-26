@@ -202,6 +202,18 @@ const char* image_paths[NUM_IMAGES] = {
     [SQUID] = "art/props/squid.creation",
     [STARFISH] = "art/props/starfish.creation",
     [URCHIN] = "art/props/urchin.creation",
+
+    [ORE] = "art/mementos/ore.creation",
+    [DIAMOND] = "art/mementos/diamond.creation",
+    [AGATE] = "art/mementos/agate.creation",
+    [BRANCH] = "art/mementos/branch.creation",
+    [COCONUT] = "art/mementos/coconut.creation",
+    [DEAD_BIRD] = "art/mementos/dead_bird.creation",
+    [FEATHER] = "art/mementos/feather.creation",
+    [FERN] = "art/mementos/fern.creation",
+    [LAVENDER] = "art/mementos/lavender.creation",
+    [PEARL] = "art/mementos/pearl.creation",
+    [SHELL] = "art/mementos/shell.creation",
 };
 
 // Props
@@ -443,7 +455,7 @@ struct rules_t {
 //
 // Generated from: https://docs.google.com/spreadsheets/d/11sT_7U7IMrL_BpgIoLGul436z4L0lZe-oSCdbEn09DU/edit?pli=1#gid=702050057
 struct rules_t rules = {
-    .speed_multiplier = { 60, 60 },
+    .speed_multiplier = { 1, 1 },
     .start_money = { 100, 100 },
     .minutes_to_coin = { 1, 1 },
     .dinosaur_lifetime_minutes = { 1, 10 },
@@ -1031,7 +1043,7 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
         return;
     }
 
-    if (button(state, args, menu_icon_r, CLOSE))
+    if (state->state != STATE__AWARD && button(state, args, menu_icon_r, CLOSE))
         state->state = STATE__MAIN;
 
     const tm_rect_t menu_r = tm_rect_center_in(0.8f * unit, 0.8f * unit, args->rect);
@@ -1237,7 +1249,7 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
             const tm_color_srgb_t text_color = { .a = 255 };
             uistyle->font_scale = desc_r.h / 18.0f;
 
-// Returns the name of the gift (Prop or Memento) with the specified image.
+            // Returns the name of the gift (Prop or Memento) with the specified image.
             tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = gift_name(idx), .color = &text_color, .align = TM_UI_ALIGN_CENTER });
             char buffer[32];
             sprintf(buffer, "%d", award->quantity[idx]);

@@ -1,0 +1,35 @@
+__type: "tm_creation_graph"
+__uuid: "9e0abce4-eb7b-d140-0c3b-4a5993b1f48d"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "f97e1145-9b53-e5cd-4f4a-966a03bc7dcd"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "2be75d81-5c0a-55fc-0846-219162c715f0"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "cb8a2747-92b9-f775-9804-25a605205570"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "88e8421c-3ba2-aeba-8d72-98a08d5154ec"
+					filename: "C:\\work\\dino-dino\\art\\mementos\\ore.png"
+					validity_hash: "7f8b47b989ba80b9"
+					description: {
+						__uuid: "81740164-49a2-c64d-3786-ce1a22e31b6e"
+					}
+					buffer: "aebd60fc0cf97a14"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "10f46488-d2b7-e9da-02d2-00d1353dde33"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

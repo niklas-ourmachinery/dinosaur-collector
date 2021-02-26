@@ -1,0 +1,37 @@
+__type: "tm_creation_graph"
+__uuid: "e2a00f07-dd68-7b04-3a4f-e6f200749110"
+__prototype_type: "tm_creation_graph"
+__prototype_uuid: "9f829e31-b0cb-b5fe-21af-ab561d841602"
+graph: {
+	__uuid: "2b97f17f-98d7-05a5-a295-40ae7d3eaefa"
+	__prototype_type: "tm_graph"
+	__prototype_uuid: "36cc8645-6b6a-0744-1cee-700e60d86f2a"
+	interface: {
+		__uuid: "d0e80c37-143c-68c6-dfec-982f269db733"
+		__prototype_type: "tm_graph_interface"
+		__prototype_uuid: "2f55d40b-e256-67df-d350-1e937c342921"
+		inputs__instantiated: [
+			{
+				__uuid: "d4d90a69-8994-93dc-5a77-16e4c6944a4b"
+				__prototype_type: "tm_graph_input"
+				__prototype_uuid: "928659a7-4021-a622-d1e0-c757232b9220"
+				value: {
+					__type: "tm_image_archive"
+					__uuid: "d2370c9b-2b4c-c0a8-6919-8b4979df56d2"
+					filename: "C:\\work\\dino-dino\\art\\mementos\\pearl.png"
+					validity_hash: "a996fe3846c02bb3"
+					description: {
+						__uuid: "c94bef34-5d75-d9d1-51c8-4704fae8168a"
+						widht: 1264
+						height: 1113
+					}
+					buffer: "77392719dfd5cf23"
+				}
+			}
+		]
+	}
+}
+__asset_uuid: "09485481-5ebd-23a8-6e4e-09657f8f0861"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]
