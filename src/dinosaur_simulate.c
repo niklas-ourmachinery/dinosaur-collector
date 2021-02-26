@@ -210,6 +210,9 @@ enum STATE {
 
     // Placing a prop in the scene.
     STATE__PLACING,
+
+    // Award screen state.
+    STATE__AWARD,
 };
 
 // Types for props.
@@ -627,6 +630,10 @@ static double roll(struct range_t r)
 // Implement game logic.
 static void game_logic(tm_simulate_state_o* state, double dt)
 {
+    // Time doesn't pass in award screen.
+    if (state->state == STATE__AWARD)
+        dt = 0;
+
     // Earn money
     if (!state->next_coin)
         state->next_coin = roll(rules.minutes_to_coin) * 60;
@@ -876,6 +883,15 @@ static void disabled_button(tm_simulate_state_o* state, tm_simulate_frame_args_t
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, r, state->images[image_idx], (tm_rect_t){ 0, 0, 1, 1 });
 }
 
+// Adds the specified award to the inventory.
+static void claim_award(tm_simulate_state_o* state, enum IMAGE image, uint32_t quantity)
+{
+    for (struct prop_t* p = props; p != TM_ARRAY_END(props); ++p) {
+        if (p->image == image)
+            state->inventory[p - props] += quantity;
+    }
+}
+
 // Draws the menu screens.
 static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 {
@@ -891,7 +907,12 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
     const tm_rect_t menu_icon_r = tm_rect_split_top(tm_rect_split_left(inset_r, icon_size, 0, 0), icon_size, 0, 0);
 
     tm_rect_t rect = args->rect;
+
+    // Click on menu button.
     if (state->state == STATE__MAIN || state->state == STATE__PLACING) {
+        if (state->num_awarded_drops)
+            state->state = STATE__AWARD;
+
         if (button(state, args, menu_icon_r, MENU))
             state->state = STATE__MENU;
         return;
@@ -905,7 +926,7 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, menu_r, state->images[MENU_BACKGROUND], (tm_rect_t){ 0, 0, 1, 1 });
 
-    if (button(state, args, close_r, state->state == STATE__MENU ? CLOSE : BACK))
+    if (state->state != STATE__AWARD && button(state, args, close_r, state->state == STATE__MENU ? CLOSE : BACK))
         state->state = state->state == STATE__MENU ? STATE__MAIN : STATE__MENU;
     const tm_rect_t menu_inset_r = tm_rect_inset(menu_r, 0.05f * unit, 0.05f * unit);
     rect = menu_inset_r;
@@ -1054,12 +1075,64 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
             tm_rect_t desc_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
             icon_r = tm_rect_center_in(icon_r.h, icon_r.h, icon_r);
 
-            const tm_color_srgb_t text_color = { .a = 255 };
             uistyle->font_scale = desc_r.h / 18.0f;
+            const tm_color_srgb_t text_color = { .a = 255 };
             tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = dinosaurs[idx].name, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
 
             button(state, args, icon_r, dinosaurs[idx].image);
         }
+    } else if (state->state == STATE__AWARD) {
+        tm_ui_style_t uistyle[1] = { *args->uistyle };
+
+        struct awarded_drop_t* award = state->awarded_drops;
+
+        const tm_color_srgb_t text_color = { .a = 255 };
+        tm_rect_t title_r = tm_rect_split_off_top(&rect, 0.03f * unit, 0.01f * unit);
+        char gift_text[1024];
+        sprintf(gift_text, "%s left you a gift", award->dinosaur->name);
+        tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = title_r, .text = gift_text, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
+
+        uint32_t idx = 0;
+        for (uint32_t i = 0;; ++i, ++idx) {
+            const uint32_t page = i / 9;
+            const uint32_t x = i % 3;
+            const uint32_t y = (i % 9) / 3;
+
+            while (idx < NUM_IMAGES && !award->quantity[idx])
+                ++idx;
+            if (idx >= NUM_IMAGES)
+                break;
+
+            num_pages = page + 1;
+
+            if (state->page != page)
+                continue;
+
+            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.01f * unit, 3, y);
+            tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.01f * unit, 3, x);
+            tm_rect_t desc_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
+            icon_r = tm_rect_center_in(icon_r.h, icon_r.h, icon_r);
+
+            const tm_color_srgb_t text_color = { .a = 255 };
+            uistyle->font_scale = desc_r.h / 18.0f;
+            char buffer[32];
+            sprintf(buffer, "%d", award->quantity[idx]);
+            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = buffer, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
+
+            if (button(state, args, icon_r, idx)) {
+                const uint32_t q = award->quantity[idx];
+                claim_award(state, idx, q);
+                award->quantity[idx] = 0;
+                award->total_items -= q;
+            }
+        }
+
+        if (award->total_items == 0) {
+            memmove(state->awarded_drops, state->awarded_drops + 1, sizeof(struct awarded_drop_t) * (MAX_AWARDED_DROPS - 1));
+            --state->num_awarded_drops;
+        }
+        if (state->num_awarded_drops == 0)
+            state->state = STATE__MAIN;
     }
 
     // Left and right buttons.
