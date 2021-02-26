@@ -70,13 +70,11 @@ children: [
 				}
 			}
 		]
-		sort_order: 100
 	}
 	{
 		__uuid: "ae5f3989-5e44-4b02-07d5-5efdfb6ab51d"
 		__prototype_type: "tm_entity"
 		__prototype_uuid: "3ad88a64-2b81-508b-4e84-4160cc346b12"
-		sort_order: 101
 	}
 ]
 __asset_uuid: "8ed592fc-9377-4a28-c433-59d89a94b75f"

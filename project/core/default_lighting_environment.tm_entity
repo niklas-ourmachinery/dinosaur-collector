@@ -73,13 +73,11 @@ children: [
 				scene_tree_node: 0
 			}
 		]
-		sort_order: 100
 	}
 	{
 		__uuid: "cf381b86-2b58-b782-ef52-3612307a92d7"
 		__prototype_type: "tm_entity"
 		__prototype_uuid: "3ad88a64-2b81-508b-4e84-4160cc346b12"
-		sort_order: 101
 	}
 ]
 __asset_uuid: "50365af4-829d-a4cb-895d-0b7bc9c75393"

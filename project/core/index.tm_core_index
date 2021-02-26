@@ -54,21 +54,21 @@ entries: [
 		core_id: "64a595fbb71697f3"
 		object: "05fe482f-df58-c56a-fa4b-ddf77c8dcfa0"
 		object__type: "tm_entity"
-		version: 2
+		version: 3
 	}
 	{
 		__uuid: "04baf5fa-a69a-951e-ba24-d9e5c461b292"
 		core_id: "a0bc8de9fe14a626"
 		object: "d1108c05-1ed8-1a44-93cd-defa729ff68e"
 		object__type: "tm_entity"
-		version: 2
+		version: 3
 	}
 	{
 		__uuid: "de4a367d-94c9-26eb-27d7-f506086a9497"
 		core_id: "6577b720f5a1d990"
 		object: "0c9824e6-8fb4-d84b-86a5-1715a66111dc"
 		object__type: "tm_entity"
-		version: 2
+		version: 3
 	}
 	{
 		__uuid: "6d43ca45-5b2f-cecf-5ad7-826b4362bd60"
@@ -117,6 +117,13 @@ entries: [
 		core_id: "1e5d4cdd7939e82d"
 		object: "18b3ae96-1abf-bdcf-6e18-a5b500638249"
 		object__type: "tm_entity"
+		version: 1
+	}
+	{
+		__uuid: "24d2f674-249e-beab-e466-0125abe89a6c"
+		core_id: "8f55daabfe131cf5"
+		object: "1b68cc8b-5c58-203c-798c-b869070ea89b"
+		object__type: "tm_asset_label"
 		version: 1
 	}
 ]
