@@ -5,10 +5,9 @@
             "name": "Win64: Run",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "%TM_DINO_SDK_DIR%/bin/the-machinery.exe",
+            "program": "${env:TM_DINO_SDK_DIR}/bin/the-machinery.exe",
             "args": [
-                "--load-project",
-                "../project"
+                "${workspaceFolder}/../project"
             ]
         },
         {

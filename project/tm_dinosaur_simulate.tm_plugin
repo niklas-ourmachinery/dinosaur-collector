@@ -1,8 +1,8 @@
 __type: "tm_plugin"
 __uuid: "2525bb9f-5d71-c090-8850-258e660a1b97"
 import_on_change: true
-windows_dll_import_path: "C:\\work\\dinosaur-collector\\src\\bin\\Debug\\tm_dinosaur_simulate.dll"
-windows_dll: "dbf9d14d3ebe8d91"
-linux_dll_import_path: "C:\\work\\dinosaur-collector\\src\\bin\\Debug\\tm_dinosaur_simulate.so"
-linux_dll: "5efb92724c3429c9"
+windows_dll_import_path: "C:\\work\\dino-dino\\src\\bin\\Debug\\tm_dinosaur_simulate.dll"
+windows_dll: "5fdafdd662c8d819"
+linux_dll_import_path: "C:\\work\\dino-dino\\src\\bin\\Debug\\tm_dinosaur_simulate.so"
+linux_dll: "872ebf9394e15d67"
 __asset_uuid: "c5bfba45-df07-f948-e81b-96a6d93a9b3c"

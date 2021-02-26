@@ -27,6 +27,8 @@
                 "command": "zig",
                 "args": [
                     "cc",
+                    "-g",
+                    "-gcodeview",
                     "-shared",
                     "-o",
                     "bin/Debug/tm_dinosaur_simulate.dll",
@@ -47,6 +49,7 @@
                 "command": "zig",
                 "args": [
                     "cc",
+                    "-g",
                     "-target",
                     "x86_64-linux-gnu",
                     "-shared",
