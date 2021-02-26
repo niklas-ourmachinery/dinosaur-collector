@@ -72,9 +72,10 @@
                 "command": "%TM_DINO_SDK_DIR%/bin/docgen.exe"
             },
             "args": [
-                "-e",
+                "-o",
+                "dinosaur_simulate.html",
                 "dinosaur_simulate.c"
-            ],
+            ]
         },
         {
             "label": "launch",

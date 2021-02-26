@@ -1,0 +1,1632 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-">
+<link rel="stylesheet" href="apidoc.css">
+<link rel="stylesheet" href="https://casual-effects.com/markdeep/1.11/apidoc.css?">
+
+<div style="background: white; position:fixed; top:0; left:0; right:0; z-index:100; max-width: 50em; box-sizing: content-box; padding: 1em 2.5em 1em 1em; border-bottom: solid #ccc 2px; max-height: 50%; overflow: auto;">
+    <input id="search-box" type="search" autocorrect="off" autocapitalize="off" style="width:100%; margin-bottom: 1em;" onkeyup="searchKeyUp(this, event)" placeholder="Press s to search...">
+    <div id="search-result"></div>
+</div>
+
+# dinosaur_simulate.c
+
+## Overview <a href="#" onclick="t('196c21e190e4c907'); return false;" id="196c21e190e4c907-link">&#9662;</a>
+
+<div class="overview" id="196c21e190e4c907">
+
+Implements a dinosaur collecting game.
+
+Static game data is saved in the arrays <a href="#image_paths">`image_paths`</a>, <a href="#props">`props`</a>, <a href="#dinosaurs">`dinosaurs`</a>, <a href="#drops">`drops`</a> and
+<a href="#mementos">`mementos`</a>, where as all dynamic game data is saved in the `struct tm_simulate_state_o`.
+
+</div>
+
+## Index <a href="#" onclick="t('e5a5daf0d3ba8377'); return false;" id="e5a5daf0d3ba8377-link">&#9662;</a>
+
+<div class="index" id="e5a5daf0d3ba8377">
+<a href="#helpers"><b>Helpers</b></a><br>
+<a href="#hexcolor()">`HEXCOLOR()`</a><br>
+<a href="#structrange_t{">`struct range_t {`</a><br>
+<br>
+<a href="#images"><b>Images</b></a><br>
+<a href="#enumimage">`enum IMAGE`</a><br>
+<a href="#missing_art">`MISSING_ART`</a><br>
+<a href="#image_paths">`image_paths`</a><br>
+<br>
+<a href="#props"><b>Props</b></a><br>
+<a href="#enumprop_type">`enum PROP_TYPE`</a><br>
+<a href="#structprop_t{">`struct prop_t {`</a><br>
+<a href="#props">`props`</a><br>
+<a href="#num_props">`NUM_PROPS`</a><br>
+<br>
+<a href="#dinosaurs"><b>Dinosaurs</b></a><br>
+<a href="#enumdino_type">`enum DINO_TYPE`</a><br>
+<a href="#structdinosaur_t{">`struct dinosaur_t {`</a><br>
+<a href="#dinosaurs">`dinosaurs`</a><br>
+<a href="#num_dinosaurs">`NUM_DINOSAURS`</a><br>
+<br>
+<a href="#drops"><b>Drops</b></a><br>
+<a href="#structdrop_t{">`struct drop_t {`</a><br>
+<a href="#drops">`drops`</a><br>
+<br>
+<a href="#mementos"><b>Mementos</b></a><br>
+<a href="#structmemento_t{">`struct memento_t {`</a><br>
+<a href="#mementos">`mementos`</a><br>
+<a href="#num_mementos">`NUM_MEMENTOS`</a><br>
+<br>
+<a href="#rules"><b>Rules</b></a><br>
+<a href="#structrules_t{">`struct rules_t {`</a><br>
+<a href="#rules">`rules`</a><br>
+<br>
+<a href="#runtimestate"><b>Runtime state</b></a><br>
+<a href="#enumstate">`enum STATE`</a><br>
+<a href="#structscene_prop_t{">`struct scene_prop_t {`</a><br>
+<a href="#max_scene_props">`MAX_SCENE_PROPS`</a><br>
+<a href="#structscene_dinosaur_t{">`struct scene_dinosaur_t {`</a><br>
+<a href="#max_scene_dinosaurs">`MAX_SCENE_DINOSAURS`</a><br>
+<a href="#structawarded_drop_t{">`struct awarded_drop_t {`</a><br>
+<a href="#max_awarded_drops">`MAX_AWARDED_DROPS`</a><br>
+<a href="#reserve_state_bytes">`RESERVE_STATE_BYTES`</a><br>
+<a href="#structtm_simulate_state_o{">`struct tm_simulate_state_o {`</a><br>
+<br>
+<a href="#runtimestructs"><b>Runtime structs</b></a><br>
+<a href="#structdraw_item_t{">`struct draw_item_t {`</a><br>
+<br>
+<a href="#code"><b>Code</b></a><br>
+<a href="#load_image()">`load_image()`</a><br>
+<a href="#in_lake()">`in_lake()`</a><br>
+<a href="#draw_scene_props()">`draw_scene_props()`</a><br>
+<a href="#draw_scene_dinosaurs()">`draw_scene_dinosaurs()`</a><br>
+<a href="#roll()">`roll()`</a><br>
+<a href="#game_logic()">`game_logic()`</a><br>
+<a href="#scene()">`scene()`</a><br>
+<a href="#money()">`money()`</a><br>
+<a href="#button()">`button()`</a><br>
+<a href="#disabled_button()">`disabled_button()`</a><br>
+<a href="#gift_name()">`gift_name()`</a><br>
+<a href="#claim_gift()">`claim_gift()`</a><br>
+<a href="#menu()">`menu()`</a><br>
+<a href="#simulate__start()">`simulate__start()`</a><br>
+<a href="#simulate__stop()">`simulate__stop()`</a><br>
+<a href="#simulate__tick()">`simulate__tick()`</a><br>
+<a href="#simulate_entry_i">`simulate_entry_i`</a><br>
+<a href="#tm_load_plugin()">`tm_load_plugin()`</a><br>
+</div>
+
+
+## API <a href="#" onclick="t('17db4dd4de681a94'); return false;" id="17db4dd4de681a94-link">&#9662;</a>
+
+<div class="api" id="17db4dd4de681a94">
+
+<a class='target' name='helpers'></a>
+<h3 class='section'>Helpers</h3>
+
+### `HEXCOLOR()`
+
+<div class="indent">
+
+~~~c
+#define HEXCOLOR(c)
+~~~
+
+Returns a `tm_color_srgb_t` corresponding to the hexadecimal color `c`. I.e. `HEXCOLOR(0xff0000)`
+returns a red color. The alpha of the returned color is always set to 255.
+
+</div>
+
+### `struct range_t {`
+
+<div class="indent">
+
+Used to specify a numeric range for randomized values.
+
+~~~c
+struct range_t {
+    double min, max;
+};
+~~~
+
+</div>
+
+<a class='target' name='images'></a>
+<h3 class='section'>Images</h3>
+
+### `enum IMAGE`
+
+<div class="indent">
+
+Index of all images in the game.
+
+~~~c
+enum IMAGE {
+    // Used as placeholder for missing graphics.
+    PLACEHOLDER,
+
+    // Background images. The background has multiple layers used to implement "hidden surface
+    // removal".
+    BACKGROUND_LAYER_0,
+    BACKGROUND_LAYER_1,
+    BACKGROUND_LAYER_2,
+    BACKGROUND_LAYER_3,
+    BACKGROUND_LAYER_4,
+
+    // Dinosaur images.
+    ANKYLOSAURUS,
+    ANKYLOSAURUS_2,
+    APATOSAURUS,
+    BRACHIOSAURUS,
+    BRACHIOSAURUS_2,
+    CARNOTAURUS,
+    DIMORPHODON,
+    PACHYCEPHALOSAURUS,
+    PARASAUROLOPHUS,
+    PARASAUROLOPHUS_2,
+    PLESIOSAURUS,
+    PLIOSAURUS,
+    PTERANODON,
+    SPINOSAURUS,
+    STEGOSAURUS,
+    STEGOSAURUS_2,
+    STEGOSAURUS_3,
+    STYGIMOLOCH,
+    THERIZINOSAURUS,
+    TRICERATOPS,
+    TRICERATOPS_2,
+    TYRANNOSAURUS,
+    UTAHCERATOPS,
+    VELOCIRAPTOR,
+
+    // Icons
+    ALBUM,
+    BACK,
+    BONE,
+    CLOSE,
+    INVENTORY,
+    MENU,
+    MENU_BACKGROUND,
+    SHOP,
+    SQUARE,
+    LEFT_ARROW,
+    RIGHT_ARROW,
+    MEMENTOS,
+
+    // Props
+    BANANA_BUNCH,
+    BERRY_BUNCH,
+    DEAD_MOUSE,
+    FISH,
+    HAM,
+    HAUNCH,
+    HERB_BUNDLE,
+    LEAVES,
+    MEAT,
+    SQUID,
+    STARFISH,
+    URCHIN,
+
+    // Mementos
+    ORE,
+    DIAMOND,
+    AGATE,
+    BRANCH,
+    COCONUT,
+    DEAD_BIRD,
+    FEATHER,
+    FERN,
+    LAVENDER,
+    PEARL,
+    SHELL,
+
+    // Total number of images.
+    NUM_IMAGES,
+};
+~~~
+
+</div>
+
+### `MISSING_ART`
+
+<div class="indent">
+
+~~~c
+#define MISSING_ART "art/icons/missing.creation"
+~~~
+
+Default image to use when no image has been specified.
+
+</div>
+
+### `image_paths`
+
+<div class="indent">
+
+Specifies project paths for the various images. Used to load the image data.
+
+~~~c
+const char* image_paths[NUM_IMAGES] = {
+    [PLACEHOLDER] = MISSING_ART,
+
+    [BACKGROUND_LAYER_0] = "art/backgrounds/background.creation",
+    [BACKGROUND_LAYER_1] = "art/backgrounds/layer 1.creation",
+    [BACKGROUND_LAYER_2] = "art/backgrounds/layer 2.creation",
+    [BACKGROUND_LAYER_3] = "art/backgrounds/layer 3.creation",
+    [BACKGROUND_LAYER_4] = "art/backgrounds/layer 4.creation",
+
+    [ANKYLOSAURUS] = "art/dinosaurs/ankylosaurus.creation",
+    [ANKYLOSAURUS_2] = "art/dinosaurs/ankylosaurus_2.creation",
+    [APATOSAURUS] = "art/dinosaurs/apatosaurus.creation",
+    [BRACHIOSAURUS] = "art/dinosaurs/brachiosaurus.creation",
+    [BRACHIOSAURUS_2] = "art/dinosaurs/brachiosaurus_2.creation",
+    [CARNOTAURUS] = "art/dinosaurs/carnotaurus.creation",
+    [DIMORPHODON] = "art/dinosaurs/dimorphodon.creation",
+    [PACHYCEPHALOSAURUS] = "art/dinosaurs/pachycephalosaurus.creation",
+    [PARASAUROLOPHUS] = "art/dinosaurs/parasaurolophus.creation",
+    [PARASAUROLOPHUS_2] = "art/dinosaurs/parasaurolophus_2.creation",
+    [PLESIOSAURUS] = "art/dinosaurs/plesiosaurus.creation",
+    [PLIOSAURUS] = "art/dinosaurs/pliosaurus.creation",
+    [PTERANODON] = "art/dinosaurs/pteranodon.creation",
+    [SPINOSAURUS] = "art/dinosaurs/spinosaurus.creation",
+    [STEGOSAURUS] = "art/dinosaurs/stegosaurus.creation",
+    [STEGOSAURUS_2] = "art/dinosaurs/stegosaurus_2.creation",
+    [STEGOSAURUS_3] = "art/dinosaurs/stegosaurus_3.creation",
+    [STYGIMOLOCH] = "art/dinosaurs/stygimoloch.creation",
+    [THERIZINOSAURUS] = "art/dinosaurs/therizinosaurus.creation",
+    [TRICERATOPS] = "art/dinosaurs/triceratops.creation",
+    [TRICERATOPS_2] = "art/dinosaurs/triceratops_2.creation",
+    [TYRANNOSAURUS] = "art/dinosaurs/tyrannosaurus.creation",
+    [UTAHCERATOPS] = "art/dinosaurs/utahceratops.creation",
+    [VELOCIRAPTOR] = "art/dinosaurs/velociraptor.creation",
+
+    [ALBUM] = "art/icons/album.creation",
+    [BACK] = "art/icons/back.creation",
+    [BONE] = "art/icons/bone.creation",
+    [CLOSE] = "art/icons/close.creation",
+    [INVENTORY] = "art/icons/inventory.creation",
+    [MENU] = "art/icons/menu.creation",
+    [MENU_BACKGROUND] = "art/icons/menu_background.creation",
+    [SHOP] = "art/icons/shop.creation",
+    [SQUARE] = "art/icons/square.creation",
+    [LEFT_ARROW] = "art/icons/left_arrow.creation",
+    [RIGHT_ARROW] = "art/icons/right_arrow.creation",
+    [MEMENTOS] = "art/icons/mementos.creation",
+
+    [BANANA_BUNCH] = "art/props/banana_bunch.creation",
+    [BERRY_BUNCH] = "art/props/berry_bunch.creation",
+    [DEAD_MOUSE] = "art/props/dead_mouse.creation",
+    [FISH] = "art/props/fish.creation",
+    [HAM] = "art/props/ham.creation",
+    [HAUNCH] = "art/props/haunch.creation",
+    [HERB_BUNDLE] = "art/props/herb_bundle.creation",
+    [LEAVES] = "art/props/leaves.creation",
+    [MEAT] = "art/props/meat.creation",
+    [SQUID] = "art/props/squid.creation",
+    [STARFISH] = "art/props/starfish.creation",
+    [URCHIN] = "art/props/urchin.creation",
+};
+~~~
+
+</div>
+
+<a class='target' name='props'></a>
+<h3 class='section'>Props</h3>
+
+Props are food you can buy and place in the level to attract dinosaurs. The dinosaurs will
+consume the props and leave a gift.
+
+### `enum PROP_TYPE`
+
+<div class="indent">
+
+Type classification for Props. (Currently, this isn't used for anything.)
+
+~~~c
+enum PROP_TYPE {
+    PROP_TYPE__VEG,
+    PROP_TYPE__MEAT,
+    PROP_TYPE__FISH,
+};
+~~~
+
+</div>
+
+### `struct prop_t {`
+
+<div class="indent">
+
+Properties for Props.
+
+~~~c
+struct prop_t {
+    // Name of the prop.
+    const char* name;
+
+    // Image index for the prop.
+    enum IMAGE image;
+
+    // Distance from the bottom of the prop graphics to the bottom of the image box as a fraction of
+    // the graphics height (0--1).
+    //
+    // The prop images are always square and 256 x 256 pixel, with the graphics centered in the
+    // square. When we place a prop, we want to align the bottom of the actual graphics of the prop
+    // with the cursor position, so we need to offset it by this margin.
+    double margin;
+
+    // Scale at which the prop will be drawn. Props can be drawn bigger or smaller in the world.
+    double scale;
+
+    // Type of the prop.
+    enum PROP_TYPE type;
+
+    // Price to buy the prop in the shop.
+    uint32_t price;
+};
+~~~
+
+</div>
+
+### `props`
+
+<div class="indent">
+
+List of all the Props in the game.
+
+This list is generated from https://docs.google.com/spreadsheets/d/11sT_7U7IMrL_BpgIoLGul436z4L0lZe-oSCdbEn09DU/edit?pli=1#gid=0
+
+~~~c
+struct prop_t props[] = {
+    { .name = "Leaves", .image = LEAVES, .type = PROP_TYPE__VEG, .price = 5, .margin = 0.17, .scale = 0.9 },
+    { .name = "Meat", .image = MEAT, .type = PROP_TYPE__MEAT, .price = 5, .margin = 0.2, .scale = 1 },
+    { .name = "Fish", .image = FISH, .type = PROP_TYPE__FISH, .price = 5, .margin = 0.35, .scale = 0.7 },
+    { .name = "Herb Bundle", .image = HERB_BUNDLE, .type = PROP_TYPE__VEG, .price = 10, .margin = 0.2, .scale = 0.7 },
+    { .name = "Banana Bunch", .image = BANANA_BUNCH, .type = PROP_TYPE__VEG, .price = 20, .margin = 0.2, .scale = 0.8 },
+    { .name = "Berry Bunch", .image = BERRY_BUNCH, .type = PROP_TYPE__VEG, .price = 30, .margin = 0.2, .scale = 0.6 },
+    { .name = "Ham", .image = HAM, .type = PROP_TYPE__MEAT, .price = 10, .margin = 0.2, .scale = 0.9 },
+    { .name = "Haunch", .image = HAUNCH, .type = PROP_TYPE__MEAT, .price = 20, .margin = 0.2, .scale = 1.1 },
+    { .name = "Dead Mouse", .image = DEAD_MOUSE, .type = PROP_TYPE__MEAT, .price = 30, .margin = 0.2, .scale = 0.7 },
+    { .name = "Squid", .image = SQUID, .type = PROP_TYPE__FISH, .price = 10, .margin = 0.2, .scale = 1 },
+    { .name = "Urchin", .image = URCHIN, .type = PROP_TYPE__FISH, .price = 20, .margin = 0.2, .scale = 0.7 },
+    { .name = "Starfish ", .image = STARFISH, .type = PROP_TYPE__FISH, .price = 30, .margin = 0.2, .scale = 0.7 },
+};
+~~~
+
+</div>
+
+### `NUM_PROPS`
+
+<div class="indent">
+
+~~~c
+#define NUM_PROPS
+~~~
+
+Total number of Props in the game.
+
+</div>
+
+<a class='target' name='dinosaurs'></a>
+<h3 class='section'>Dinosaurs</h3>
+
+### `enum DINO_TYPE`
+
+<div class="indent">
+
+Type classification for Dinosaurs. This is used to control where dinosaurs can spawn,
+`DINO_TYPE__ICTYOSAUR` can only spawn in water and no other dinosaurs can spawn in water.
+
+~~~c
+enum DINO_TYPE {
+    DINO_TYPE__HERBIVORE,
+    DINO_TYPE__CARNIVORE,
+    DINO_TYPE__PTEROSAUR,
+    DINO_TYPE__ICTYOSAUR,
+};
+~~~
+
+</div>
+
+### `struct dinosaur_t {`
+
+<div class="indent">
+
+Properties for Dinosaurs.
+
+~~~c
+struct dinosaur_t {
+    // Name of the dinosaur.
+    const char* name;
+
+    // Image for the dinosaur.
+    enum IMAGE image;
+
+    // Type of the dinosaur.
+    enum DINO_TYPE type;
+
+    // Average minutes before this dinosaur spawns if the right prop is placed.
+    double minutes_to_spawn;
+
+    // Images of props that attract this dinosaur. Currently, we only support 1 attracting prop.
+    enum IMAGE attracted_by[1];
+
+    // Margin and scale for drawing the dinosaur.
+    double margin, scale;
+};
+~~~
+
+</div>
+
+### `dinosaurs`
+
+<div class="indent">
+
+All the Dinosaurs in the game.
+
+Generated from: https://docs.google.com/spreadsheets/d/11sT_7U7IMrL_BpgIoLGul436z4L0lZe-oSCdbEn09DU/edit?pli=1#gid=4726286
+
+~~~c
+struct dinosaur_t dinosaurs[] = {
+    { .name = "Ankylosaurus", .image = ANKYLOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 1, .attracted_by = { LEAVES }, .margin = 0.3, .scale = 0.9 },
+    { .name = "Ankylosuarus 2", .image = ANKYLOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 3, .attracted_by = { HERB_BUNDLE }, .margin = 0.4, .scale = 0.9 },
+    { .name = "Apatosaurus", .image = APATOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 5, .attracted_by = { LEAVES }, .margin = 0.03, .scale = 1.2 },
+    { .name = "Brachiosaurus", .image = BRACHIOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 10, .attracted_by = { BERRY_BUNCH }, .margin = 0.02, .scale = 1.7 },
+    { .name = "Brachiosaurus 2", .image = BRACHIOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 30, .attracted_by = { BANANA_BUNCH }, .margin = 0.02, .scale = 1.7 },
+    { .name = "Carnotaurus", .image = CARNOTAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 30, .attracted_by = { HAUNCH }, .margin = 0.13, .scale = 1.2 },
+    { .name = "Dimorphodon", .image = DIMORPHODON, .type = DINO_TYPE__PTEROSAUR, .minutes_to_spawn = 10, .attracted_by = { MEAT }, .margin = 0.3, .scale = 0.7 },
+    { .name = "Pachycephalosaurus", .image = PACHYCEPHALOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 10, .attracted_by = { BERRY_BUNCH }, .margin = 0.13, .scale = 0.7 },
+    { .name = "Parsaurolophus", .image = PARASAUROLOPHUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 12, .attracted_by = { BANANA_BUNCH }, .margin = 0.22, .scale = 1 },
+    { .name = "Parsaurolophus 2", .image = PARASAUROLOPHUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 50, .attracted_by = { LEAVES }, .margin = 0.22, .scale = 1 },
+    { .name = "Plesiosaurus", .image = PLESIOSAURUS, .type = DINO_TYPE__ICTYOSAUR, .minutes_to_spawn = 45, .attracted_by = { FISH }, .margin = 0.4, .scale = 1 },
+    { .name = "Pliosaurus", .image = PLIOSAURUS, .type = DINO_TYPE__ICTYOSAUR, .minutes_to_spawn = 25, .attracted_by = { SQUID }, .margin = 0.3, .scale = 0.7 },
+    { .name = "Pteranodon", .image = PTERANODON, .type = DINO_TYPE__PTEROSAUR, .minutes_to_spawn = 20, .attracted_by = { DEAD_MOUSE }, .margin = 0.25, .scale = 0.7 },
+    { .name = "Spinosaurus", .image = SPINOSAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 30, .attracted_by = { HAM }, .margin = 0.25, .scale = 1.5 },
+    { .name = "Stegosaurus", .image = STEGOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 5, .attracted_by = { LEAVES }, .margin = 0.3, .scale = 1 },
+    { .name = "Stegosaurus 2", .image = STEGOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 100, .attracted_by = { HERB_BUNDLE }, .margin = 0.3, .scale = 1 },
+    { .name = "Stegosaurus 3", .image = STEGOSAURUS_3, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 200, .attracted_by = { BERRY_BUNCH }, .margin = 0.25, .scale = 0.8 },
+    { .name = "Stygimoloch", .image = STYGIMOLOCH, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 120, .attracted_by = { BANANA_BUNCH }, .margin = 0.05, .scale = 0.8 },
+    { .name = "Therizinosaurus", .image = THERIZINOSAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 45, .attracted_by = { URCHIN }, .margin = 0.25, .scale = 1 },
+    { .name = "Triceratops", .image = TRICERATOPS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 10, .attracted_by = { LEAVES }, .margin = 0.25, .scale = 1.2 },
+    { .name = "Triceratops 2", .image = TRICERATOPS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 120, .attracted_by = { BERRY_BUNCH }, .margin = 0.25, .scale = 1.2 },
+    { .name = "Tyrannosaurus", .image = TYRANNOSAURUS, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 10, .attracted_by = { HAUNCH }, .margin = 0.2, .scale = 1.5 },
+    { .name = "Utahceratops", .image = UTAHCERATOPS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 60, .attracted_by = { BERRY_BUNCH }, .margin = 0.3, .scale = 1.2 },
+    { .name = "Velociraptor", .image = VELOCIRAPTOR, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 20, .attracted_by = { HAUNCH }, .margin = 0.1, .scale = 1 },
+};
+~~~
+
+</div>
+
+### `NUM_DINOSAURS`
+
+<div class="indent">
+
+~~~c
+#define NUM_DINOSAURS
+~~~
+
+Total number of Dinosaurs in the game.
+
+</div>
+
+<a class='target' name='drops'></a>
+<h3 class='section'>Drops</h3>
+
+A Drop is a rule specifying that a certain item is dropped by a certain dinosaur. The dropped
+item can be either a Prop or a Memento.
+
+### `struct drop_t {`
+
+<div class="indent">
+
+Properties for drops.
+
+~~~c
+struct drop_t {
+    // Image of the dinosaur that this drop rule concerns.
+    enum IMAGE dinosaur_image;
+
+    // Image of the dropped item. We find the actual dropped item by comparing this image with
+    // the images in the [[props]] and [[mementos]] lists.
+    enum IMAGE drop_image;
+
+    // Quantity of item that will be dropped.
+    struct range_t quantity;
+
+    // Probability that item will be dropped.
+    double probability;
+};
+~~~
+
+</div>
+
+### `drops`
+
+<div class="indent">
+
+Rules for drops.
+
+When a dinosaur leaves the game we check each rule. If the dinosaur matches the `dino` field
+we will award the specified (randomized) quantity of drop items with the specified probability.
+(The actual drop number is rounded to the nearest integer.)
+
+Generated from: https://docs.google.com/spreadsheets/d/11sT_7U7IMrL_BpgIoLGul436z4L0lZe-oSCdbEn09DU/edit?pli=1#gid=1632155867
+
+~~~c
+struct drop_t drops[] = {
+    { .dinosaur_image = ANKYLOSAURUS, .drop_image = ORE, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = ANKYLOSAURUS_2, .drop_image = DIAMOND, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = APATOSAURUS, .drop_image = ORE, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = BRACHIOSAURUS, .drop_image = BRANCH, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = BRACHIOSAURUS_2, .drop_image = COCONUT, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = CARNOTAURUS, .drop_image = DEAD_MOUSE, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = DIMORPHODON, .drop_image = FEATHER, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = PACHYCEPHALOSAURUS, .drop_image = FERN, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = PARASAUROLOPHUS, .drop_image = HERB_BUNDLE, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = PARASAUROLOPHUS_2, .drop_image = LAVENDER, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = PLESIOSAURUS, .drop_image = PEARL, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = PLIOSAURUS, .drop_image = SHELL, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = PTERANODON, .drop_image = BRANCH, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = SPINOSAURUS, .drop_image = FERN, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = STEGOSAURUS, .drop_image = DEAD_BIRD, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = STEGOSAURUS_2, .drop_image = FEATHER, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = STEGOSAURUS_3, .drop_image = COCONUT, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = STYGIMOLOCH, .drop_image = LAVENDER, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = THERIZINOSAURUS, .drop_image = AGATE, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = TRICERATOPS, .drop_image = ORE, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = TRICERATOPS_2, .drop_image = BRANCH, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = TYRANNOSAURUS, .drop_image = BRANCH, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = UTAHCERATOPS, .drop_image = DEAD_BIRD, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = VELOCIRAPTOR, .drop_image = DIAMOND, .quantity = { 1, 1 }, .probability = 1 },
+};
+~~~
+
+</div>
+
+<a class='target' name='mementos'></a>
+<h3 class='section'>Mementos</h3>
+
+Mementos are items dropped by dinosaurs that can be sold for cash value.
+
+### `struct memento_t {`
+
+<div class="indent">
+
+Properties for Mementos.
+
+~~~c
+struct memento_t {
+    // Name of the memento.
+    const char* name;
+
+    // Image index for the memento.
+    enum IMAGE image;
+
+    // Price to sell the memento in the shop.
+    uint32_t sell_value;
+};
+~~~
+
+</div>
+
+### `mementos`
+
+<div class="indent">
+
+All the Mementos in the game.
+
+Generated from: https://docs.google.com/spreadsheets/d/11sT_7U7IMrL_BpgIoLGul436z4L0lZe-oSCdbEn09DU/edit?pli=1#gid=1102118616
+
+~~~c
+struct memento_t mementos[] = {
+    { .name = "Ore", .image = ORE, .sell_value = 1 },
+    { .name = "Diamond", .image = DIAMOND, .sell_value = 10 },
+    { .name = "Agate", .image = AGATE, .sell_value = 5 },
+    { .name = "Branch", .image = BRANCH, .sell_value = 2 },
+    { .name = "Coconut", .image = COCONUT, .sell_value = 2 },
+    { .name = "Dead bird", .image = DEAD_BIRD, .sell_value = 1 },
+    { .name = "Feather", .image = FEATHER, .sell_value = 1 },
+    { .name = "Fern", .image = FERN, .sell_value = 2 },
+    { .name = "Lavender", .image = LAVENDER, .sell_value = 5 },
+    { .name = "Pearl", .image = PEARL, .sell_value = 10 },
+    { .name = "Shell", .image = SHELL, .sell_value = 5 },
+};
+~~~
+
+</div>
+
+### `NUM_MEMENTOS`
+
+<div class="indent">
+
+~~~c
+#define NUM_MEMENTOS
+~~~
+
+Total number of Mementos in the game.
+
+</div>
+
+<a class='target' name='rules'></a>
+<h3 class='section'>Rules</h3>
+
+### `struct rules_t {`
+
+<div class="indent">
+
+Rules that control the gameplay.
+
+~~~c
+struct rules_t {
+    // Multiplier to the game speed. This can be set to a value &gt; 1 to speed up testing.
+    struct range_t speed_multiplier;
+
+    // Money player has at the start.
+    struct range_t start_money;
+
+    // Minutes for the player to receive a coin.
+    struct range_t minutes_to_coin;
+
+    // Time a dinosaur stays around after it has come to eat food.
+    struct range_t dinosaur_lifetime_minutes;
+
+    // Time food stays around if no dinosaur comes to eat it.
+    struct range_t food_lifetime_minutes;
+};
+~~~
+
+</div>
+
+### `rules`
+
+<div class="indent">
+
+Current game rules.
+
+Generated from: https://docs.google.com/spreadsheets/d/11sT_7U7IMrL_BpgIoLGul436z4L0lZe-oSCdbEn09DU/edit?pli=1#gid=702050057
+
+~~~c
+struct rules_t rules = {
+    .speed_multiplier = { 60, 60 },
+    .start_money = { 100, 100 },
+    .minutes_to_coin = { 1, 1 },
+    .dinosaur_lifetime_minutes = { 1, 10 },
+    .food_lifetime_minutes = { 10, 20 },
+};
+~~~
+
+</div>
+
+<a class='target' name='runtimestate'></a>
+<h3 class='section'>Runtime state</h3>
+
+### `enum STATE`
+
+<div class="indent">
+
+Current state of the game.
+
+~~~c
+enum STATE {
+    // The main scene view.
+    STATE__MAIN,
+
+    // Menu screen.
+    STATE__MENU,
+
+    // Inventory screen.
+    STATE__INVENTORY,
+
+    // Shop screen.
+    STATE__SHOP,
+
+    // Dinosaur album screen.
+    STATE__ALBUM,
+
+    // Placing a prop in the scene.
+    STATE__PLACING,
+
+    // Being awarded a gift.
+    STATE__AWARD,
+
+    // Mementos screen.
+    STATE__MEMENTOS,
+};
+~~~
+
+</div>
+
+### `struct scene_prop_t {`
+
+<div class="indent">
+
+Data for a prop placed in the scene.
+
+~~~c
+struct scene_prop_t {
+    // Prop.
+    const struct prop_t* prop;
+
+    // X and Y position of the prop (in relative coordinates, relative to the background image).
+    // I.e. `(0,0)` represents the top left corner of the background image and `(1,1)` the bottom
+    // right corner.
+    float x, y;
+
+    // Time that this prop has left to live until it disappears.
+    double lifetime;
+};
+~~~
+
+</div>
+
+### `MAX_SCENE_PROPS`
+
+<div class="indent">
+
+Maximum number of props that can be placed in the scene.
+
+~~~c
+enum { MAX_SCENE_PROPS = 32 };
+~~~
+
+</div>
+
+### `struct scene_dinosaur_t {`
+
+<div class="indent">
+
+Data for a dinosaur placed in the scene.
+
+~~~c
+struct scene_dinosaur_t {
+    // Dinosaur.
+    const struct dinosaur_t* dinosaur;
+
+    // X and Y position of the dinosaur (in relative coordinates, relative to the background image).
+    // I.e. `(0,0)` represents the top left corner of the background image and `(1,1)` the bottom
+    // right corner.
+    float x, y;
+
+    // If true, the graphics of this dinosaur is horizontally flipped.
+    bool flipped;
+
+    // Time that this dinosaur has left to live until it disappears.
+    double lifetime;
+};
+~~~
+
+</div>
+
+### `MAX_SCENE_DINOSAURS`
+
+<div class="indent">
+
+Maximum number of dinosaurs in the scene.
+
+~~~c
+enum { MAX_SCENE_DINOSAURS = 32 };
+~~~
+
+</div>
+
+### `struct awarded_drop_t {`
+
+<div class="indent">
+
+A drop that has been awarded to the player.
+
+~~~c
+struct awarded_drop_t {
+    // Dinosaur that awarded the drop.
+    const struct dinosaur_t* dinosaur;
+
+    // Number of items (identified by image) in the drop.
+    uint32_t quantity[NUM_IMAGES];
+
+    // Total number of dropped items.
+    uint32_t total_items;
+};
+~~~
+
+</div>
+
+### `MAX_AWARDED_DROPS`
+
+<div class="indent">
+
+Maximum number of unclaimed awarded drops that a player can have.
+
+~~~c
+enum { MAX_AWARDED_DROPS = 16 };
+~~~
+
+</div>
+
+### `RESERVE_STATE_BYTES`
+
+<div class="indent">
+
+We reserve this many bytes for the game state.
+
+!!! NOTE
+    By reserving `&gt; sizeof(tm_simulate_state_o)` bytes and initializing it to zero, we can
+    add new items to the end of the game state while hot-reloading without crashing. The added
+    items will be zero initialized.
+
+~~~c
+enum { RESERVE_STATE_BYTES = 32 * 1024 };
+~~~
+
+</div>
+
+### `struct tm_simulate_state_o {`
+
+<div class="indent">
+
+Game state.
+
+~~~c
+struct tm_simulate_state_o {
+    tm_allocator_i* allocator;
+
+    // Money that the player has.
+    uint32_t money;
+
+    // Time until next coin is received.
+    double next_coin;
+
+    // Loaded image data.
+    uint32_t images[NUM_IMAGES];
+
+    // Current game state.
+    enum STATE state;
+
+    // Current page when the STATE is a menu screen.
+    uint32_t page;
+
+    // Number of items of each prop type that the player has in her inventory.
+    uint32_t inventory[NUM_PROPS];
+
+    // Number of items of each memento type that the player has in her inventory.
+    uint32_t mementos[NUM_MEMENTOS];
+
+    // Current scroll amount for main screen. On small displays, the main screen scrolls
+    // horizontally to fit the full background image.
+    float scroll;
+
+    // In [[STATE__PLACING]] -- the index of the prop that is currently being placed.
+    uint32_t place_prop;
+
+    // Props currently paced in the scene.
+    uint32_t num_scene_props;
+    struct scene_prop_t scene_props[MAX_SCENE_PROPS + 1];
+
+    // Dinosaurs currently in the scene.
+    uint32_t num_scene_dinosaurs;
+    struct scene_dinosaur_t scene_dinosaurs[MAX_SCENE_DINOSAURS];
+
+    // Dinosaurs that the player has seen.
+    bool in_album[NUM_DINOSAURS];
+
+    // Drops that the player hasn't claimed yet.
+    uint32_t num_awarded_drops;
+    struct awarded_drop_t awarded_drops[MAX_AWARDED_DROPS];
+};
+~~~
+
+</div>
+
+<a class='target' name='runtimestructs'></a>
+<h3 class='section'>Runtime structs</h3>
+
+### `struct draw_item_t {`
+
+<div class="indent">
+
+Represents an item to draw in the scene.
+
+To draw the scene, we generate a number of `struct draw_item_t`, sort them by their
+y-coordinates and draw them in that order.
+
+~~~c
+struct draw_item_t {
+    // Y-coordinate for sorting.
+    float y;
+
+    // Image to draw for the item.
+    enum IMAGE image;
+
+    // Rect where image should be drawn.
+    tm_rect_t rect;
+
+    // UV rect for image texture. (If zero, the default (0,0,1,1) will be used.)
+    tm_rect_t uv_rect;
+};
+~~~
+
+</div>
+
+<a class='target' name='code'></a>
+<h3 class='section'>Code</h3>
+
+### `load_image()`
+
+<div class="indent">
+
+~~~c
+static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_path)
+~~~
+
+Loads the image at the specified `asset_path` and returns an image handle to it. If the image
+fails to load, the image handle `0` is returned. (This handle is used for the placeholder image.)
+
+</div>
+
+### `in_lake()`
+
+<div class="indent">
+
+~~~c
+static const bool in_lake(float x, float y)
+~~~
+
+Returns `true` if the background-realtive coordinates `(x,y)` are "in the lake". Only
+`DINO_TYPE__ICTYOSAUR` can spawn in the lake.
+
+</div>
+
+### `draw_scene_props()`
+
+<div class="indent">
+
+~~~c
+static void draw_scene_props(tm_rect_t background_r, struct scene_prop_t* draw_props, uint32_t num_props,
+~~~
+
+Draws scene props in the array `(draw_props, num_props)`.
+
+</div>
+
+### `draw_scene_dinosaurs()`
+
+<div class="indent">
+
+~~~c
+static void draw_scene_dinosaurs(tm_rect_t background_r, struct scene_dinosaur_t* draw_dinosaurs, uint32_t num_dinosaurs,
+~~~
+
+Draws scene dinosaurs in the array `(draw_dinosaurs, num_dinosaurs)`.
+
+</div>
+
+### `roll()`
+
+<div class="indent">
+
+~~~c
+static double roll(struct range_t r)
+~~~
+
+Rolls a random value in the range and returns it.
+
+</div>
+
+### `game_logic()`
+
+<div class="indent">
+
+~~~c
+static void game_logic(tm_simulate_state_o* state, double dt)
+~~~
+
+Implements the game logic.
+
+</div>
+
+### `scene()`
+
+<div class="indent">
+
+~~~c
+static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
+~~~
+
+Draws the scene -- the background layers and the placed props.
+
+</div>
+
+### `money()`
+
+<div class="indent">
+
+~~~c
+static void money(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
+~~~
+
+Draws the money counter.
+
+</div>
+
+### `button()`
+
+<div class="indent">
+
+~~~c
+static bool button(tm_simulate_state_o* state, tm_simulate_frame_args_t* args, tm_rect_t r, const uint32_t image_idx)
+~~~
+
+Draws a button using the image specified by `image_idx`. Returns `true` if the button was
+clicked.
+
+</div>
+
+### `disabled_button()`
+
+<div class="indent">
+
+~~~c
+static void disabled_button(tm_simulate_state_o* state, tm_simulate_frame_args_t* args, tm_rect_t r, const uint32_t image_idx)
+~~~
+
+Draws a disabled (not clickable) button.
+
+</div>
+
+### `gift_name()`
+
+<div class="indent">
+
+~~~c
+static const char* gift_name(enum IMAGE image)
+~~~
+
+Returns the name of the gift (Prop or Memento) with the specified image.
+
+</div>
+
+### `claim_gift()`
+
+<div class="indent">
+
+~~~c
+static void claim_gift(tm_simulate_state_o* state, enum IMAGE image, uint32_t quantity)
+~~~
+
+Adds the specified gift (Prop or Memento) to the player's inventory.
+
+</div>
+
+### `menu()`
+
+<div class="indent">
+
+~~~c
+static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
+~~~
+
+Draws the menu screens.
+
+</div>
+
+### `simulate__start()`
+
+<div class="indent">
+
+~~~c
+static tm_simulate_state_o* simulate__start(tm_simulate_start_args_t* args)
+~~~
+
+Implements `tm_simulate_entry_i-&gt;start()`.
+
+</div>
+
+### `simulate__stop()`
+
+<div class="indent">
+
+~~~c
+static void simulate__stop(tm_simulate_state_o* state)
+~~~
+
+Implements `tm_simulate_entry_i-&gt;stop()`.
+
+</div>
+
+### `simulate__tick()`
+
+<div class="indent">
+
+~~~c
+static void simulate__tick(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
+~~~
+
+Implements `tm_simulate_entry_i-&gt;tick()`.
+
+</div>
+
+### `simulate_entry_i`
+
+<div class="indent">
+
+`tm_simulate_entry_i` interface.
+
+~~~c
+static tm_simulate_entry_i simulate_entry_i = {
+    .id = TM_STATIC_HASH("tm_dinosaur_simulate", 0xcc5e7b0d0f04fed9ULL),
+    .display_name = "Dinosaur Simulate",
+    .start = simulate__start,
+    .stop = simulate__stop,
+    .tick = simulate__tick,
+};
+~~~
+
+</div>
+
+### `tm_load_plugin()`
+
+<div class="indent">
+
+~~~c
+TM_DLL_EXPORT void tm_load_plugin(struct tm_api_registry_api* reg, bool load)
+~~~
+
+Called to load the plugin.
+
+</div>
+
+</div>
+
+<script>
+let terms = [
+    'dinosaur_simulate.c',
+    'HEXCOLOR()',
+    'range_t {',
+    'enum IMAGE',
+    'MISSING_ART',
+    'image_paths',
+    'enum PROP_TYPE',
+    'prop_t {',
+    'props',
+    'NUM_PROPS',
+    'enum DINO_TYPE',
+    'dinosaur_t {',
+    'dinosaurs',
+    'NUM_DINOSAURS',
+    'drop_t {',
+    'drops',
+    'memento_t {',
+    'mementos',
+    'NUM_MEMENTOS',
+    'rules_t {',
+    'rules',
+    'enum STATE',
+    'scene_prop_t {',
+    'MAX_SCENE_PROPS',
+    'scene_dinosaur_t {',
+    'MAX_SCENE_DINOSAURS',
+    'awarded_drop_t {',
+    'MAX_AWARDED_DROPS',
+    'RESERVE_STATE_BYTES',
+    'tm_simulate_state_o {',
+    'draw_item_t {',
+    'load_image()',
+    'in_lake()',
+    'draw_scene_props()',
+    'draw_scene_dinosaurs()',
+    'roll()',
+    'game_logic()',
+    'scene()',
+    'money()',
+    'button()',
+    'disabled_button()',
+    'gift_name()',
+    'claim_gift()',
+    'menu()',
+    'simulate__start()',
+    'simulate__stop()',
+    'simulate__tick()',
+    'simulate_entry_i',
+    'tm_load_plugin()',
+    ''
+];
+let aNames = [
+    'dinosaur_simulate.c',
+    'hexcolor()',
+    'structrange_t{',
+    'enumimage',
+    'missing_art',
+    'image_paths',
+    'enumprop_type',
+    'structprop_t{',
+    'props',
+    'num_props',
+    'enumdino_type',
+    'structdinosaur_t{',
+    'dinosaurs',
+    'num_dinosaurs',
+    'structdrop_t{',
+    'drops',
+    'structmemento_t{',
+    'mementos',
+    'num_mementos',
+    'structrules_t{',
+    'rules',
+    'enumstate',
+    'structscene_prop_t{',
+    'max_scene_props',
+    'structscene_dinosaur_t{',
+    'max_scene_dinosaurs',
+    'structawarded_drop_t{',
+    'max_awarded_drops',
+    'reserve_state_bytes',
+    'structtm_simulate_state_o{',
+    'structdraw_item_t{',
+    'load_image()',
+    'in_lake()',
+    'draw_scene_props()',
+    'draw_scene_dinosaurs()',
+    'roll()',
+    'game_logic()',
+    'scene()',
+    'money()',
+    'button()',
+    'disabled_button()',
+    'gift_name()',
+    'claim_gift()',
+    'menu()',
+    'simulate__start()',
+    'simulate__stop()',
+    'simulate__tick()',
+    'simulate_entry_i',
+    'tm_load_plugin()',
+    ''
+];
+let sourceFiles = [
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    ''
+];
+
+
+// Returns *true* if the needle matches the haystack, *false* otherwise.
+function fuzzyMatch(needle, haystack) {
+    let np = 0;
+    for (let hp = 0; hp < haystack.length; hp++) {
+        if (haystack[hp] == needle[np]) {
+            ++np;
+            if (np == needle.length)
+                return true;
+        }
+    }
+    return false;
+}
+
+// Returns the score for matching the needle against the haystack starting at the specified search
+// positions.
+function fuzzyScorePos(needle, np, haystack, hp) {
+    const hp_start = hp;
+    const np_start = np;
+    for (; hp < haystack.length; ++hp) {
+        if (haystack[hp] == needle[np])
+            break;
+    }
+    if (haystack[hp] != needle[np])
+        return null;
+
+    let run = 1;
+    while (haystack[hp + run] == needle[np + run] && np + run < needle.length)
+        ++run;
+
+    let score = 5 * (run - 1);
+    score *= (hp == 0 || haystack[hp - 1] == '.') ? 3 : 1;
+    score *= (haystack[hp - 1] == '_') ? 2 : 1;
+    score -= (hp - hp_start);
+
+    if (np + run == needle.length) {
+        score -= haystack.length - hp - run;
+        return score;
+    }
+
+    const restScore = fuzzyScorePos(needle, np + run, haystack, hp + run);
+    if (restScore == null)
+        return null;
+    const thisScore = score + restScore;
+    const skipScore = fuzzyScorePos(needle, np, haystack, hp + 1);
+    return skipScore && skipScore > thisScore ? skipScore : thisScore;
+}
+
+// Returns the score for matching the needle against the haystack.
+function fuzzyScore(needle, haystack) {
+    return fuzzyScorePos(needle, 0, haystack, 0);
+}
+
+// Highlights all matches of the needle in the haystack by surrounding them with <b></b>.
+function fuzzyHighlight(needle, haystackCase) {
+    function fuzzyHighlightPos(needle, np, haystackCase, hp) {
+        const haystack = haystackCase.toLowerCase();
+        const hp_start = hp;
+        const np_start = np;
+        for (; hp < haystack.length; ++hp) {
+            if (haystack[hp] == needle[np])
+                break;
+        }
+        if (haystack[hp] != needle[np])
+            return null;
+
+        let run = 1;
+        while (haystack[hp + run] == needle[np + run] && np + run < needle.length)
+            ++run;
+
+        if (np + run == needle.length)
+            return haystackCase.slice(hp_start, hp) + "<b>" + haystackCase.slice(hp, hp + run) + "</b>" + haystackCase.slice(hp + run);
+
+        let score = 5 * (run - 1);
+        score *= (hp == 0 || haystack[hp - 1] == '.') ? 3 : 1;
+        score *= (haystack[hp - 1] == '_') ? 2 : 1;
+        score -= (hp - hp_start);
+
+        const restScore = fuzzyScorePos(needle, np + run, haystack, hp + run);
+        const thisScore = score + restScore;
+        const skipScore = fuzzyScorePos(needle, np, haystack, hp + 1);
+        return skipScore && skipScore > thisScore ?
+            haystackCase.slice(hp_start, hp + 1) + fuzzyHighlightPos(needle, np, haystackCase, hp + 1) :
+            haystackCase.slice(hp_start, hp) + "<b>" + haystackCase.slice(hp, hp + run) + "</b>" + fuzzyHighlightPos(needle, np + run, haystackCase, hp + run);
+    }
+
+    return fuzzyHighlightPos(needle, 0, haystackCase, 0);
+}
+
+// Returns a sorted list of matches of the needle in the haystacks. Each match is an object
+// `{score, str, index}` where `score` is the score of the match, `str` is the matched string
+// in the haystacks and `index` is th index of the matched string. It's always true that
+// `res.str == haystacks[res.index]`.
+function fuzzySearch(needle, haystacks, maxMatches) {
+    if (needle.length == 0)
+        return [];
+
+    let matches = [];
+    let threshold = 0;
+    for (let i = 0; i < haystacks.length; ++i) {
+        const haystack = haystacks[i].toLowerCase();
+        if (!fuzzyMatch(needle, haystack))
+            continue;
+        const score = fuzzyScore(needle, haystack);
+        if (score < threshold)
+            continue;
+        const res = {
+            score: score,
+            str: haystacks[i],
+            index: i
+        };
+        matches.push(res);
+        if (matches.length > maxMatches * 2) {
+            matches.sort((a, b) => b.score - a.score);
+            matches = matches.slice(0, maxMatches);
+            threshold = matches[matches.length - 1].score;
+        }
+    }
+    matches.sort((a, b) => b.score - a.score);
+    matches = matches.slice(0, maxMatches);
+    return matches;
+}
+
+let searchResults = []
+
+function search(s) {
+    let result = document.getElementById('search-result');
+    while (result.firstChild)
+        result.removeChild(result.firstChild);
+    searchResults = [];
+    if (s == '')
+        return;
+
+    s = s.replace(/ /g, "_");
+    const maxMatches = 30;
+    let matches = fuzzySearch(s, terms, maxMatches + 1);
+    const hasMore = matches.length > maxMatches;
+    mathces = matches.slice(0, maxMatches);
+
+    for (let m of matches) {
+        const i = m.index;
+        const p = document.createElement('p');
+        const a = document.createElement('a');
+        const sf = false ? searchBase + sourceFiles[i] + ".html" : ""
+        a.href = sf + "#" + aNames[i];
+        const text = fuzzyHighlight(s, m.str);
+        const parts = text.split(".", 2);
+        const isField = parts.length == 2 && parts[1] != 'inl' && parts[1] != 'c' && parts[1] != 'h';
+        const struct = isField ? parts[0] : sourceFiles[i].slice(sourceFiles[i].lastIndexOf('/') + 1);
+        const field = isField ? parts[1] : text;
+        a.innerHTML = `<span style="display: inline-block; width:30%; font-size:80%;">${struct}</span> <span style="padding-left: 2em;">${field}</span>`;
+        a.onclick = function(e) {
+            while (result.firstChild)
+                result.removeChild(result.firstChild);
+        };
+        p.appendChild(a);
+        result.appendChild(p);
+        searchResults.push(a);
+    }
+    if (hasMore) {
+        const p = document.createElement('p');
+        p.innerText = "...";
+        result.appendChild(p);
+    }
+}
+
+function searchKeyUp(s, e) {
+    search(s.value);
+}
+
+document.onkeydown = function(e) {
+    const focus = document.activeElement;
+    let i = searchResults.indexOf(focus);
+    if (e.code == "ArrowDown" || e.code == "ArrowUp") {
+        const start = i;
+
+        i = i + (e.code == "ArrowDown" ? 1 : -1);
+        i = Math.max(-1, i);
+        i = Math.min(i, searchResults.length - 1);
+        if (i == -1)
+            document.getElementById("search-box").focus();
+        else
+            searchResults[i].focus();
+        return false;
+    } else if (e.code == "Enter") {
+        if (focus == document.getElementById("search-box"))
+            searchResults[0].click();
+        else
+            focus.click();
+        return false;
+    } else if (e.code == "Escape") {
+        document.getElementById("search-box").value = "";
+        let result = document.getElementById('search-result');
+        while (result.firstChild)
+            result.removeChild(result.firstChild);
+        searchResults = [];
+    }
+}
+
+document.onkeypress = function(e) {
+    const focus = document.activeElement;
+    if (e.key == "s") {
+        const searchBox = document.getElementById("search-box");
+        if (focus != searchBox) {
+            searchBox.focus();
+            searchBox.value = "";
+            return false;
+        }
+    }
+}
+</script>
+
+<script src="https://utteranc.es/client.js"
+    repo="OurMachinery/blog-comments"
+    issue-term="apidoc/dinosaur_simulate.c"
+    theme="github-light"
+    crossorigin="anonymous"
+    async>
+</script>
+
+
+<a href="#" onclick="scrollUp()" id="up">&#9206;</a><style>
+    a:focus {background-color: #ffa;}
+    .indent {margin-left: 2em;}
+    body#md {margin-top: 3em;}
+    html {scroll-padding-top: 5em;}
+    #search-result p {margin: 0.1em 0em;}
+    .md pre.tilde {border: none;}
+    .md h3 {background: #eee; border: none; padding: 0.5em; margin-left: -0.5em;`}
+    .md h3.section {background: #ddd; font-weight: bold;`}
+    .md h4 {background: #eee; border: none; padding: 0.5em; margin-left: -0.5em; font-weight: normal;`}
+    .md .error {background: #f99;}
+    .index code {background: #fff;}
+    .index a {text-decoration: none;}
+    .md h3 code, .md h4 code {background: none;}
+    .md pre.listing {
+        font-size: 80%%;
+        padding: 0.5em;
+        box-sizing: border-box;
+        scrollbar-width: none;
+    }
+    .md pre.listing::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
+    .md iframe:not(.markdeep) {
+         border: 0px;
+         background-color: transparent;
+     }
+#up{
+  display: none;
+  position: fixed; 
+  bottom: 20px; 
+  right: 30px;
+  z-index: 99; 
+  border: none;
+  outline: none;
+  color: #000; 
+  padding: 15px;
+  text-decoration: none;
+  border-radius: 10px; 
+  font-size: 64px; 
+     }
+#up:hover { color:#ccc;}
+</style>
+
+<script>
+    function t(id) {
+        let e = document.getElementById(id);
+        let link = document.getElementById(id + "-link");
+        if (e.style.display != "none") {
+            e.style.display = "none";
+            link.innerHTML = "&#9657;";
+        } else {
+            e.style.display = "block";
+            link.innerHTML = "&#9662;";
+        }
+    }
+
+function Up() {
+ let upBtn = document.getElementById("up");  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    upBtn.style.display = "block";
+  } else {
+    upBtn.style.display = "none";
+  }
+}
+window.addEventListener('scroll',Up);
+function scrollUp() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+
+<script>markdeepOptions={tocStyle:'none'};</script>
+<!-- Markdeep: -->
+<style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style>
+<script src="markdeep.min.js"></script>
+<script src="https://casual-effects.com/markdeep/1.11/markdeep.min.js"></script>
+<script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
+<script>searchBase = "";</script>
+<script src="search.js"></script>

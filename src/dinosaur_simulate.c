@@ -37,13 +37,23 @@ static struct tm_random_api* tm_random_api;
 #include <memory.h>
 #include <stdio.h>
 
-// A dinosaur collecting game.
+// Implements a dinosaur collecting game.
+//
+// Static game data is saved in the arrays [[image_paths]], [[props]], [[dinosaurs]], [[drops]] and
+// [[mementos]], where as all dynamic game data is saved in the [[struct tm_simulate_state_o]].
 
-// Reserve this many bytes for the state, so that we can grow it while hot-reloading.
-enum { RESERVE_STATE_BYTES = 32 * 1024 };
+// Helpers
 
-// Returns a `tm_color_srgb_t` corresponding to the hexadecimal color `c`.
+// Returns a `tm_color_srgb_t` corresponding to the hexadecimal color `c`. I.e. `HEXCOLOR(0xff0000)`
+// returns a red color. The alpha of the returned color is always set to 255.
 #define HEXCOLOR(c) ((tm_color_srgb_t){ .a = 255, .r = 0xff & (c >> 16), .g = 0xff & (c >> 8), .b = 0xff & (c >> 0) })
+
+// Used to specify a numeric range for randomized values.
+struct range_t {
+    double min, max;
+};
+
+// Images
 
 // Index of all images in the game.
 enum IMAGE {
@@ -129,6 +139,7 @@ enum IMAGE {
     NUM_IMAGES,
 };
 
+// Default image to use when no image has been specified.
 #define MISSING_ART "art/icons/missing.creation"
 
 // Specifies project paths for the various images. Used to load the image data.
@@ -193,41 +204,19 @@ const char* image_paths[NUM_IMAGES] = {
     [URCHIN] = "art/props/urchin.creation",
 };
 
-// Current game state.
-enum STATE {
-    // The main scene view.
-    STATE__MAIN,
+// Props
+//
+// Props are food you can buy and place in the level to attract dinosaurs. The dinosaurs will
+// consume the props and leave a gift.
 
-    // Menu screen.
-    STATE__MENU,
-
-    // Inventory screen.
-    STATE__INVENTORY,
-
-    // Shop screen.
-    STATE__SHOP,
-
-    // Dinosaur album screen.
-    STATE__ALBUM,
-
-    // Placing a prop in the scene.
-    STATE__PLACING,
-
-    // Award screen state.
-    STATE__AWARD,
-
-    // Mementos screen.
-    STATE__MEMENTOS,
-};
-
-// Types for props.
+// Type classification for Props. (Currently, this isn't used for anything.)
 enum PROP_TYPE {
     PROP_TYPE__VEG,
     PROP_TYPE__MEAT,
     PROP_TYPE__FISH,
 };
 
-// Properties for props.
+// Properties for Props.
 struct prop_t {
     // Name of the prop.
     const char* name;
@@ -235,12 +224,12 @@ struct prop_t {
     // Image index for the prop.
     enum IMAGE image;
 
-    // Distance from the bottom of the prop graphics to the bottom of the image box as a fraction
-    // of the graphics height (0--1).
+    // Distance from the bottom of the prop graphics to the bottom of the image box as a fraction of
+    // the graphics height (0--1).
     //
-    // The prop images are always square and 256 x 256 pixel, with the graphics centered in the square.
-    // When we place a prop, we want to align the bottom of the actual graphics of the prop with the
-    // cursor position, so we need to offset it by this margin.
+    // The prop images are always square and 256 x 256 pixel, with the graphics centered in the
+    // square. When we place a prop, we want to align the bottom of the actual graphics of the prop
+    // with the cursor position, so we need to offset it by this margin.
     double margin;
 
     // Scale at which the prop will be drawn. Props can be drawn bigger or smaller in the world.
@@ -253,7 +242,9 @@ struct prop_t {
     uint32_t price;
 };
 
-// List of all the props in the game.
+// List of all the Props in the game.
+//
+// This list is generated from https://docs.google.com/spreadsheets/d/11sT_7U7IMrL_BpgIoLGul436z4L0lZe-oSCdbEn09DU/edit?pli=1#gid=0
 struct prop_t props[] = {
     { .name = "Leaves", .image = LEAVES, .type = PROP_TYPE__VEG, .price = 5, .margin = 0.17, .scale = 0.9 },
     { .name = "Meat", .image = MEAT, .type = PROP_TYPE__MEAT, .price = 5, .margin = 0.2, .scale = 1 },
@@ -269,10 +260,13 @@ struct prop_t props[] = {
     { .name = "Starfish ", .image = STARFISH, .type = PROP_TYPE__FISH, .price = 30, .margin = 0.2, .scale = 0.7 },
 };
 
-// Total number of props in the game.
+// Total number of Props in the game.
 #define NUM_PROPS (TM_ARRAY_COUNT(props))
 
-// Type of the dinosaur.
+// Dinosaurs
+
+// Type classification for Dinosaurs. This is used to control where dinosaurs can spawn,
+// [[DINO_TYPE__ICTYOSAUR]] can only spawn in water and no other dinosaurs can spawn in water.
 enum DINO_TYPE {
     DINO_TYPE__HERBIVORE,
     DINO_TYPE__CARNIVORE,
@@ -280,7 +274,7 @@ enum DINO_TYPE {
     DINO_TYPE__ICTYOSAUR,
 };
 
-// Properties for dinosaurs.
+// Properties for Dinosaurs.
 struct dinosaur_t {
     // Name of the dinosaur.
     const char* name;
@@ -301,7 +295,9 @@ struct dinosaur_t {
     double margin, scale;
 };
 
-// All the dinosaurs in the game.
+// All the Dinosaurs in the game.
+//
+// Generated from: https://docs.google.com/spreadsheets/d/11sT_7U7IMrL_BpgIoLGul436z4L0lZe-oSCdbEn09DU/edit?pli=1#gid=4726286
 struct dinosaur_t dinosaurs[] = {
     { .name = "Ankylosaurus", .image = ANKYLOSAURUS, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 1, .attracted_by = { LEAVES }, .margin = 0.3, .scale = 0.9 },
     { .name = "Ankylosuarus 2", .image = ANKYLOSAURUS_2, .type = DINO_TYPE__HERBIVORE, .minutes_to_spawn = 3, .attracted_by = { HERB_BUNDLE }, .margin = 0.4, .scale = 0.9 },
@@ -329,20 +325,21 @@ struct dinosaur_t dinosaurs[] = {
     { .name = "Velociraptor", .image = VELOCIRAPTOR, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 20, .attracted_by = { HAUNCH }, .margin = 0.1, .scale = 1 },
 };
 
-// Total number of dinosaurs in the game.
+// Total number of Dinosaurs in the game.
 #define NUM_DINOSAURS (TM_ARRAY_COUNT(dinosaurs))
 
-// Specifies a numeric range.
-struct range_t {
-    double min, max;
-};
+// Drops
+//
+// A Drop is a rule specifying that a certain item is dropped by a certain dinosaur. The dropped
+// item can be either a Prop or a Memento.
 
 // Properties for drops.
 struct drop_t {
     // Image of the dinosaur that this drop rule concerns.
     enum IMAGE dinosaur_image;
 
-    // Image of the dropped item.
+    // Image of the dropped item. We find the actual dropped item by comparing this image with
+    // the images in the [[props]] and [[mementos]] lists.
     enum IMAGE drop_image;
 
     // Quantity of item that will be dropped.
@@ -357,6 +354,8 @@ struct drop_t {
 // When a dinosaur leaves the game we check each rule. If the dinosaur matches the `dino` field
 // we will award the specified (randomized) quantity of drop items with the specified probability.
 // (The actual drop number is rounded to the nearest integer.)
+//
+// Generated from: https://docs.google.com/spreadsheets/d/11sT_7U7IMrL_BpgIoLGul436z4L0lZe-oSCdbEn09DU/edit?pli=1#gid=1632155867
 struct drop_t drops[] = {
     { .dinosaur_image = ANKYLOSAURUS, .drop_image = ORE, .quantity = { 1, 1 }, .probability = 1 },
     { .dinosaur_image = ANKYLOSAURUS_2, .drop_image = DIAMOND, .quantity = { 1, 1 }, .probability = 1 },
@@ -384,6 +383,10 @@ struct drop_t drops[] = {
     { .dinosaur_image = VELOCIRAPTOR, .drop_image = DIAMOND, .quantity = { 1, 1 }, .probability = 1 },
 };
 
+// Mementos
+//
+// Mementos are items dropped by dinosaurs that can be sold for cash value.
+
 // Properties for Mementos.
 struct memento_t {
     // Name of the memento.
@@ -396,7 +399,9 @@ struct memento_t {
     uint32_t sell_value;
 };
 
-// All the mementos in the game
+// All the Mementos in the game.
+//
+// Generated from: https://docs.google.com/spreadsheets/d/11sT_7U7IMrL_BpgIoLGul436z4L0lZe-oSCdbEn09DU/edit?pli=1#gid=1102118616
 struct memento_t mementos[] = {
     { .name = "Ore", .image = ORE, .sell_value = 1 },
     { .name = "Diamond", .image = DIAMOND, .sell_value = 10 },
@@ -411,33 +416,67 @@ struct memento_t mementos[] = {
     { .name = "Shell", .image = SHELL, .sell_value = 5 },
 };
 
+// Total number of Mementos in the game.
 #define NUM_MEMENTOS TM_ARRAY_COUNT(mementos)
 
-// Game rules.
+// Rules
+
+// Rules that control the gameplay.
 struct rules_t {
-    // Multiplier to the game speed (for faster testing).
+    // Multiplier to the game speed. This can be set to a value > 1 to speed up testing.
     struct range_t speed_multiplier;
 
     // Money player has at the start.
     struct range_t start_money;
 
-    // Minutes until the next coin is spawned.
+    // Minutes for the player to receive a coin.
     struct range_t minutes_to_coin;
 
     // Time a dinosaur stays around after it has come to eat food.
     struct range_t dinosaur_lifetime_minutes;
 
-    // Time food stays around if no dinosaur eats it.
+    // Time food stays around if no dinosaur comes to eat it.
     struct range_t food_lifetime_minutes;
 };
 
 // Current game rules.
+//
+// Generated from: https://docs.google.com/spreadsheets/d/11sT_7U7IMrL_BpgIoLGul436z4L0lZe-oSCdbEn09DU/edit?pli=1#gid=702050057
 struct rules_t rules = {
     .speed_multiplier = { 60, 60 },
     .start_money = { 100, 100 },
     .minutes_to_coin = { 1, 1 },
     .dinosaur_lifetime_minutes = { 1, 10 },
     .food_lifetime_minutes = { 10, 20 },
+};
+
+// Runtime state
+
+// Current state of the game.
+enum STATE {
+    // The main scene view.
+    STATE__MAIN,
+
+    // Menu screen.
+    STATE__MENU,
+
+    // Inventory screen.
+    STATE__INVENTORY,
+
+    // Shop screen.
+    STATE__SHOP,
+
+    // Dinosaur album screen.
+    STATE__ALBUM,
+
+    // Placing a prop in the scene.
+    STATE__PLACING,
+
+    // Being awarded a gift.
+    STATE__AWARD,
+
+    // Mementos screen.
+    STATE__MEMENTOS,
 };
 
 // Data for a prop placed in the scene.
@@ -474,10 +513,10 @@ struct scene_dinosaur_t {
     double lifetime;
 };
 
-// Maximum number of dionsaurs in the scene.
+// Maximum number of dinosaurs in the scene.
 enum { MAX_SCENE_DINOSAURS = 32 };
 
-// A drop that has been awareded to the player.
+// A drop that has been awarded to the player.
 struct awarded_drop_t {
     // Dinosaur that awarded the drop.
     const struct dinosaur_t* dinosaur;
@@ -491,6 +530,14 @@ struct awarded_drop_t {
 
 // Maximum number of unclaimed awarded drops that a player can have.
 enum { MAX_AWARDED_DROPS = 16 };
+
+// We reserve this many bytes for the game state.
+//
+// !!! NOTE
+//     By reserving `> sizeof(tm_simulate_state_o)` bytes and initializing it to zero, we can
+//     add new items to the end of the game state while hot-reloading without crashing. The added
+//     items will be zero initialized.
+enum { RESERVE_STATE_BYTES = 32 * 1024 };
 
 // Game state.
 struct tm_simulate_state_o {
@@ -521,7 +568,7 @@ struct tm_simulate_state_o {
     // horizontally to fit the full background image.
     float scroll;
 
-    // In STATE__PLACING -- the index of the prop that is currently being placed.
+    // In [[STATE__PLACING]] -- the index of the prop that is currently being placed.
     uint32_t place_prop;
 
     // Props currently paced in the scene.
@@ -540,7 +587,12 @@ struct tm_simulate_state_o {
     struct awarded_drop_t awarded_drops[MAX_AWARDED_DROPS];
 };
 
-// Item to draw in the scene.
+// Runtime structs
+
+// Represents an item to draw in the scene.
+//
+// To draw the scene, we generate a number of [[struct draw_item_t]], sort them by their
+// y-coordinates and draw them in that order.
 struct draw_item_t {
     // Y-coordinate for sorting.
     float y;
@@ -554,6 +606,8 @@ struct draw_item_t {
     // UV rect for image texture. (If zero, the default (0,0,1,1) will be used.)
     tm_rect_t uv_rect;
 };
+
+// Code
 
 // Loads the image at the specified `asset_path` and returns an image handle to it. If the image
 // fails to load, the image handle `0` is returned. (This handle is used for the placeholder image.)
@@ -577,6 +631,7 @@ static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_pat
 }
 
 // Returns `true` if the background-realtive coordinates `(x,y)` are "in the lake". Only
+// [[DINO_TYPE__ICTYOSAUR]] can spawn in the lake.
 static const bool in_lake(float x, float y)
 {
     if (x > 0.39f)
@@ -664,7 +719,7 @@ static double roll(struct range_t r)
     return r.min + t * (r.max - r.min);
 }
 
-// Implement game logic.
+// Implements the game logic.
 static void game_logic(tm_simulate_state_o* state, double dt)
 {
     // Time doesn't pass in award screen.
@@ -920,7 +975,8 @@ static void disabled_button(tm_simulate_state_o* state, tm_simulate_frame_args_t
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, r, state->images[image_idx], (tm_rect_t){ 0, 0, 1, 1 });
 }
 
-static const char* award_name(enum IMAGE image)
+// Returns the name of the gift (Prop or Memento) with the specified image.
+static const char* gift_name(enum IMAGE image)
 {
     for (struct prop_t* p = props; p != TM_ARRAY_END(props); ++p) {
         if (p->image == image)
@@ -935,8 +991,8 @@ static const char* award_name(enum IMAGE image)
     return "Unknown";
 }
 
-// Adds the specified award to the inventory.
-static void claim_award(tm_simulate_state_o* state, enum IMAGE image, uint32_t quantity)
+// Adds the specified gift (Prop or Memento) to the player's inventory.
+static void claim_gift(tm_simulate_state_o* state, enum IMAGE image, uint32_t quantity)
 {
     for (struct prop_t* p = props; p != TM_ARRAY_END(props); ++p) {
         if (p->image == image)
@@ -1181,14 +1237,15 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
             const tm_color_srgb_t text_color = { .a = 255 };
             uistyle->font_scale = desc_r.h / 18.0f;
 
-            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = award_name(idx), .color = &text_color, .align = TM_UI_ALIGN_CENTER });
+// Returns the name of the gift (Prop or Memento) with the specified image.
+            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = gift_name(idx), .color = &text_color, .align = TM_UI_ALIGN_CENTER });
             char buffer[32];
             sprintf(buffer, "%d", award->quantity[idx]);
             tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = quantity_r, .text = buffer, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
 
             if (button(state, args, icon_r, idx)) {
                 const uint32_t q = award->quantity[idx];
-                claim_award(state, idx, q);
+                claim_gift(state, idx, q);
                 award->quantity[idx] = 0;
                 award->total_items -= q;
             }
