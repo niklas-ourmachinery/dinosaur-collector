@@ -96,6 +96,7 @@ enum IMAGE {
     SQUARE,
     LEFT_ARROW,
     RIGHT_ARROW,
+    MEMENTOS,
 
     // Props
     BANANA_BUNCH,
@@ -176,6 +177,7 @@ const char* image_paths[NUM_IMAGES] = {
     [SQUARE] = "art/icons/square.creation",
     [LEFT_ARROW] = "art/icons/left_arrow.creation",
     [RIGHT_ARROW] = "art/icons/right_arrow.creation",
+    [MEMENTOS] = "art/icons/mementos.creation",
 
     [BANANA_BUNCH] = "art/props/banana_bunch.creation",
     [BERRY_BUNCH] = "art/props/berry_bunch.creation",
@@ -213,6 +215,9 @@ enum STATE {
 
     // Award screen state.
     STATE__AWARD,
+
+    // Mementos screen.
+    STATE__MEMENTOS,
 };
 
 // Types for props.
@@ -244,7 +249,7 @@ struct prop_t {
     // Type of the prop.
     enum PROP_TYPE type;
 
-    // Price to by the prop in the shop.
+    // Price to buy the prop in the shop.
     uint32_t price;
 };
 
@@ -324,6 +329,9 @@ struct dinosaur_t dinosaurs[] = {
     { .name = "Velociraptor", .image = VELOCIRAPTOR, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 20, .attracted_by = { HAUNCH }, .margin = 0.1, .scale = 1 },
 };
 
+// Total number of dinosaurs in the game.
+#define NUM_DINOSAURS (TM_ARRAY_COUNT(dinosaurs))
+
 // Specifies a numeric range.
 struct range_t {
     double min, max;
@@ -376,8 +384,34 @@ struct drop_t drops[] = {
     { .dinosaur_image = VELOCIRAPTOR, .drop_image = DIAMOND, .quantity = { 1, 1 }, .probability = 1 },
 };
 
-// Total number of dinosaurs in the game.
-#define NUM_DINOSAURS (TM_ARRAY_COUNT(dinosaurs))
+// Properties for Mementos.
+struct memento_t {
+    // Name of the memento.
+    const char* name;
+
+    // Image index for the memento.
+    enum IMAGE image;
+
+    // Price to sell the memento in the shop.
+    uint32_t sell_value;
+};
+
+// All the mementos in the game
+struct memento_t mementos[] = {
+    { .name = "Ore", .image = ORE, .sell_value = 1 },
+    { .name = "Diamond", .image = DIAMOND, .sell_value = 10 },
+    { .name = "Agate", .image = AGATE, .sell_value = 5 },
+    { .name = "Branch", .image = BRANCH, .sell_value = 2 },
+    { .name = "Coconut", .image = COCONUT, .sell_value = 2 },
+    { .name = "Dead bird", .image = DEAD_BIRD, .sell_value = 1 },
+    { .name = "Feather", .image = FEATHER, .sell_value = 1 },
+    { .name = "Fern", .image = FERN, .sell_value = 2 },
+    { .name = "Lavender", .image = LAVENDER, .sell_value = 5 },
+    { .name = "Pearl", .image = PEARL, .sell_value = 10 },
+    { .name = "Shell", .image = SHELL, .sell_value = 5 },
+};
+
+#define NUM_MEMENTOS TM_ARRAY_COUNT(mementos)
 
 // Game rules.
 struct rules_t {
@@ -479,6 +513,9 @@ struct tm_simulate_state_o {
 
     // Number of items of each prop type that the player has in her inventory.
     uint32_t inventory[NUM_PROPS];
+
+    // Number of items of each memento type that the player has in her inventory.
+    uint32_t mementos[NUM_MEMENTOS];
 
     // Current scroll amount for main screen. On small displays, the main screen scrolls
     // horizontally to fit the full background image.
@@ -883,12 +920,32 @@ static void disabled_button(tm_simulate_state_o* state, tm_simulate_frame_args_t
     tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, r, state->images[image_idx], (tm_rect_t){ 0, 0, 1, 1 });
 }
 
+static const char* award_name(enum IMAGE image)
+{
+    for (struct prop_t* p = props; p != TM_ARRAY_END(props); ++p) {
+        if (p->image == image)
+            return p->name;
+    }
+
+    for (struct memento_t* m = mementos; m != TM_ARRAY_END(mementos); ++m) {
+        if (m->image == image)
+            return m->name;
+    }
+
+    return "Unknown";
+}
+
 // Adds the specified award to the inventory.
 static void claim_award(tm_simulate_state_o* state, enum IMAGE image, uint32_t quantity)
 {
     for (struct prop_t* p = props; p != TM_ARRAY_END(props); ++p) {
         if (p->image == image)
             state->inventory[p - props] += quantity;
+    }
+
+    for (struct memento_t* m = mementos; m != TM_ARRAY_END(mementos); ++m) {
+        if (m->image == image)
+            state->mementos[m - mementos] += quantity;
     }
 }
 
@@ -962,6 +1019,13 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
             case 2:
                 if (button(state, args, icon_r, ALBUM)) {
                     state->state = STATE__ALBUM;
+                    state->page = 0;
+                }
+                break;
+
+            case 3:
+                if (button(state, args, icon_r, MEMENTOS)) {
+                    state->state = STATE__MEMENTOS;
                     state->page = 0;
                 }
                 break;
@@ -1110,14 +1174,17 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
 
             const tm_rect_t row_r = tm_rect_divide_y(rect, 0.01f * unit, 3, y);
             tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.01f * unit, 3, x);
+            tm_rect_t quantity_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
             tm_rect_t desc_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
             icon_r = tm_rect_center_in(icon_r.h, icon_r.h, icon_r);
 
             const tm_color_srgb_t text_color = { .a = 255 };
             uistyle->font_scale = desc_r.h / 18.0f;
+
+            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = award_name(idx), .color = &text_color, .align = TM_UI_ALIGN_CENTER });
             char buffer[32];
             sprintf(buffer, "%d", award->quantity[idx]);
-            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = buffer, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
+            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = quantity_r, .text = buffer, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
 
             if (button(state, args, icon_r, idx)) {
                 const uint32_t q = award->quantity[idx];
@@ -1133,6 +1200,51 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
         }
         if (state->num_awarded_drops == 0)
             state->state = STATE__MAIN;
+    } else if (state->state == STATE__MEMENTOS) {
+        tm_ui_style_t uistyle[1] = { *args->uistyle };
+
+        uint32_t idx = 0;
+        for (uint32_t i = 0;; ++i, ++idx) {
+            const uint32_t page = i / 9;
+            const uint32_t x = i % 3;
+            const uint32_t y = (i % 9) / 3;
+
+            while (idx < NUM_MEMENTOS && state->mementos[idx] == 0)
+                ++idx;
+            if (idx >= NUM_MEMENTOS)
+                break;
+
+            num_pages = page + 1;
+
+            if (state->page != page)
+                continue;
+
+            const tm_rect_t row_r = tm_rect_divide_y(rect, 0.01f * unit, 3, y);
+            tm_rect_t icon_r = tm_rect_divide_x(row_r, 0.01f * unit, 3, x);
+            tm_rect_t price_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
+            tm_rect_t desc_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
+            icon_r = tm_rect_center_in(icon_r.h, icon_r.h, icon_r);
+            price_r = tm_rect_center_in(icon_r.w, price_r.h, price_r);
+
+            const tm_color_srgb_t text_color = { .a = 255 };
+            uistyle->font_scale = desc_r.h / 18.0f;
+            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = desc_r, .text = mementos[idx].name, .color = &text_color, .align = TM_UI_ALIGN_CENTER });
+
+            const tm_rect_t bone_r = tm_rect_split_off_left(&price_r, price_r.h, 0.01f * unit);
+            tm_draw2d_api->textured_rect(uib.vbuffer, *uib.ibuffers, style, bone_r, state->images[BONE], (tm_rect_t){ 0, 0, 1, 1 });
+
+            char price_str[32] = { 0 };
+            char inventory_str[32] = { 0 };
+            sprintf(price_str, "%d", mementos[idx].sell_value);
+            sprintf(inventory_str, "%d", state->mementos[idx]);
+            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = price_r, .text = price_str, .color = &text_color, .align = TM_UI_ALIGN_LEFT });
+            tm_ui_api->text(args->ui, uistyle, &(tm_ui_text_t){ .rect = price_r, .text = inventory_str, .color = &text_color, .align = TM_UI_ALIGN_RIGHT });
+
+            if (button(state, args, icon_r, mementos[idx].image)) {
+                --state->mementos[idx];
+                state->money += mementos[idx].sell_value;
+            }
+        }
     }
 
     // Left and right buttons.
