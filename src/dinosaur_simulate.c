@@ -111,13 +111,28 @@ enum IMAGE {
     STARFISH,
     URCHIN,
 
+    // Mementos
+    ORE,
+    DIAMOND,
+    AGATE,
+    BRANCH,
+    COCONUT,
+    DEAD_BIRD,
+    FEATHER,
+    FERN,
+    LAVENDER,
+    PEARL,
+    SHELL,
+
     // Total number of images.
     NUM_IMAGES,
 };
 
+#define MISSING_ART "art/icons/missing.creation"
+
 // Specifies project paths for the various images. Used to load the image data.
 const char* image_paths[NUM_IMAGES] = {
-    [PLACEHOLDER] = "art/icons/missing.creation",
+    [PLACEHOLDER] = MISSING_ART,
 
     [BACKGROUND_LAYER_0] = "art/backgrounds/background.creation",
     [BACKGROUND_LAYER_1] = "art/backgrounds/layer 1.creation",
@@ -257,7 +272,7 @@ enum DINO_TYPE {
     DINO_TYPE__ICTYOSAUR,
 };
 
-// Properties for dinosaurs
+// Properties for dinosaurs.
 struct dinosaur_t {
     // Name of the dinosaur.
     const char* name;
@@ -306,13 +321,60 @@ struct dinosaur_t dinosaurs[] = {
     { .name = "Velociraptor", .image = VELOCIRAPTOR, .type = DINO_TYPE__CARNIVORE, .minutes_to_spawn = 20, .attracted_by = { HAUNCH }, .margin = 0.1, .scale = 1 },
 };
 
-// Total number of dinosaurs in the game.
-#define NUM_DINOSAURS (TM_ARRAY_COUNT(dinosaurs))
-
 // Specifies a numeric range.
 struct range_t {
     double min, max;
 };
+
+// Properties for drops.
+struct drop_t {
+    // Image of the dinosaur that this drop rule concerns.
+    enum IMAGE dinosaur_image;
+
+    // Image of the dropped item.
+    enum IMAGE drop_image;
+
+    // Quantity of item that will be dropped.
+    struct range_t quantity;
+
+    // Probability that item will be dropped.
+    double probability;
+};
+
+// Rules for drops.
+//
+// When a dinosaur leaves the game we check each rule. If the dinosaur matches the `dino` field
+// we will award the specified (randomized) quantity of drop items with the specified probability.
+// (The actual drop number is rounded to the nearest integer.)
+struct drop_t drops[] = {
+    { .dinosaur_image = ANKYLOSAURUS, .drop_image = ORE, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = ANKYLOSAURUS_2, .drop_image = DIAMOND, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = APATOSAURUS, .drop_image = ORE, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = BRACHIOSAURUS, .drop_image = BRANCH, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = BRACHIOSAURUS_2, .drop_image = COCONUT, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = CARNOTAURUS, .drop_image = DEAD_MOUSE, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = DIMORPHODON, .drop_image = FEATHER, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = PACHYCEPHALOSAURUS, .drop_image = FERN, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = PARASAUROLOPHUS, .drop_image = HERB_BUNDLE, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = PARASAUROLOPHUS_2, .drop_image = LAVENDER, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = PLESIOSAURUS, .drop_image = PEARL, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = PLIOSAURUS, .drop_image = SHELL, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = PTERANODON, .drop_image = BRANCH, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = SPINOSAURUS, .drop_image = FERN, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = STEGOSAURUS, .drop_image = DEAD_BIRD, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = STEGOSAURUS_2, .drop_image = FEATHER, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = STEGOSAURUS_3, .drop_image = COCONUT, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = STYGIMOLOCH, .drop_image = LAVENDER, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = THERIZINOSAURUS, .drop_image = AGATE, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = TRICERATOPS, .drop_image = ORE, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = TRICERATOPS_2, .drop_image = BRANCH, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = TYRANNOSAURUS, .drop_image = BRANCH, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = UTAHCERATOPS, .drop_image = DEAD_BIRD, .quantity = { 1, 1 }, .probability = 1 },
+    { .dinosaur_image = VELOCIRAPTOR, .drop_image = DIAMOND, .quantity = { 1, 1 }, .probability = 1 },
+};
+
+// Total number of dinosaurs in the game.
+#define NUM_DINOSAURS (TM_ARRAY_COUNT(dinosaurs))
 
 // Game rules.
 struct rules_t {
@@ -343,8 +405,8 @@ struct rules_t rules = {
 
 // Data for a prop placed in the scene.
 struct scene_prop_t {
-    // Index of the prop in the global `props` array.
-    uint32_t prop;
+    // Prop.
+    const struct prop_t* prop;
 
     // X and Y position of the prop (in relative coordinates, relative to the background image).
     // I.e. `(0,0)` represents the top left corner of the background image and `(1,1)` the bottom
@@ -360,8 +422,8 @@ enum { MAX_SCENE_PROPS = 32 };
 
 // Data for a dinosaur placed in the scene.
 struct scene_dinosaur_t {
-    // Index of the dinosaur in the global `dinosaurs` array.
-    uint32_t dinosaur;
+    // Dinosaur.
+    const struct dinosaur_t* dinosaur;
 
     // X and Y position of the dinosaur (in relative coordinates, relative to the background image).
     // I.e. `(0,0)` represents the top left corner of the background image and `(1,1)` the bottom
@@ -377,6 +439,21 @@ struct scene_dinosaur_t {
 
 // Maximum number of dionsaurs in the scene.
 enum { MAX_SCENE_DINOSAURS = 32 };
+
+// A drop that has been awareded to the player.
+struct awarded_drop_t {
+    // Dinosaur that awarded the drop.
+    const struct dinosaur_t* dinosaur;
+
+    // Number of items (identified by image) in the drop.
+    uint32_t quantity[NUM_IMAGES];
+
+    // Total number of dropped items.
+    uint32_t total_items;
+};
+
+// Maximum number of unclaimed awarded drops that a player can have.
+enum { MAX_AWARDED_DROPS = 16 };
 
 // Game state.
 struct tm_simulate_state_o {
@@ -417,6 +494,10 @@ struct tm_simulate_state_o {
 
     // Dinosaurs that the player has seen.
     bool in_album[NUM_DINOSAURS];
+
+    // Drops that the player hasn't claimed yet.
+    uint32_t num_awarded_drops;
+    struct awarded_drop_t awarded_drops[MAX_AWARDED_DROPS];
 };
 
 // Item to draw in the scene.
@@ -438,6 +519,9 @@ struct draw_item_t {
 // fails to load, the image handle `0` is returned. (This handle is used for the placeholder image.)
 static uint32_t load_image(tm_simulate_start_args_t* args, const char* asset_path)
 {
+    if (!asset_path)
+        asset_path = MISSING_ART;
+
     const tm_tt_id_t asset = tm_the_truth_assets_api->asset_from_path(args->tt, args->asset_root, asset_path);
     if (!TM_ASSERT(asset.u64, tm_error_api->def, "Image not found `%s`", asset_path))
         return 0;
@@ -481,7 +565,7 @@ static void draw_scene_props(tm_rect_t background_r, struct scene_prop_t* draw_p
 {
     struct draw_item_t* draw = *draw_ptr;
     for (struct scene_prop_t* p = draw_props; p < draw_props + num_props; ++p) {
-        struct prop_t* prop = props + p->prop;
+        const struct prop_t* prop = p->prop;
 
         const float x = background_r.x + background_r.w * p->x;
         const float y = background_r.y + background_r.h * p->y;
@@ -509,7 +593,7 @@ static void draw_scene_dinosaurs(tm_rect_t background_r, struct scene_dinosaur_t
 {
     struct draw_item_t* draw = *draw_ptr;
     for (struct scene_dinosaur_t* d = draw_dinosaurs; d < draw_dinosaurs + num_dinosaurs; ++d) {
-        struct dinosaur_t* dinosaur = dinosaurs + d->dinosaur;
+        const struct dinosaur_t* dinosaur = d->dinosaur;
 
         const float x = background_r.x + background_r.w * d->x;
         const float y = background_r.y + background_r.h * d->y;
@@ -563,20 +647,44 @@ static void game_logic(tm_simulate_state_o* state, double dt)
     }
 
     // Dinosaurs walk away
+    const struct dinosaur_t* dropping_dino = 0;
     for (uint32_t i = 0; i < state->num_scene_dinosaurs; ++i) {
         struct scene_dinosaur_t* d = state->scene_dinosaurs + i;
         if (!d->lifetime)
             d->lifetime = roll(rules.dinosaur_lifetime_minutes) * 60.0f;
         d->lifetime -= dt;
-        if (d->lifetime <= 0)
+        if (d->lifetime <= 0) {
+            dropping_dino = state->scene_dinosaurs[i].dinosaur;
             state->scene_dinosaurs[i--] = state->scene_dinosaurs[--state->num_scene_dinosaurs];
+            break;
+        }
+    }
+
+    // Drops
+    if (dropping_dino) {
+        struct awarded_drop_t awarded_drop = { .dinosaur = dropping_dino };
+
+        for (struct drop_t* drop = drops; drop != TM_ARRAY_END(drops); ++drop) {
+            if (dropping_dino->image != drop->dinosaur_image)
+                continue;
+
+            if (roll((struct range_t){ 0, 1 }) > drop->probability)
+                continue;
+
+            const uint32_t quantity = (uint32_t)(roll(drop->quantity) + 0.5f);
+            awarded_drop.quantity[drop->drop_image] += quantity;
+            awarded_drop.total_items += quantity;
+        }
+
+        if (awarded_drop.total_items && state->num_awarded_drops < MAX_AWARDED_DROPS)
+            state->awarded_drops[state->num_awarded_drops++] = awarded_drop;
     }
 
     // Food attracts dinosaurs
     if (state->num_scene_dinosaurs < MAX_SCENE_DINOSAURS) {
         for (uint32_t pi = 0; pi < state->num_scene_props; ++pi) {
             struct scene_prop_t* p = state->scene_props + pi;
-            enum IMAGE food = props[p->prop].image;
+            enum IMAGE food = p->prop->image;
             const bool food_in_lake = in_lake(p->x, p->y);
 
             for (struct dinosaur_t* d = dinosaurs; d != dinosaurs + NUM_DINOSAURS; ++d) {
@@ -595,7 +703,7 @@ static void game_logic(tm_simulate_state_o* state, double dt)
 
                 const uint32_t dino_i = (uint32_t)(d - dinosaurs);
                 state->in_album[dino_i] = true;
-                const struct scene_dinosaur_t dino = { .dinosaur = dino_i, .x = p->x, .y = p->y, .flipped = tm_random_to_bool(tm_random_api->next()) };
+                const struct scene_dinosaur_t dino = { .dinosaur = d, .x = p->x, .y = p->y, .flipped = tm_random_to_bool(tm_random_api->next()) };
                 state->scene_dinosaurs[state->num_scene_dinosaurs++] = dino;
                 state->scene_props[pi--] = state->scene_props[--state->num_scene_props];
                 break;
@@ -638,7 +746,7 @@ static void scene(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
             state->scene_props[num_scene_props] = (struct scene_prop_t){
                 .x = scene_rel_mouse_x,
                 .y = scene_rel_mouse_y,
-                .prop = state->place_prop,
+                .prop = props + state->place_prop,
             };
             if (uib.input->left_mouse_pressed) {
                 ++state->num_scene_props;
