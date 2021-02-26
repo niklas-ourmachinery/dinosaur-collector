@@ -7,7 +7,7 @@
             "label": "tmbuild",
             "group": "build",
             "windows": {
-                "command": "%TM_SDK_DIR%/bin/tmbuild.exe",
+                "command": "%TM_DINO_SDK_DIR%/bin/tmbuild.exe",
                 "args": [
                     "--quiet",
                     "--no-unit-test"
@@ -32,7 +32,7 @@
                     "bin/Debug/tm_dinosaur_simulate.dll",
                     "dinosaur_simulate.c",
                     "-I",
-                    "%TM_SDK_DIR%/headers",
+                    "%TM_DINO_SDK_DIR%/headers",
                     "-Wno-microsoft-enum-forward-reference"
                 ]
             },
@@ -54,7 +54,7 @@
                     "bin/Debug/tm_dinosaur_simulate.so",
                     "dinosaur_simulate.c",
                     "-I",
-                    "%TM_SDK_DIR%/headers",
+                    "%TM_DINO_SDK_DIR%/headers",
                     "-Wno-microsoft-enum-forward-reference"
                 ]
             },
@@ -66,7 +66,7 @@
             "label": "docgen",
             "group": "build",
             "windows": {
-                "command": "%TM_SDK_DIR%/bin/docgen.exe"
+                "command": "%TM_DINO_SDK_DIR%/bin/docgen.exe"
             },
             "args": [
                 "-e",
@@ -80,7 +80,7 @@
                 "isDefault": true
             },
             "windows": {
-                "command": "%TM_SDK_DIR%/bin/the-machinery.exe"
+                "command": "%TM_DINO_SDK_DIR%/bin/the-machinery.exe"
             },
             "args": [
                 "--load-project",
