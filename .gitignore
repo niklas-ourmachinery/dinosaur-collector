@@ -2,3 +2,4 @@ build
 bin
 *.sln
 src/zig-cache
+publish
