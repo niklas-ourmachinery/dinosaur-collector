@@ -1,7 +1,7 @@
 build
 bin
 *.sln
-src/zig-cache
+*.zip
+/src/zig-cache
 /publish
-/publish-mini
-/dino-dino.zip
+/dino-dino
