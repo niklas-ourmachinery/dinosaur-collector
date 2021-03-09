@@ -16,7 +16,7 @@
 Implements a dinosaur collecting game.
 
 Static game data is saved in the arrays <a href="#image_paths">`image_paths`</a>, <a href="#props">`props`</a>, <a href="#dinosaurs">`dinosaurs`</a>, <a href="#drops">`drops`</a> and
-<a href="#mementos">`mementos`</a>, where as all dynamic game data is saved in the `struct tm_simulate_state_o`.
+<a href="#mementos">`mementos`</a>, where as all dynamic game data is saved in the <a href="#structtm_simulate_state_o">`tm_simulate_state_o`</a>.
 
 </div>
 
@@ -25,7 +25,7 @@ Static game data is saved in the arrays <a href="#image_paths">`image_paths`</a>
 <div class="index" id="e5a5daf0d3ba8377">
 <a href="#helpers"><b>Helpers</b></a><br>
 <a href="#hexcolor()">`HEXCOLOR()`</a><br>
-<a href="#structrange_t{">`struct range_t {`</a><br>
+<a href="#structrange_t">`struct range_t`</a><br>
 <br>
 <a href="#images"><b>Images</b></a><br>
 <a href="#enumimage">`enum IMAGE`</a><br>
@@ -34,42 +34,42 @@ Static game data is saved in the arrays <a href="#image_paths">`image_paths`</a>
 <br>
 <a href="#props"><b>Props</b></a><br>
 <a href="#enumprop_type">`enum PROP_TYPE`</a><br>
-<a href="#structprop_t{">`struct prop_t {`</a><br>
+<a href="#structprop_t">`struct prop_t`</a><br>
 <a href="#props">`props`</a><br>
 <a href="#num_props">`NUM_PROPS`</a><br>
 <br>
 <a href="#dinosaurs"><b>Dinosaurs</b></a><br>
 <a href="#enumdino_type">`enum DINO_TYPE`</a><br>
-<a href="#structdinosaur_t{">`struct dinosaur_t {`</a><br>
+<a href="#structdinosaur_t">`struct dinosaur_t`</a><br>
 <a href="#dinosaurs">`dinosaurs`</a><br>
 <a href="#num_dinosaurs">`NUM_DINOSAURS`</a><br>
 <br>
 <a href="#drops"><b>Drops</b></a><br>
-<a href="#structdrop_t{">`struct drop_t {`</a><br>
+<a href="#structdrop_t">`struct drop_t`</a><br>
 <a href="#drops">`drops`</a><br>
 <br>
 <a href="#mementos"><b>Mementos</b></a><br>
-<a href="#structmemento_t{">`struct memento_t {`</a><br>
+<a href="#structmemento_t">`struct memento_t`</a><br>
 <a href="#mementos">`mementos`</a><br>
 <a href="#num_mementos">`NUM_MEMENTOS`</a><br>
 <br>
 <a href="#rules"><b>Rules</b></a><br>
-<a href="#structrules_t{">`struct rules_t {`</a><br>
+<a href="#structrules_t">`struct rules_t`</a><br>
 <a href="#rules">`rules`</a><br>
 <br>
 <a href="#runtimestate"><b>Runtime state</b></a><br>
 <a href="#enumstate">`enum STATE`</a><br>
-<a href="#structscene_prop_t{">`struct scene_prop_t {`</a><br>
+<a href="#structscene_prop_t">`struct scene_prop_t`</a><br>
 <a href="#max_scene_props">`MAX_SCENE_PROPS`</a><br>
-<a href="#structscene_dinosaur_t{">`struct scene_dinosaur_t {`</a><br>
+<a href="#structscene_dinosaur_t">`struct scene_dinosaur_t`</a><br>
 <a href="#max_scene_dinosaurs">`MAX_SCENE_DINOSAURS`</a><br>
-<a href="#structawarded_drop_t{">`struct awarded_drop_t {`</a><br>
+<a href="#structawarded_drop_t">`struct awarded_drop_t`</a><br>
 <a href="#max_awarded_drops">`MAX_AWARDED_DROPS`</a><br>
 <a href="#reserve_state_bytes">`RESERVE_STATE_BYTES`</a><br>
-<a href="#structtm_simulate_state_o{">`struct tm_simulate_state_o {`</a><br>
+<a href="#structtm_simulate_state_o">`struct tm_simulate_state_o`</a><br>
 <br>
 <a href="#runtimestructs"><b>Runtime structs</b></a><br>
-<a href="#structdraw_item_t{">`struct draw_item_t {`</a><br>
+<a href="#structdraw_item_t">`struct draw_item_t`</a><br>
 <br>
 <a href="#code"><b>Code</b></a><br>
 <a href="#load_image()">`load_image()`</a><br>
@@ -113,7 +113,7 @@ returns a red color. The alpha of the returned color is always set to 255.
 
 </div>
 
-### `struct range_t {`
+### `struct range_t`
 
 <div class="indent">
 
@@ -340,7 +340,7 @@ enum PROP_TYPE {
 
 </div>
 
-### `struct prop_t {`
+### `struct prop_t`
 
 <div class="indent">
 
@@ -422,7 +422,7 @@ Total number of Props in the game.
 <div class="indent">
 
 Type classification for Dinosaurs. This is used to control where dinosaurs can spawn,
-`DINO_TYPE__ICTYOSAUR` can only spawn in water and no other dinosaurs can spawn in water.
+<a href="#enumdino_type">`DINO_TYPE__ICTYOSAUR`</a> can only spawn in water and no other dinosaurs can spawn in water.
 
 ~~~c
 enum DINO_TYPE {
@@ -435,7 +435,7 @@ enum DINO_TYPE {
 
 </div>
 
-### `struct dinosaur_t {`
+### `struct dinosaur_t`
 
 <div class="indent">
 
@@ -522,7 +522,7 @@ Total number of Dinosaurs in the game.
 A Drop is a rule specifying that a certain item is dropped by a certain dinosaur. The dropped
 item can be either a Prop or a Memento.
 
-### `struct drop_t {`
+### `struct drop_t`
 
 <div class="indent">
 
@@ -595,7 +595,7 @@ struct drop_t drops[] = {
 
 Mementos are items dropped by dinosaurs that can be sold for cash value.
 
-### `struct memento_t {`
+### `struct memento_t`
 
 <div class="indent">
 
@@ -657,7 +657,7 @@ Total number of Mementos in the game.
 <a class='target' name='rules'></a>
 <h3 class='section'>Rules</h3>
 
-### `struct rules_t {`
+### `struct rules_t`
 
 <div class="indent">
 
@@ -743,7 +743,7 @@ enum STATE {
 
 </div>
 
-### `struct scene_prop_t {`
+### `struct scene_prop_t`
 
 <div class="indent">
 
@@ -778,7 +778,7 @@ enum { MAX_SCENE_PROPS = 32 };
 
 </div>
 
-### `struct scene_dinosaur_t {`
+### `struct scene_dinosaur_t`
 
 <div class="indent">
 
@@ -816,7 +816,7 @@ enum { MAX_SCENE_DINOSAURS = 32 };
 
 </div>
 
-### `struct awarded_drop_t {`
+### `struct awarded_drop_t`
 
 <div class="indent">
 
@@ -866,7 +866,7 @@ enum { RESERVE_STATE_BYTES = 32 * 1024 };
 
 </div>
 
-### `struct tm_simulate_state_o {`
+### `struct tm_simulate_state_o`
 
 <div class="indent">
 
@@ -926,13 +926,13 @@ struct tm_simulate_state_o {
 <a class='target' name='runtimestructs'></a>
 <h3 class='section'>Runtime structs</h3>
 
-### `struct draw_item_t {`
+### `struct draw_item_t`
 
 <div class="indent">
 
 Represents an item to draw in the scene.
 
-To draw the scene, we generate a number of `struct draw_item_t`, sort them by their
+To draw the scene, we generate a number of <a href="#structdraw_item_t">`draw_item_t`</a>, sort them by their
 y-coordinates and draw them in that order.
 
 ~~~c
@@ -978,7 +978,7 @@ static const bool in_lake(float x, float y)
 ~~~
 
 Returns `true` if the background-realtive coordinates `(x,y)` are "in the lake". Only
-`DINO_TYPE__ICTYOSAUR` can spawn in the lake.
+<a href="#enumdino_type">`DINO_TYPE__ICTYOSAUR`</a> can spawn in the lake.
 
 </div>
 
@@ -1187,35 +1187,116 @@ Called to load the plugin.
 let terms = [
     'dinosaur_simulate.c',
     'HEXCOLOR()',
-    'range_t {',
+    'range_t',
     'enum IMAGE',
+    'PLACEHOLDER',
+    'BACKGROUND_LAYER_0',
+    'BACKGROUND_LAYER_1',
+    'BACKGROUND_LAYER_2',
+    'BACKGROUND_LAYER_3',
+    'BACKGROUND_LAYER_4',
+    'ANKYLOSAURUS',
+    'ANKYLOSAURUS_2',
+    'APATOSAURUS',
+    'BRACHIOSAURUS',
+    'BRACHIOSAURUS_2',
+    'CARNOTAURUS',
+    'DIMORPHODON',
+    'PACHYCEPHALOSAURUS',
+    'PARASAUROLOPHUS',
+    'PARASAUROLOPHUS_2',
+    'PLESIOSAURUS',
+    'PLIOSAURUS',
+    'PTERANODON',
+    'SPINOSAURUS',
+    'STEGOSAURUS',
+    'STEGOSAURUS_2',
+    'STEGOSAURUS_3',
+    'STYGIMOLOCH',
+    'THERIZINOSAURUS',
+    'TRICERATOPS',
+    'TRICERATOPS_2',
+    'TYRANNOSAURUS',
+    'UTAHCERATOPS',
+    'VELOCIRAPTOR',
+    'ALBUM',
+    'BACK',
+    'BONE',
+    'CLOSE',
+    'INVENTORY',
+    'MENU',
+    'MENU_BACKGROUND',
+    'SHOP',
+    'SQUARE',
+    'LEFT_ARROW',
+    'RIGHT_ARROW',
+    'MEMENTOS',
+    'BANANA_BUNCH',
+    'BERRY_BUNCH',
+    'DEAD_MOUSE',
+    'FISH',
+    'HAM',
+    'HAUNCH',
+    'HERB_BUNDLE',
+    'LEAVES',
+    'MEAT',
+    'SQUID',
+    'STARFISH',
+    'URCHIN',
+    'ORE',
+    'DIAMOND',
+    'AGATE',
+    'BRANCH',
+    'COCONUT',
+    'DEAD_BIRD',
+    'FEATHER',
+    'FERN',
+    'LAVENDER',
+    'PEARL',
+    'SHELL',
+    'NUM_IMAGES',
     'MISSING_ART',
     'image_paths',
     'enum PROP_TYPE',
-    'prop_t {',
+    'PROP_TYPE__VEG',
+    'PROP_TYPE__MEAT',
+    'PROP_TYPE__FISH',
+    'prop_t',
     'props',
     'NUM_PROPS',
     'enum DINO_TYPE',
-    'dinosaur_t {',
+    'DINO_TYPE__HERBIVORE',
+    'DINO_TYPE__CARNIVORE',
+    'DINO_TYPE__PTEROSAUR',
+    'DINO_TYPE__ICTYOSAUR',
+    'dinosaur_t',
     'dinosaurs',
     'NUM_DINOSAURS',
-    'drop_t {',
+    'drop_t',
     'drops',
-    'memento_t {',
+    'memento_t',
     'mementos',
     'NUM_MEMENTOS',
-    'rules_t {',
+    'rules_t',
     'rules',
     'enum STATE',
-    'scene_prop_t {',
+    'STATE__MAIN',
+    'STATE__MENU',
+    'STATE__INVENTORY',
+    'STATE__SHOP',
+    'STATE__ALBUM',
+    'STATE__PLACING',
+    'STATE__AWARD',
+    'STATE__MEMENTOS',
+    'scene_prop_t',
     'MAX_SCENE_PROPS',
-    'scene_dinosaur_t {',
+    'scene_dinosaur_t',
     'MAX_SCENE_DINOSAURS',
-    'awarded_drop_t {',
+    'awarded_drop_t',
     'MAX_AWARDED_DROPS',
     'RESERVE_STATE_BYTES',
-    'tm_simulate_state_o {',
-    'draw_item_t {',
+    'tm_simulate_state_o',
+    'draw_item_t',
     'load_image()',
     'in_lake()',
     'draw_scene_props()',
@@ -1239,35 +1320,116 @@ let terms = [
 let aNames = [
     'dinosaur_simulate.c',
     'hexcolor()',
-    'structrange_t{',
+    'structrange_t',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
+    'enumimage',
     'enumimage',
     'missing_art',
     'image_paths',
     'enumprop_type',
-    'structprop_t{',
+    'enumprop_type',
+    'enumprop_type',
+    'enumprop_type',
+    'structprop_t',
     'props',
     'num_props',
     'enumdino_type',
-    'structdinosaur_t{',
+    'enumdino_type',
+    'enumdino_type',
+    'enumdino_type',
+    'enumdino_type',
+    'structdinosaur_t',
     'dinosaurs',
     'num_dinosaurs',
-    'structdrop_t{',
+    'structdrop_t',
     'drops',
-    'structmemento_t{',
+    'structmemento_t',
     'mementos',
     'num_mementos',
-    'structrules_t{',
+    'structrules_t',
     'rules',
     'enumstate',
-    'structscene_prop_t{',
+    'enumstate',
+    'enumstate',
+    'enumstate',
+    'enumstate',
+    'enumstate',
+    'enumstate',
+    'enumstate',
+    'enumstate',
+    'structscene_prop_t',
     'max_scene_props',
-    'structscene_dinosaur_t{',
+    'structscene_dinosaur_t',
     'max_scene_dinosaurs',
-    'structawarded_drop_t{',
+    'structawarded_drop_t',
     'max_awarded_drops',
     'reserve_state_bytes',
-    'structtm_simulate_state_o{',
-    'structdraw_item_t{',
+    'structtm_simulate_state_o',
+    'structdraw_item_t',
     'load_image()',
     'in_lake()',
     'draw_scene_props()',
@@ -1289,6 +1451,87 @@ let aNames = [
     ''
 ];
 let sourceFiles = [
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
+    'dinosaur_simulate.c',
     'dinosaur_simulate.c',
     'dinosaur_simulate.c',
     'dinosaur_simulate.c',

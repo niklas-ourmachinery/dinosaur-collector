@@ -40,7 +40,7 @@ static struct tm_random_api* tm_random_api;
 // Implements a dinosaur collecting game.
 //
 // Static game data is saved in the arrays [[image_paths]], [[props]], [[dinosaurs]], [[drops]] and
-// [[mementos]], where as all dynamic game data is saved in the [[struct tm_simulate_state_o]].
+// [[mementos]], where as all dynamic game data is saved in the [[tm_simulate_state_o]].
 
 // Helpers
 
@@ -603,7 +603,7 @@ struct tm_simulate_state_o {
 
 // Represents an item to draw in the scene.
 //
-// To draw the scene, we generate a number of [[struct draw_item_t]], sort them by their
+// To draw the scene, we generate a number of [[draw_item_t]], sort them by their
 // y-coordinates and draw them in that order.
 struct draw_item_t {
     // Y-coordinate for sorting.
