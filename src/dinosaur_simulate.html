@@ -988,6 +988,7 @@ Returns `true` if the background-realtive coordinates `(x,y)` are "in the lake".
 
 ~~~c
 static void draw_scene_props(tm_rect_t background_r, struct scene_prop_t* draw_props, uint32_t num_props,
+    struct draw_item_t** draw_ptr, tm_temp_allocator_i* ta)
 ~~~
 
 Draws scene props in the array `(draw_props, num_props)`.
@@ -1000,6 +1001,7 @@ Draws scene props in the array `(draw_props, num_props)`.
 
 ~~~c
 static void draw_scene_dinosaurs(tm_rect_t background_r, struct scene_dinosaur_t* draw_dinosaurs, uint32_t num_dinosaurs,
+    struct draw_item_t** draw_ptr, tm_temp_allocator_i* ta)
 ~~~
 
 Draws scene dinosaurs in the array `(draw_dinosaurs, num_dinosaurs)`.
@@ -1794,6 +1796,116 @@ document.onkeypress = function(e) {
         }
     }
 }
+
+
+// Automatic references in <pre> blocks.
+
+function isIdentifier(c)
+{
+    return (c > 47 && c < 58) || (c > 64 && c < 91) || (c > 96 && c < 123) || c==95;
+}
+
+function getIdentifierAtPos(s, i, endPos) {
+    let start = i;
+    if (!isIdentifier(s.charCodeAt(start)))
+        return null;
+
+    // Expand identifiers.
+    while (start > 0 && isIdentifier(s.charCodeAt(start-1)))
+        start -= 1;
+    let end = start + 1;
+    while (end < endPos && isIdentifier(s.charCodeAt(end)))
+        end += 1;
+
+    // Expand ->
+    if (start > 2 && s.slice(start-2, start) == "->") {
+        start -= 2;
+        while (start > 0 && isIdentifier(s.charCodeAt(start-1)))
+        start -= 1;
+    }
+    if (s.slice(end, end+2) == "->") {
+        end +=2;
+        while (end < endPos && isIdentifier(s.charCodeAt(end)))
+            end += 1;
+    }
+
+    return s.slice(start, end).replace("->", ".");
+}
+
+function getIdentifierAtPoint(elem, x, y) {
+    if (elem.nodeType == elem.TEXT_NODE) {
+        let range = elem.ownerDocument.createRange();
+        range.selectNodeContents(elem);
+        let currentPos = 0;
+        let endPos = range.endOffset;
+        while (currentPos + 1 < endPos) {
+            range.setStart(elem, currentPos);
+            range.setEnd(elem, currentPos + 1);
+            if (range.getBoundingClientRect().left <= x && range.getBoundingClientRect().right >= x &&
+                range.getBoundingClientRect().top <= y && range.getBoundingClientRect().bottom >= y) {
+                    return getIdentifierAtPos(elem.textContent, currentPos, endPos);
+            }
+            currentPos += 1;
+        }
+    } else {
+        for (let i = 0; i < elem.childNodes.length; i++) {
+            let range = elem.childNodes[i].ownerDocument.createRange();
+            range.selectNodeContents(elem.childNodes[i]);
+            if (range.getBoundingClientRect().left <= x && range.getBoundingClientRect().right >= x &&
+                range.getBoundingClientRect().top <= y && range.getBoundingClientRect().bottom >= y) {
+                range.detach();
+                return (getIdentifierAtPoint(elem.childNodes[i], x, y));
+            } else {
+                range.detach();
+            }
+        }
+    }
+    return (null);
+}
+
+let hasCodeReferences = false;
+function setUpCodeReferences() {
+    const pres = document.getElementsByTagName("PRE");
+    if (pres.length == 0)
+        return;
+
+    hasCodeReferences = true;
+
+    let lookup = new Map();
+    for (let i = 0; i < terms.length; i++) {
+        lookup.set(terms[i], i);
+        if (terms[i].startsWith("enum "))
+            lookup.set(terms[i].slice(5), i);
+        if (terms[i].endsWith("()"))
+            lookup.set(terms[i].slice(0, -2), i);
+    } 
+
+    for (const c of pres) {
+        c.onmousemove = function (e) {
+            let w = getIdentifierAtPoint(e.target, e.x, e.y);
+            if (w && lookup.has(w)) {
+                e.target.style.cursor = "pointer";
+            } else {
+                e.target.style.cursor = "initial";
+            }
+        }
+        c.onclick = function(e) {
+            let w = getIdentifierAtPoint(e.target, e.x, e.y);
+            if (w && lookup.has(w)) {
+                let i = lookup.get(w);
+                window.location.href = searchBase + sourceFiles[i] + ".html" + "#" + aNames[i];
+            }
+        }
+    }
+}
+
+function checkCodeReferences() {
+    setUpCodeReferences();
+    if (!hasCodeReferences)
+        window.setTimeout(checkCodeReferences, 1000);
+}
+
+checkCodeReferences();
 </script>
 
 <script src="https://utteranc.es/client.js"
@@ -1820,10 +1932,12 @@ document.onkeypress = function(e) {
     .index a {text-decoration: none;}
     .md h3 code, .md h4 code {background: none;}
     .md pre.listing {
-        font-size: 80%%;
+        font-size: 0.8em;
         padding: 0.5em;
         box-sizing: border-box;
         scrollbar-width: none;
+        white-space: pre-wrap;
+        width: max(100%, calc(100% + (100vw - 100% - 10em)/2));
     }
     .md pre.listing::-webkit-scrollbar {
         width: 0;
