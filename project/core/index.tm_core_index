@@ -126,5 +126,12 @@ entries: [
 		object__type: "tm_asset_label"
 		version: 1
 	}
+	{
+		__uuid: "0f1ff83b-deb6-a5a0-1ee0-f5a6a90f9140"
+		core_id: "6630f4ffb44d1b0f"
+		object: "9b32539f-83a5-ddb8-ec03-3a8a8deb47f6"
+		object__type: "tm_entity"
+		version: 1
+	}
 ]
 __asset_uuid: "89eb1f1a-6fdd-cdb9-206c-f2a741d4fe48"

@@ -216,6 +216,7 @@ components: [
 								__uuid: "ea2ddeaa-6c43-5be0-2e1c-0dd62206b553"
 								widht: 128
 								height: 128
+								debug_tag: "Default Image"
 							}
 							buffer: "1c0766e5745d8d8f"
 						}
@@ -245,12 +246,12 @@ components: [
 						{
 							__uuid: "d9450011-a8be-383f-f192-3a395eed173e"
 							node: "f6fe50a0-5e17-10e3-8295-2a342f54c202"
-							validity_hash: "392952127d0d57b0"
+							validity_hash: "e646aac526bb55fe"
 							object: {
 								__type: "tm_shader_system_compiled_result"
-								__uuid: "4d216aeb-fa11-9b45-73ea-7033d6ff1f4c"
-								name: "392952127d0d57b0"
-								buffer: "efd6cb9b4df943f9"
+								__uuid: "ad2f939f-a351-3590-946c-90d7f2026316"
+								name: "e646aac526bb55fe"
+								buffer: "bba20bb3cd51c85c"
 							}
 						}
 					]

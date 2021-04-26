@@ -1,0 +1,210 @@
+__type: "tm_entity"
+__uuid: "9b32539f-83a5-ddb8-ec03-3a8a8deb47f6"
+components: [
+	{
+		__type: "tm_transform_component"
+		__uuid: "62d59741-586a-a70f-0998-ff8797950029"
+		local_position: {
+			__uuid: "9a71d429-5db8-3a96-528d-41aeaa3b6358"
+		}
+		local_rotation: {
+			__uuid: "063c303c-b634-b915-f1e3-27654f67500c"
+		}
+		local_scale: {
+			__uuid: "7a6bf562-b2a8-e60c-3a8b-3be96d867f44"
+		}
+	}
+	{
+		__type: "tm_atmospheric_sky_component"
+		__uuid: "793e03cd-36ef-b9bc-9e25-6528fa4dd7cc"
+		celestial_body_center: {
+			__uuid: "0555185e-2000-6a7b-6afa-fb0e0cfd659e"
+		}
+		rayleigh_scattering: {
+			__uuid: "0025fb65-96e9-dae3-310f-aa69e8e6414f"
+			r: 0.05801999941468239
+			g: 0.1355800032615662
+			b: 0.3310000002384186
+		}
+		mie_scattering: {
+			__uuid: "f3ede1c8-8061-8cda-a74d-7cfb800ea45c"
+			r: 0.3995999991893768
+			g: 0.3995999991893768
+			b: 0.3995999991893768
+		}
+		mie_absorption: {
+			__uuid: "f0b4cf69-b14c-2386-4c53-fb15044dd230"
+			r: 0
+			g: 0
+			b: 0
+		}
+		ozone_absorption: {
+			__uuid: "e93b9a62-6589-f642-e6a1-fc77e45eb4a4"
+			r: 0.06499999761581421
+			g: 0.1880999952554703
+			b: 0.008500000461935997
+		}
+		ground_albedo: {
+			__uuid: "c66e87e5-c20d-9d07-6a85-adfcf129feb6"
+			x: 0.300000011920929
+			y: 0.300000011920929
+			z: 0.300000011920929
+		}
+	}
+	{
+		__type: "tm_cubemap_capture_component"
+		__uuid: "19b1ca2a-3e7b-9bb5-b2bb-567279cc97a2"
+		output_image: {
+			__uuid: "3c431602-18eb-fb6b-f01e-4a734b235f8b"
+			graph: {
+				__uuid: "debc2949-e047-cdb7-ce63-a6fdbd896c4f"
+				nodes: [
+					{
+						__uuid: "c4634e2d-c7cd-4fe1-5f41-cf8c6eeae185"
+						type: "gpu_image_import"
+						position_x: -239.7675170898438
+						position_y: -24.75
+					}
+					{
+						__uuid: "3f1e155a-78fd-2dac-199d-7cc3a7b50f78"
+						type: "mipmap"
+						position_x: 7.73248291015625
+						position_y: -148.75
+						width: 181
+					}
+					{
+						__uuid: "52ba3f5f-aed8-ed98-dbf2-f38ed436aeb3"
+						type: "mipmap"
+						position_x: 7.23248291015625
+						position_y: 13.25
+						width: 184
+					}
+					{
+						__uuid: "cc040374-912f-def0-c2a4-2c7cfea509f5"
+						type: "image_output"
+						position_x: 257.2324829101563
+						position_y: -64.75
+					}
+					{
+						__uuid: "ecf25b78-2b4e-0446-154f-b7d7b7ce5b87"
+						type: "image_output"
+						position_x: 258.2324829101563
+						position_y: 27.25
+					}
+				]
+				connections: [
+					{
+						__uuid: "4521ded5-f29a-44db-c831-bc1b0246a33d"
+						from_node: "c4634e2d-c7cd-4fe1-5f41-cf8c6eeae185"
+						to_node: "3f1e155a-78fd-2dac-199d-7cc3a7b50f78"
+						from_connector_hash: "c05fedba357b4754"
+						to_connector_hash: "c05fedba357b4754"
+					}
+					{
+						__uuid: "11321d41-626e-54c5-65bb-f54e1c629e1e"
+						from_node: "c4634e2d-c7cd-4fe1-5f41-cf8c6eeae185"
+						to_node: "52ba3f5f-aed8-ed98-dbf2-f38ed436aeb3"
+						from_connector_hash: "c05fedba357b4754"
+						to_connector_hash: "c05fedba357b4754"
+					}
+					{
+						__uuid: "e4d5dd6c-2a55-e319-6ec2-3bdab29615cf"
+						from_node: "3f1e155a-78fd-2dac-199d-7cc3a7b50f78"
+						to_node: "cc040374-912f-def0-c2a4-2c7cfea509f5"
+						from_connector_hash: "c05fedba357b4754"
+						to_connector_hash: "c05fedba357b4754"
+					}
+					{
+						__uuid: "b7179349-a309-1014-0dc6-db90e28b4cda"
+						from_node: "52ba3f5f-aed8-ed98-dbf2-f38ed436aeb3"
+						to_node: "ecf25b78-2b4e-0446-154f-b7d7b7ce5b87"
+						from_connector_hash: "c05fedba357b4754"
+						to_connector_hash: "c05fedba357b4754"
+					}
+				]
+				data: [
+					{
+						__uuid: "26ef9902-d624-2675-fa60-9515e8a1724b"
+						to_node: "c4634e2d-c7cd-4fe1-5f41-cf8c6eeae185"
+						to_connector_hash: "d4c943cba60c270b"
+						data: {
+							__type: "tm_string"
+							__uuid: "10eb8130-8bd6-7590-f196-6dee04db3f94"
+							string: "cubemap"
+						}
+					}
+					{
+						__uuid: "cd39f5a0-5f08-bb71-4775-2d50d4e7e8cd"
+						to_node: "3f1e155a-78fd-2dac-199d-7cc3a7b50f78"
+						to_connector_hash: "26695e621d8cd790"
+						data: {
+							__type: "tm_mipmap_settings"
+							__uuid: "0cbee450-04cd-7963-1c25-713fe8ee0fb6"
+							color_space: 0
+							filter: 2
+							storage_policy: 1
+						}
+					}
+					{
+						__uuid: "3ddef363-6228-7e0a-b3b9-11ce1c8c1860"
+						to_node: "52ba3f5f-aed8-ed98-dbf2-f38ed436aeb3"
+						to_connector_hash: "26695e621d8cd790"
+						data: {
+							__type: "tm_mipmap_settings"
+							__uuid: "4462cfac-c779-b268-6b48-99931528960a"
+							color_space: 0
+							filter: 1
+							storage_policy: 1
+						}
+					}
+					{
+						__uuid: "6b635e0a-18ed-31d6-764c-3e13fd834b59"
+						to_node: "cc040374-912f-def0-c2a4-2c7cfea509f5"
+						to_connector_hash: "d4c943cba60c270b"
+						data: {
+							__type: "tm_string"
+							__uuid: "23390be5-0e4e-2202-1799-2c62123c4392"
+							string: "ibl_diffuse"
+						}
+					}
+					{
+						__uuid: "69966aa1-ce18-0d17-279c-c4752d433705"
+						to_node: "ecf25b78-2b4e-0446-154f-b7d7b7ce5b87"
+						to_connector_hash: "d4c943cba60c270b"
+						data: {
+							__type: "tm_string"
+							__uuid: "f75ac204-8e82-2801-531b-17766f8d807b"
+							string: "ibl_specular"
+						}
+					}
+				]
+				interface: {
+					__uuid: "b524e314-3105-0a05-41a7-df72890d85f9"
+				}
+			}
+		}
+		resolution: 128
+	}
+	{
+		__type: "tm_default_render_pipe_light_component"
+		__uuid: "da9b654d-192c-3a26-8dad-7ba0c2064001"
+		type: 3
+		color: {
+			__uuid: "1acd4d32-526f-4c8b-f9eb-50c1dd0cb36e"
+		}
+		area_extent: {
+			__uuid: "db5f688f-f634-3259-0d8f-d629a2bd62cf"
+			x: 1
+			y: 1
+		}
+	}
+]
+child_sort_values: [
+	{
+		__uuid: "403e1c75-ead1-bf14-bff4-1929798e48ab"
+	}
+	{
+		__uuid: "ce0be513-88dc-e9c0-e228-72472a95ccb9"
+	}
+]
+__asset_uuid: "414e7d95-c2f8-f591-b656-1e4bed98b6ff"

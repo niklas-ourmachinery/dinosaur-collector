@@ -77,6 +77,7 @@ graph: {
 					filename: ""
 					description: {
 						__uuid: "c61a8365-247b-a48d-4570-cf05d6ed3328"
+						debug_tag: "Default Image"
 					}
 				}
 				public: true
@@ -87,3 +88,6 @@ graph: {
 	}
 }
 __asset_uuid: "523a2c0b-c29c-5815-66ed-23e89625d5f5"
+__asset_labels: [
+	"e4bec38d8f73f423"
+]

@@ -172,6 +172,18 @@
 		}
 	}
 	{
+		name: "shader_tm_frame_system_image_luts_node_settings"
+		properties: [
+			{
+				name: "lut"
+				type: "uint64_t"
+			}
+		]
+		default: {
+			lut: "822d28f4b11f5b7d"
+		}
+	}
+	{
 		name: "tm_animation_clip"
 		properties: [
 			{
@@ -204,13 +216,17 @@
 				type: "double"
 			}
 			{
-				name: "locomotion_node"
-				type: "reference"
-				type_hash: "1ed02afba4e23875"
+				name: "locomotion_node_name"
+				type: "string"
 			}
 			{
 				name: "locomotion"
 				type: "uint32_t"
+			}
+			{
+				name: "triggers"
+				type: "subobject_set"
+				type_hash: "796b8cc8cc5baac2"
 			}
 		]
 		default: {
@@ -227,6 +243,40 @@
 				type_hash: "b6e5de67c7549505"
 			}
 		]
+	}
+	{
+		name: "tm_animation_clip_trigger"
+		properties: [
+			{
+				name: "name"
+				type: "string"
+			}
+			{
+				name: "frame"
+				type: "double"
+			}
+			{
+				name: "value"
+				type: "float"
+			}
+		]
+	}
+	{
+		name: "tm_animation_compression_settings"
+		properties: [
+			{
+				name: "max_error"
+				type: "float"
+			}
+			{
+				name: "skin_size"
+				type: "float"
+			}
+		]
+		default: {
+			max_error: 0.001000000047497451
+			skin_size: 0.1000000014901161
+		}
 	}
 	{
 		name: "tm_animation_simple_player_component"
@@ -959,6 +1009,149 @@
 		]
 	}
 	{
+		name: "tm_atmospheric_sky_component"
+		properties: [
+			{
+				name: "sun_entity"
+				type: "reference"
+				type_hash: "ff156da2e01c4a3d"
+			}
+			{
+				name: "sun_angular_diameter"
+				type: "float"
+			}
+			{
+				name: "celestial_body_center"
+				type: "subobject"
+				type_hash: "8d1487af36b1e3e1"
+			}
+			{
+				name: "planet_radius"
+				type: "float"
+			}
+			{
+				name: "karman_line"
+				type: "float"
+			}
+			{
+				name: "rayleigh_density1_height_scale"
+				type: "float"
+			}
+			{
+				name: "rayleigh_scattering"
+				type: "subobject"
+				type_hash: "d0c8704d11c0c0f1"
+			}
+			{
+				name: "rayleigh_scattering_scale"
+				type: "float"
+			}
+			{
+				name: "mie_density1_height_scale"
+				type: "float"
+			}
+			{
+				name: "mie_scattering"
+				type: "subobject"
+				type_hash: "d0c8704d11c0c0f1"
+			}
+			{
+				name: "mie_scattering_scale"
+				type: "float"
+			}
+			{
+				name: "mie_absorption"
+				type: "subobject"
+				type_hash: "d0c8704d11c0c0f1"
+			}
+			{
+				name: "mie_absorption_scale"
+				type: "float"
+			}
+			{
+				name: "mie_phase_function_g"
+				type: "float"
+			}
+			{
+				name: "ozone_absorption_height_scale"
+				type: "float"
+			}
+			{
+				name: "ozone_absorption"
+				type: "subobject"
+				type_hash: "d0c8704d11c0c0f1"
+			}
+			{
+				name: "ozone_absorption_scale"
+				type: "float"
+			}
+			{
+				name: "ozone_enabled"
+				type: "bool"
+			}
+			{
+				name: "ground_albedo"
+				type: "subobject"
+				type_hash: "8d1487af36b1e3e1"
+			}
+			{
+				name: "fog_density"
+				type: "float"
+			}
+			{
+				name: "aerial_perspective_scale"
+				type: "float"
+			}
+			{
+				name: "automatic_cubemap_capture"
+				type: "bool"
+			}
+		]
+		default: {
+			sun_angular_diameter: 1920
+			celestial_body_center: {
+			}
+			planet_radius: 6371
+			karman_line: 100
+			rayleigh_density1_height_scale: 8
+			rayleigh_scattering: {
+				r: 0.05801999941468239
+				g: 0.1355800032615662
+				b: 0.3310000002384186
+			}
+			rayleigh_scattering_scale: 0.1000000014901161
+			mie_density1_height_scale: 1.200000047683716
+			mie_scattering: {
+				r: 0.3995999991893768
+				g: 0.3995999991893768
+				b: 0.3995999991893768
+			}
+			mie_scattering_scale: 0.009999999776482582
+			mie_absorption: {
+				r: 0.4440000057220459
+				g: 0.4440000057220459
+				b: 0.4440000057220459
+			}
+			mie_phase_function_g: 0.800000011920929
+			ozone_absorption_height_scale: 15
+			ozone_absorption: {
+				r: 0.06499999761581421
+				g: 0.1880999952554703
+				b: 0.008500000461935997
+			}
+			ozone_absorption_scale: 0.009999999776482582
+			ozone_enabled: true
+			ground_albedo: {
+				x: 0.300000011920929
+				y: 0.300000011920929
+				z: 0.300000011920929
+			}
+			fog_density: 1
+			aerial_perspective_scale: 1
+			automatic_cubemap_capture: true
+		}
+	}
+	{
 		name: "tm_bool"
 		properties: [
 			{
@@ -1077,6 +1270,45 @@
 		}
 	}
 	{
+		name: "tm_color_space_settings"
+		properties: [
+			{
+				name: "color_primary"
+				type: "uint32_t"
+			}
+			{
+				name: "transfer_function"
+				type: "uint32_t"
+			}
+			{
+				name: "color_model"
+				type: "uint32_t"
+			}
+		]
+	}
+	{
+		name: "tm_compressed_animation"
+		properties: [
+			{
+				name: "format"
+				type: "string"
+			}
+			{
+				name: "version"
+				type: "uint32_t"
+			}
+			{
+				name: "buffer"
+				type: "buffer"
+			}
+			{
+				name: "dcc_animation"
+				type: "reference"
+				type_hash: "b4f2c5822cde57db"
+			}
+		]
+	}
+	{
 		name: "tm_core_index"
 		properties: [
 			{
@@ -1145,6 +1377,24 @@
 				name: "creation_graph"
 				type: "reference"
 				type_hash: "c5f12f23d4534d76"
+			}
+		]
+	}
+	{
+		name: "tm_creation_graph_component_instance_provider"
+		properties: [
+			{
+				name: "component_name"
+				type: "uint64_t"
+			}
+		]
+	}
+	{
+		name: "tm_creation_graph_data_type"
+		properties: [
+			{
+				name: "data_type"
+				type: "uint64_t"
 			}
 		]
 	}
@@ -1266,6 +1516,10 @@
 				type: "subobject"
 				type_hash: "c5f12f23d4534d76"
 			}
+			{
+				name: "resolution"
+				type: "uint32_t"
+			}
 		]
 		default: {
 			capture_interface: "d2420b8f77d91139"
@@ -1275,6 +1529,7 @@
 					}
 				}
 			}
+			resolution: 512
 		}
 	}
 	{
@@ -1353,6 +1608,11 @@
 				type: "subobject"
 				type_hash: "bee36020d022cc51"
 			}
+			{
+				name: "preview_entity"
+				type: "subobject"
+				type_hash: "5e0fd59434dda1de"
+			}
 		]
 		default: {
 			settings: {
@@ -1363,6 +1623,8 @@
 					scale: {
 					}
 				}
+			}
+			preview_entity: {
 			}
 		}
 	}
@@ -1584,7 +1846,7 @@
 			{
 				name: "resource"
 				type: "reference"
-				type_hash: "c5f12f23d4534d76"
+				type_hash: "8944e0b1cefd4756"
 			}
 		]
 	}
@@ -1896,6 +2158,40 @@
 			{
 				name: "z"
 				type: "float"
+			}
+		]
+	}
+	{
+		name: "tm_dcc_asset_preview_entity"
+		properties: [
+			{
+				name: "entity"
+				type: "subobject"
+				type_hash: "ff156da2e01c4a3d"
+			}
+			{
+				name: "extracted_images"
+				type: "subobject_set"
+				type_hash: "a6efabc21bbed077"
+			}
+			{
+				name: "extracted_materials"
+				type: "subobject_set"
+				type_hash: "a6efabc21bbed077"
+			}
+		]
+	}
+	{
+		name: "tm_dcc_asset_preview_entity_extracted_resource"
+		properties: [
+			{
+				name: "resource"
+				type: "subobject"
+				type_hash: "8944e0b1cefd4756"
+			}
+			{
+				name: "name"
+				type: "string"
 			}
 		]
 	}
@@ -2285,9 +2581,62 @@
 		}
 	}
 	{
+		name: "tm_default_render_pipe_light_probes_component"
+		properties: [
+			{
+				name: "enabled"
+				type: "bool"
+			}
+			{
+				name: "update_frequency"
+				type: "uint32_t"
+			}
+			{
+				name: "density"
+				type: "float"
+			}
+		]
+		default: {
+			enabled: true
+			update_frequency: 2
+			density: 1
+		}
+	}
+	{
 		name: "tm_default_render_pipe_ray_trace_debug"
 		properties: [
 		]
+	}
+	{
+		name: "tm_default_render_pipe_ssao_component"
+		properties: [
+			{
+				name: "enabled"
+				type: "bool"
+			}
+			{
+				name: "radius"
+				type: "float"
+			}
+			{
+				name: "power"
+				type: "float"
+			}
+			{
+				name: "bias"
+				type: "float"
+			}
+			{
+				name: "step_count"
+				type: "uint32_t"
+			}
+		]
+		default: {
+			enabled: true
+			radius: 1
+			power: 1
+			step_count: 4
+		}
 	}
 	{
 		name: "tm_default_render_pipe_volume_component"
@@ -2328,6 +2677,23 @@
 				y: 0.5
 				z: 0.5
 			}
+		}
+	}
+	{
+		name: "tm_default_render_ray_traced_ao_component"
+		properties: [
+			{
+				name: "enabled"
+				type: "bool"
+			}
+			{
+				name: "ray_length"
+				type: "float"
+			}
+		]
+		default: {
+			enabled: true
+			ray_length: 32
 		}
 	}
 	{
@@ -2445,6 +2811,51 @@
 		]
 	}
 	{
+		name: "tm_entity_spawner_channel"
+		properties: [
+			{
+				name: "name"
+				type: "string"
+			}
+			{
+				name: "draw_mode"
+				type: "uint32_t"
+			}
+			{
+				name: "entity"
+				type: "reference"
+				type_hash: "ff156da2e01c4a3d"
+			}
+			{
+				name: "max_count"
+				type: "uint32_t"
+			}
+			{
+				name: "creation_graph"
+				type: "subobject"
+				type_hash: "c5f12f23d4534d76"
+			}
+		]
+		default: {
+			creation_graph: {
+				graph: {
+					interface: {
+					}
+				}
+			}
+		}
+	}
+	{
+		name: "tm_entity_spawner_component"
+		properties: [
+			{
+				name: "channels"
+				type: "subobject_set"
+				type_hash: "436a01576b7bf03c"
+			}
+		]
+	}
+	{
 		name: "tm_float"
 		properties: [
 			{
@@ -2463,6 +2874,15 @@
 		]
 		default: {
 		}
+	}
+	{
+		name: "tm_gpu_image_to_cpu_image_settings"
+		properties: [
+			{
+				name: "release_input"
+				type: "bool"
+			}
+		]
 	}
 	{
 		name: "tm_gpu_simulation_accessor_settings"
@@ -2501,6 +2921,10 @@
 				name: "desc"
 				type: "reference"
 				type_hash: "7d15e1df3084e998"
+			}
+			{
+				name: "index_mode"
+				type: "uint32_t"
 			}
 		]
 	}
@@ -2760,6 +3184,10 @@
 		name: "tm_graph_output"
 		properties: [
 			{
+				name: "name"
+				type: "string"
+			}
+			{
 				name: "display_name"
 				type: "string"
 			}
@@ -2818,9 +3246,24 @@
 				name: "grid_size"
 				type: "float"
 			}
+			{
+				name: "debug_watch_wire_overlay_mode"
+				type: "uint32_t"
+			}
+			{
+				name: "show_removed_inherited"
+				type: "bool"
+			}
+			{
+				name: "debug_watched_wires"
+				type: "subobject_set"
+				type_hash: "b11aa2e510ce635e"
+			}
 		]
 		default: {
 			grid_size: 30
+			debug_watch_wire_overlay_mode: 5
+			show_removed_inherited: true
 		}
 	}
 	{
@@ -2885,9 +3328,14 @@
 				name: "buffer"
 				type: "buffer"
 			}
+			{
+				name: "raw"
+				type: "bool"
+			}
 		]
 		default: {
 			description: {
+				debug_tag: "Default Image"
 			}
 		}
 	}
@@ -2955,6 +3403,10 @@
 				name: "sample_count"
 				type: "uint32_t"
 			}
+			{
+				name: "debug_tag"
+				type: "string"
+			}
 		]
 		default: {
 			type: 1
@@ -2965,6 +3417,7 @@
 			mip_levels: 1
 			layer_count: 1
 			sample_count: 1
+			debug_tag: "Default Image"
 		}
 	}
 	{
@@ -3056,6 +3509,10 @@
 			{
 				name: "override_existing_mips"
 				type: "bool"
+			}
+			{
+				name: "storage_policy"
+				type: "uint32_t"
 			}
 		]
 		default: {
@@ -3566,6 +4023,10 @@
 				name: "linux_dll"
 				type: "buffer"
 			}
+			{
+				name: "is_helper"
+				type: "bool"
+			}
 		]
 	}
 	{
@@ -3592,6 +4053,11 @@
 				name: "mask"
 				type: "uint64_t"
 			}
+		]
+	}
+	{
+		name: "tm_ray_tracing_debug"
+		properties: [
 		]
 	}
 	{
@@ -4598,7 +5064,7 @@
 			{
 				name: "systems_active"
 				type: "subobject_set"
-				type_hash: "14a46edeaac824fc"
+				type_hash: "c96488cb408e745f"
 			}
 		]
 	}
@@ -5048,6 +5514,14 @@
 				type: "float"
 			}
 			{
+				name: "width"
+				type: "float"
+			}
+			{
+				name: "height"
+				type: "float"
+			}
+			{
 				name: "draw_mode"
 				type: "uint32_t"
 			}
@@ -5082,6 +5556,514 @@
 			local_rotation: {
 			}
 			local_scale: {
+			}
+		}
+	}
+	{
+		name: "tm_tt_entity_spawner_channel_reference"
+		properties: [
+			{
+				name: "entity"
+				type: "reference"
+				type_hash: "ff156da2e01c4a3d"
+			}
+			{
+				name: "channel"
+				type: "reference"
+				type_hash: "436a01576b7bf03c"
+			}
+		]
+	}
+	{
+		name: "tm_ui_canvas_component"
+		properties: [
+			{
+				name: "canvas_type"
+				type: "uint32_t"
+			}
+			{
+				name: "unit_types"
+				type: "subobject"
+				type_hash: "1925ce971c95f851"
+			}
+			{
+				name: "virtual_rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "pixels_per_meter"
+				type: "float"
+			}
+			{
+				name: "fullscreen"
+				type: "bool"
+			}
+			{
+				name: "theme"
+				type: "subobject"
+				type_hash: "8944e0b1cefd4756"
+			}
+		]
+		default: {
+			unit_types: {
+			}
+			virtual_rect: {
+				w: 1
+				h: 1
+			}
+			pixels_per_meter: 256
+		}
+	}
+	{
+		name: "tm_ui_component_unit_types"
+		properties: [
+			{
+				name: "x"
+				type: "uint32_t"
+			}
+			{
+				name: "y"
+				type: "uint32_t"
+			}
+			{
+				name: "w"
+				type: "uint32_t"
+			}
+			{
+				name: "h"
+				type: "uint32_t"
+			}
+		]
+	}
+	{
+		name: "tm_ui_control_button"
+		properties: [
+			{
+				name: "rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "visible_rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "icon"
+				type: "uint32_t"
+			}
+			{
+				name: "text"
+				type: "string"
+			}
+			{
+				name: "color"
+				type: "subobject"
+				type_hash: "d0c8704d11c0c0f1"
+			}
+			{
+				name: "tooltip"
+				type: "string"
+			}
+			{
+				name: "text_offset_y"
+				type: "float"
+			}
+			{
+				name: "is_disabled"
+				type: "bool"
+			}
+			{
+				name: "hide_background"
+				type: "bool"
+			}
+			{
+				name: "hide_margins"
+				type: "bool"
+			}
+		]
+		default: {
+			rect: {
+			}
+			visible_rect: {
+			}
+			color: {
+			}
+		}
+	}
+	{
+		name: "tm_ui_control_checkbox"
+		properties: [
+			{
+				name: "rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "is_disabled"
+				type: "bool"
+			}
+			{
+				name: "text"
+				type: "string"
+			}
+			{
+				name: "tooltip"
+				type: "string"
+			}
+		]
+		default: {
+			rect: {
+			}
+		}
+	}
+	{
+		name: "tm_ui_control_dropdown"
+		properties: [
+			{
+				name: "rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "is_disabled"
+				type: "bool"
+			}
+			{
+				name: "items"
+				type: "subobject_set"
+				type_hash: "3706bdc24f43d377"
+			}
+		]
+		default: {
+			rect: {
+			}
+		}
+	}
+	{
+		name: "tm_ui_control_dropdown_item"
+		properties: [
+			{
+				name: "order"
+				type: "float"
+			}
+			{
+				name: "text"
+				type: "string"
+			}
+			{
+				name: "tooltip"
+				type: "string"
+			}
+		]
+		default: {
+		}
+	}
+	{
+		name: "tm_ui_control_label"
+		properties: [
+			{
+				name: "rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "icon"
+				type: "uint32_t"
+			}
+			{
+				name: "text"
+				type: "string"
+			}
+			{
+				name: "tooltip"
+				type: "string"
+			}
+		]
+		default: {
+			rect: {
+			}
+		}
+	}
+	{
+		name: "tm_ui_control_link"
+		properties: [
+			{
+				name: "rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "text"
+				type: "string"
+			}
+			{
+				name: "tooltip"
+				type: "string"
+			}
+			{
+				name: "color"
+				type: "subobject"
+				type_hash: "d0c8704d11c0c0f1"
+			}
+			{
+				name: "align"
+				type: "uint32_t"
+			}
+		]
+		default: {
+			rect: {
+			}
+			color: {
+			}
+		}
+	}
+	{
+		name: "tm_ui_control_progress"
+		properties: [
+			{
+				name: "rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "is_disabled"
+				type: "bool"
+			}
+			{
+				name: "text"
+				type: "string"
+			}
+			{
+				name: "tooltip"
+				type: "string"
+			}
+		]
+		default: {
+			rect: {
+			}
+		}
+	}
+	{
+		name: "tm_ui_control_radio"
+		properties: [
+			{
+				name: "rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "is_disabled"
+				type: "bool"
+			}
+			{
+				name: "text"
+				type: "string"
+			}
+			{
+				name: "tooltip"
+				type: "string"
+			}
+		]
+		default: {
+			rect: {
+			}
+		}
+	}
+	{
+		name: "tm_ui_control_scrollbar"
+		properties: [
+			{
+				name: "rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "min"
+				type: "float"
+			}
+			{
+				name: "max"
+				type: "float"
+			}
+			{
+				name: "size"
+				type: "float"
+			}
+		]
+		default: {
+			rect: {
+			}
+		}
+	}
+	{
+		name: "tm_ui_control_slider"
+		properties: [
+			{
+				name: "rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "is_disabled"
+				type: "bool"
+			}
+			{
+				name: "min"
+				type: "float"
+			}
+			{
+				name: "max"
+				type: "float"
+			}
+			{
+				name: "size"
+				type: "float"
+			}
+		]
+		default: {
+			rect: {
+			}
+		}
+	}
+	{
+		name: "tm_ui_control_spinner"
+		properties: [
+			{
+				name: "rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "is_disabled"
+				type: "bool"
+			}
+			{
+				name: "min"
+				type: "double"
+			}
+			{
+				name: "max"
+				type: "double"
+			}
+			{
+				name: "value_per_pixel"
+				type: "double"
+			}
+			{
+				name: "decimals"
+				type: "uint32_t"
+			}
+			{
+				name: "tooltip"
+				type: "string"
+			}
+		]
+		default: {
+			rect: {
+			}
+		}
+	}
+	{
+		name: "tm_ui_control_text"
+		properties: [
+			{
+				name: "rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "text"
+				type: "string"
+			}
+			{
+				name: "tooltip"
+				type: "string"
+			}
+			{
+				name: "color"
+				type: "subobject"
+				type_hash: "d0c8704d11c0c0f1"
+			}
+			{
+				name: "align"
+				type: "uint32_t"
+			}
+		]
+		default: {
+			rect: {
+			}
+			color: {
+			}
+		}
+	}
+	{
+		name: "tm_ui_control_textedit"
+		properties: [
+			{
+				name: "rect"
+				type: "subobject"
+				type_hash: "a6e9c5f4ec093df1"
+			}
+			{
+				name: "is_disabled"
+				type: "bool"
+			}
+			{
+				name: "is_password"
+				type: "bool"
+			}
+			{
+				name: "default_text"
+				type: "string"
+			}
+			{
+				name: "select_on_mouse_activate"
+				type: "bool"
+			}
+			{
+				name: "scroll_to_end"
+				type: "bool"
+			}
+			{
+				name: "select_all_on_startup"
+				type: "bool"
+			}
+		]
+		default: {
+			rect: {
+			}
+		}
+	}
+	{
+		name: "tm_ui_element_component"
+		properties: [
+			{
+				name: "type"
+				type: "uint32_t"
+			}
+			{
+				name: "unit_types"
+				type: "subobject"
+				type_hash: "1925ce971c95f851"
+			}
+			{
+				name: "control"
+				type: "subobject"
+				type_hash: "8944e0b1cefd4756"
+			}
+		]
+		default: {
+			type: 1
+			unit_types: {
+			}
+			control: {
+				__type: "tm_ui_control_label"
+				rect: {
+				}
+				text: ""
+				tooltip: ""
 			}
 		}
 	}
@@ -5275,6 +6257,45 @@
 			{
 				name: "palette"
 				type: "buffer"
+			}
+			{
+				name: "nodes"
+				type: "subobject_set"
+				type_hash: "77983deec66f80d1"
+			}
+		]
+	}
+	{
+		name: "tm_vox_asset_node"
+		properties: [
+			{
+				name: "name"
+				type: "string"
+			}
+			{
+				name: "position"
+				type: "subobject"
+				type_hash: "7a29b8f6b1ca42ec"
+			}
+			{
+				name: "rotation"
+				type: "subobject"
+				type_hash: "a4d2f46b41c9d717"
+			}
+			{
+				name: "scale"
+				type: "subobject"
+				type_hash: "20ef513a9606cc30"
+			}
+			{
+				name: "children"
+				type: "reference_set"
+				type_hash: "77983deec66f80d1"
+			}
+			{
+				name: "models"
+				type: "reference_set"
+				type_hash: "d66d982141bc8aaa"
 			}
 		]
 	}
