@@ -1246,7 +1246,6 @@ static void menu(tm_simulate_state_o* state, tm_simulate_frame_args_t* args)
             tm_rect_t desc_r = tm_rect_split_off_bottom(&icon_r, 0.03f * unit, 0.01f * unit);
             icon_r = tm_rect_center_in(icon_r.h, icon_r.h, icon_r);
 
-            const tm_color_srgb_t text_color = { .a = 255 };
             uistyle->font_scale = desc_r.h / 18.0f;
 
             // Returns the name of the gift (Prop or Memento) with the specified image.
